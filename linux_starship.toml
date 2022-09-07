@@ -1,0 +1,109 @@
+# ~/.config/starship.toml
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Change command timeout from 500 to 1000 ms
+command_timeout = 1000
+
+# Change the default prompt format
+# ---
+# old config ...
+format = """\
+[╭╴](238)$env_var\
+$all[╰─](238)$character"""
+
+# new config
+#format = """$env_var $all"""
+
+# Change the default prompt characters
+[character]
+# old config
+success_symbol = "[](238)"
+error_symbol = "[](238)"
+#success_symbol = ""
+#error_symbol = ""
+
+# Shows an icon that should be included by zshrc script based on the distribution or os
+[env_var.STARSHIP_DISTRO]
+format = '[$env_value](white)'
+variable = "STARSHIP_DISTRO"
+disabled = false
+
+# Shows the username
+[username]
+style_user = "white"
+style_root = "white"
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "on [$hostname](bold yellow) "
+disabled = false
+
+[directory]
+truncation_length = 1
+truncation_symbol = "…/"
+home_symbol = " ~"
+read_only_style = "197"
+read_only = "  "
+format = "at [$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = " "
+format = "via [$symbol$branch]($style) "
+# truncation_length = 4
+truncation_symbol = "…/"
+style = "bold green"
+
+[git_status]
+format = '[\($all_status$ahead_behind\)]($style) '
+style = "bold green"
+conflicted = "🏳"
+up_to_date = " "
+untracked = " "
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+stashed = " "
+modified = " "
+staged = '[++\($count\)](green)'
+renamed = "襁 "
+deleted = " "
+
+[kubernetes]
+format = 'via [ﴱ $context\($namespace\)](bold purple) '
+disabled = false
+
+# (deactivated because of no space left)
+# 
+[terraform]
+format = "via [ terraform $version]($style) 壟 [$workspace]($style) "
+disabled = true
+
+[vagrant]
+format = "via [ vagrant $version]($style) "
+disabled = true
+
+[docker_context]
+format = "via [ $context](bold blue) "
+disabled = true
+
+[helm]
+format = "via [ $version](bold purple) "
+disabled = true
+
+[python]
+symbol = " "
+python_binary = "python3"
+disabled = true
+
+[nodejs]
+format = "via [ $version](bold green) "
+disabled = true
+
+[ruby]
+format = "via [ $version]($style) "
+disabled = true
