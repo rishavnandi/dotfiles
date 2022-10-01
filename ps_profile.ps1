@@ -12,3 +12,4 @@ if (Test-Path($ChocolateyProfile)) {
 }
 
 Set-Alias l lsd
+winfetch
