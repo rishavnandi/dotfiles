@@ -51,10 +51,10 @@ $ShowDisks = @("*")
 # 'bar' is for bar only.
 # 'textbar' is for text + bar.
 # 'bartext' is for bar + text.
-$cpustyle = 'bartext'
-$memorystyle = 'bartext'
-$diskstyle = 'bartext'
-$batterystyle = 'bartext'
+$cpustyle = 'textbar'
+$memorystyle = 'textbar'
+$diskstyle = 'textbar'
+$batterystyle = 'textbar'
 
 
 # Remove the '#' from any of the lines in
