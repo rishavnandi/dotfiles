@@ -10,13 +10,13 @@ Write-Host "   /  \ | |  | |  | | | |  | |   | | |  \| | (___    | |  /  \  | | 
 Write-Host "  / /\ \| |  | |  | | | |  | |   | | | . ` |\___ \   | | / /\ \ | |    | |                          "
 Write-Host " / ____ \ |__| |  | | | |__| |  _| |_| |\  |____) |  | |/ ____ \| |____| |____                      "
 Write-Host "/_/    \_\____/   |_|  \____/  |_____|_| \_|_____/   |_/_/    \_\______|______|                     "
-Write-Host "https://github.com/rishavnandi/Dotfiles"
+Write-Host "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
-Write-Host "Installing Scoop"
+Write-Host "----------------Installing Scoop----------------"
 Set-ExecutionPolicy AllSigned
 irm get.scoop.sh | iex
 
-Write-Host "Add Required Buckets For All The Apps"
+Write-Host "----------------Add Required Buckets For All The Apps----------------"
 scoop bucket add main
 scoop bucket add extras
 scoop bucket add nerd-fonts
@@ -24,7 +24,7 @@ scoop bucket add starise_Scoop-Gaming https://github.com/starise/Scoop-Gaming
 scoop bucket add anderlli0053_DEV-tools https://github.com/anderlli0053/DEV-tools
 scoop bucket add nonportable
 
-Write-Host "Installing All The Apps"
+Write-Host "----------------Installing All The Apps----------------"
 scoop install 7zip
 scoop install git
 scoop install vlc
@@ -51,3 +51,6 @@ scoop install lsd
 scoop install winfetch
 scoop install starship
 scoop install FiraCode-NF
+
+Write-Host "----------------Restore Legacy Context Menu----------------"
+reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
