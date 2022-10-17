@@ -10,6 +10,7 @@ Write-Host "    /  \ | |  | |  | | | |  | |   | | |  \| | (___    | |  /  \  | |
 Write-Host "   / /\ \| |  | |  | | | |  | |   | | | . ` |\___ \   | | / /\ \ | |    | |       \___ \| |    |  _  /  | | |  ___/  | |   "
 Write-Host "  / ____ \ |__| |  | | | |__| |  _| |_| |\  |____) |  | |/ ____ \| |____| |____   ____) | |____| | \ \ _| |_| |      | |   "
 Write-Host " /_/    \_\____/   |_|  \____/  |_____|_| \_|_____/   |_/_/    \_\______|______| |_____/ \_____|_|  \_\_____|_|      |_|   "
+Write-Host " https://github.com/rishavnandi/Dotfiles "
 
 Write-Host "Installing Scoop"
 Set-ExecutionPolicy AllSigned
