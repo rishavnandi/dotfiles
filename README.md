@@ -4,9 +4,9 @@ There are three starship config files, one for bash shell for my wsl2 instance a
 
 ## Config PATHS
 
-- win_starship.toml -> C:\Users\risha\.starship\starship.toml
-- starship.lua -> C:\Users\risha\AppData\Local\clink\starship.lua
-- winfetch.ps1 -> C:\Users\risha\.config\winfetch\config.ps1
+- win_starship.toml -> "C:\Users\risha\.starship\starship.toml"
+- starship.lua -> "C:\Users\risha\AppData\Local\clink\starship.lua"
+- winfetch.ps1 -> "C:\Users\risha\.config\winfetch\config.ps1"
 
 ![Screenshot (3)](https://user-images.githubusercontent.com/101431112/196135275-9083721c-7ea9-4e7d-bde4-f36ef5d5bfa9.png)
 ![Screenshot (7)](https://user-images.githubusercontent.com/101431112/193418437-42984393-b815-47d2-8694-77a0dd91f1b1.png)
