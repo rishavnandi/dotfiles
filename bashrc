@@ -159,6 +159,10 @@ eval "$(starship init bash)"
 # Export PATH
 export PATH="/home/rishav/.local/bin:$PATH"
 
+# Export Configs For Vagrant 
+export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/risha
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+
 neofetch
 
 export NVM_DIR="$HOME/.nvm"
