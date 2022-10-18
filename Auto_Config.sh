@@ -16,23 +16,24 @@ echo "
 ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝     ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝"                        
 
 echo "----------------Setup Bashrc----------------"
-cat bashrc > ~/.bashrc
-dircolors -p | sed 's/;42/;01/' > ~/.dircolors
+echo "----------------Enter Unix Username----------------"
+read user
+cat bashrc > /home/$user/.bashrc
+dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
 echo "----------------Setup Starship For Bash----------------"
 curl -sS https://starship.rs/install.sh | sh
-if [ -d "~/.config/" ] 
+if [ -d "/home/$user/.config/" ] 
 then
-    cat starship.toml > ~/.config/starship.toml 
+    cat starship.toml > /home/$user/.config/starship.toml 
 else
-    mkdir ~/.config/ && cat starship.toml > ~/.config/starship.toml
+    mkdir /home/$user/.config/ && cat starship.toml > /home/$user/.config/starship.toml
 fi
 
 echo "----------------Setup PowerShell Profile----------------"
 
 echo "----------------Enter Windows Username----------------"
 read username
-
 if [ -d "/mnt/c/Users/$username/Documents/PowerShell/" ] 
 then
     cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
@@ -40,14 +41,14 @@ else
     mkdir /mnt/c/Users/$username/Documents/PowerShell/ && cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 fi
 
-if [-d "/mnt/c/Users/$username/.starship/"]
+if [ -d "/mnt/c/Users/$username/.starship/" ]
 then
     cat starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 else
     mkdir /mnt/c/Users/$username/.starship/ && cat starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 fi
 
-if [-d "/mnt/c/Users/$username/.config/winfetch/"]
+if [ -d "/mnt/c/Users/$username/.config/winfetch/" ]
 then
     cat winfetch.ps1 > /mnt/c/Users/$username/.config/winfetch/winfetch.ps1
 else
