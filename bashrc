@@ -156,6 +156,9 @@ export STARSHIP_DISTRO="$ICON "
 export STARSHIP_CONFIG=~/.config/starship.toml
 eval "$(starship init bash)"
 
+# Export PATH
+export PATH="/home/rishav/.local/bin:$PATH"
+
 neofetch
 
 export NVM_DIR="$HOME/.nvm"
