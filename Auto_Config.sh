@@ -19,6 +19,7 @@ echo "----------------Setup Bashrc----------------"
 echo "----------------Enter Unix Username----------------"
 read user
 cat bashrc > /home/$user/.bashrc
+echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
 echo "----------------Setup Starship For Bash----------------"
