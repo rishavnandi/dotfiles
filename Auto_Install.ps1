@@ -14,7 +14,7 @@ Write-Host "                                                                    
 Write-Host "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
 Write-Host "----------------Installing Scoop----------------"
-irm get.scoop.sh | iex
+iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 
 Write-Host "----------------Add Required Buckets For All The Apps----------------"
 scoop install git
