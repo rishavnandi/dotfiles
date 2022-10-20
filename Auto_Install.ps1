@@ -23,7 +23,6 @@ scoop bucket add extras
 scoop bucket add nerd-fonts
 scoop bucket add starise_Scoop-Gaming https://github.com/starise/Scoop-Gaming
 scoop bucket add anderlli0053_DEV-tools https://github.com/anderlli0053/DEV-tools
-scoop bucket add Ash258 'https://github.com/Ash258/scoop-Ash258.git'
 scoop bucket add nonportable
 
 Write-Host "----------------Installing All The Apps----------------"
@@ -45,7 +44,6 @@ scoop install wireguard-np
 scoop install virtualbox-np
 scoop install zoom
 scoop install vagrant
-scoop install vagrant-manager
 scoop install quicklook
 scoop install msiafterburner
 scoop install obsidian
@@ -56,10 +54,7 @@ scoop install lsd
 scoop install winfetch
 scoop install starship
 scoop install FiraCode-NF
-scoop install Directx
-scoop uninstall Directx
 scoop install rufus
-scoop install etcher
 scoop install powertoys
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
