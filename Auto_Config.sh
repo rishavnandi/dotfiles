@@ -120,17 +120,15 @@ echo "----------------Setup Ansible----------------"
 pip3 install ansible
 pip3 install ansible-lint
 
-echo "----------------Setup Kubectl----------------"
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
 
 echo "----------------Setup Git----------------"
-echo "----------------Enter GitHub Username----------------"
-read gituser
+echo "----------------Enter First Name----------------"
+read first
+echo "----------------Enter Last Name----------------"
+read last
 echo "----------------Enter GitHub Email----------------"
 read gitemail
-git config --global user.name "$gituser"
+git config --global user.name "$first $last"
 git config --global user.email "$gitemail"
