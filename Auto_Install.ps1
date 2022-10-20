@@ -10,6 +10,7 @@ Write-Host "   /  \ | |  | |  | | | |  | |   | | |  \| | (___    | |  /  \  | | 
 Write-Host "  / /\ \| |  | |  | | | |  | |   | | | . ` |\___ \   | | / /\ \ | |    | |                          "
 Write-Host " / ____ \ |__| |  | | | |__| |  _| |_| |\  |____) |  | |/ ____ \| |____| |____                      "
 Write-Host "/_/    \_\____/   |_|  \____/  |_____|_| \_|_____/   |_/_/    \_\______|______|                     "
+Write-Host "                                                                                                    "
 Write-Host "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
 Write-Host "----------------Installing Scoop----------------"
@@ -51,6 +52,10 @@ scoop install lsd
 scoop install winfetch
 scoop install starship
 scoop install FiraCode-NF
+scoop install directx
+scoop install rufus
+scoop install etcher
+scoop install powertoys
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve

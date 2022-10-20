@@ -118,7 +118,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
 # find out which distribution we are running on
 LFILE="/etc/*-release"
 MFILE="/System/Library/CoreServices/SystemVersion.plist"
