@@ -18,6 +18,7 @@ Set-ExecutionPolicy AllSigned
 irm get.scoop.sh | iex
 
 Write-Host "----------------Add Required Buckets For All The Apps----------------"
+scoop install git
 scoop bucket add main
 scoop bucket add extras
 scoop bucket add nerd-fonts
