@@ -24,9 +24,9 @@ sudo apt install build-essential software-properties-common neovim neofetch git 
 echo "----------------Setup Bashrc----------------"
 echo "----------------Enter Unix Username----------------"
 read user
-cat bashrc > /home/$user/.bashrc
+sudo cat bashrc > /home/$user/.bashrc
 sudo apt install dos2unix
-dos2unix /home/$user/.bashrc
+sudo dos2unix /home/$user/.bashrc
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
@@ -34,9 +34,9 @@ echo "----------------Setup Starship For Bash----------------"
 curl -sS https://starship.rs/install.sh | sh
 if [ -d "/home/$user/.config/" ] 
 then
-    cat linux_starship.toml > /home/$user/.config/starship.toml 
+    sudo cat linux_starship.toml > /home/$user/.config/starship.toml 
 else
-    mkdir /home/$user/.config/ && cat linux_starship.toml > /home/$user/.config/starship.toml
+    sudo mkdir /home/$user/.config/ && sudo cat linux_starship.toml > /home/$user/.config/starship.toml
 fi
 
 echo "----------------Setup PowerShell Profile----------------"
@@ -44,31 +44,31 @@ echo "----------------Enter Windows Username----------------"
 read username
 if [ -d "/mnt/c/Users/$username/Documents/WindowsPowerShell/" ] 
 then
-    cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+    sudo cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 else
-    mkdir /mnt/c/Users/$username/Documents/WindowsPowerShell/ && cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
+    sudo mkdir /mnt/c/Users/$username/Documents/WindowsPowerShell/ && sudo cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
 fi
 
 if [ -d "/mnt/c/Users/$username/.starship/" ]
 then
-    cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
+    sudo cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 else
-    mkdir /mnt/c/Users/$username/.starship/ && cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
+    sudo mkdir /mnt/c/Users/$username/.starship/ && sudo cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 fi
 
 if [ -d "/mnt/c/Users/$username/.config/winfetch/" ]
 then
-    cat winfetch.ps1 > /mnt/c/Users/$username/.config/winfetch/config.ps1
+    sudo cat winfetch.ps1 > /mnt/c/Users/$username/.config/winfetch/config.ps1
 else
-    mkdir /mnt/c/Users/$username/.config/winfetch/ && cat winfetch.ps1 > /mnt/c/Users/$username/.config/winfetch/config.ps1
+    sudo mkdir /mnt/c/Users/$username/.config/winfetch/ && sudo cat winfetch.ps1 > /mnt/c/Users/$username/.config/winfetch/config.ps1
 fi
 
 echo "----------------Setup Command Prompt----------------"
-cat starship.lua > /mnt/c/Users/$username/AppData/Local/clink/starship.lua
+sudo cat starship.lua > /mnt/c/Users/$username/AppData/Local/clink/starship.lua
 
 echo "----------------Setup Windows Terminal----------------"
 terminal_folder=$(ls | grep Terminal)
-cat settings.json > /mnt/c/Users/$username/AppData/Local/Packages/$terminal_folder/LocalState/settings.json
+sudo cat settings.json > /mnt/c/Users/$username/AppData/Local/Packages/$terminal_folder/LocalState/settings.json
 
 echo "----------------Download QuickLook Plugins----------------"
 cd /mnt/c/Users/$username/Downloads/
