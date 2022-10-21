@@ -71,9 +71,7 @@ echo "----------------Setup Command Prompt----------------"
 sudo cat starship.lua > /mnt/c/Users/$username/AppData/Local/clink/starship.lua
 
 echo "----------------Setup Windows Terminal----------------"
-cd /mnt/c/Users/$username/AppData/Local/Packages/
-terminal_folder=$(ls | grep Terminal)
-sudo cat settings.json > /mnt/c/Users/$username/AppData/Local/Packages/$terminal_folder/LocalState/settings.json
+sudo cat settings.json > /mnt/c/Users/$username/AppData/Local/Packages/Microsoft.WindowsTerminal*/LocalState/settings.json
 
 echo "----------------Download QuickLook Plugins----------------"
 cd /mnt/c/Users/$username/Downloads/
@@ -83,15 +81,6 @@ wget https://github.com/canheo136/QuickLook.Plugin.ApkViewer/releases/download/1
 wget https://github.com/adyanth/QuickLook.Plugin.FolderViewer/releases/download/1.3/QuickLook.Plugin.FolderViewer.qlplugin
 wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/download/0.1.0/QuickLook.Plugin.TorrentViewer.qlplugin
 wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/releases/download/1.0.1/QuickLook.Plugin.JupyterNotebookViewer.qlplugin
-
-echo "----------------Download dotnet----------------"
-wget https://download.visualstudio.microsoft.com/download/pr/a6e878eb-d1da-40cb-8b6a-7f5b9390f09c/e4431ce2aa28b6c9956db672209be500/windowsdesktop-runtime-6.0.10-win-x64.exe
-
-echo "----------------Download directx----------------"
-wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe
-
-echo "----------------Download FxSound----------------"
-wget -O fxsound.exe https://download.fxsound.com/fxsoundlatest
 
 echo "----------------Download NerdFonts----------------"
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraMono.zip
