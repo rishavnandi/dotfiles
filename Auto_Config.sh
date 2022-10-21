@@ -134,6 +134,15 @@ pip3 install ansible-lint
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
 
+echo "----------------Download Anaconda Icon For Windows Terminal----------------"
+if [ -d "/mnt/c/Users/$username/scoop/apps/miniconda3/current/" ]
+then
+    cd /mnt/c/Users/$username/scoop/apps/miniconda3/current/ && wget -O anaconda.png https://img.icons8.com/fluency/48/000000/anaconda--v2.png
+else
+    echo "Miniconda Not Installed"
+fi
+
+
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"
 read first
