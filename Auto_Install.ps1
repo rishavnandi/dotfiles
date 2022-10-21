@@ -26,33 +26,35 @@ scoop bucket add anderlli0053_DEV-tools https://github.com/anderlli0053/DEV-tool
 scoop bucket add nonportable
 
 Write-Host "----------------Installing All The Apps----------------"
-scoop install 7zip
-scoop install git
-scoop install vlc
-scoop install freedownloadmanager
-scoop install miniconda3
-scoop install wemod
-scoop install windirstat
-scoop install notepadplusplus
-scoop install clink
-scoop install vcredist
-scoop uninstall vcredist2005 vcredist2008 vcredist2010 vcredist2012 vcredist2013 vcredist
-scoop install googlechrome
-scoop install wireguard-np
-scoop install virtualbox-np
-scoop install zoom
-scoop install vagrant
-scoop install quicklook
+winget install -e --id M2Team.NanaZip
+winget install -e --id Git.Git
+winget install -e --id VideoLAN.VLC
+winget install -e --id SoftDeluxe.FreeDownloadManager
+winget install -e --id Anaconda.Miniconda3
+winget install -e --id WeMod.WeMod
+winget install -e --id WinDirStat.WinDirStat
+winget install -e --id Notepad++.Notepad++
+winget install -e --id chrisant996.Clink
+winget install -e --id Microsoft.VC++2015-2022Redist-x86
+winget install -e --id Microsoft.VC++2015-2022Redist-x64
+winget install -e --id Microsoft.VC++2013Redist-x86
+winget install -e --id Microsoft.VC++2013Redist-x64
+winget install -e --id Google.Chrome
+winget install -e --id WireGuard.WireGuard
+winget install -e --id Oracle.VirtualBox
+winget install -e --id Zoom.Zoom
+winget install -e --id Hashicorp.Vagrant
+winget install -e --id QL-Win.QuickLook
 scoop install msiafterburner
-scoop install obsidian
-scoop install vscode
-scoop install whatsapp
-scoop install telegram
+winget install -e --id Obsidian.Obsidian
+winget install -e --id Microsoft.VisualStudioCode
+winget install -e --id WhatsApp.WhatsApp
+winget install -e --id Telegram.TelegramDesktop
 scoop install lsd
 scoop install winfetch
-scoop install starship
-scoop install rufus
-scoop install powertoys
+winget install -e --id Starship.Starship
+winget install -e --id Rufus.Rufus
+winget install -e --id Microsoft.PowerToys
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
