@@ -80,13 +80,13 @@ wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/downloa
 wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/releases/download/1.0.1/QuickLook.Plugin.JupyterNotebookViewer.qlplugin
 
 echo "----------------Download dotnet----------------"
-wget https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.10-windows-x64-installer
+wget -O runtime-desktop-6.0.10.exe https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.10-windows-x64-installer
 
 echo "----------------Download directx----------------"
 wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe
 
 echo "----------------Download FxSound----------------"
-wget https://download.fxsound.com/fxsoundlatest
+wget -O fxsound.exe https://download.fxsound.com/fxsoundlatest
 
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
