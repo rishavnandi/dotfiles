@@ -20,7 +20,7 @@ echo "----------------https://github.com/rishavnandi/Dotfiles----------------"
 echo "----------------Make Sure User Has Ownership Of All Files----------------"
 echo "----------------Enter Unix Username----------------"
 read user
-sudo chown -R "$user" .
+sudo chown -R "$user" /home/$user/
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
