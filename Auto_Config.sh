@@ -42,11 +42,11 @@ fi
 echo "----------------Setup PowerShell Profile----------------"
 echo "----------------Enter Windows Username----------------"
 read username
-if [ -d "/mnt/c/Users/$username/Documents/PowerShell/" ] 
+if [ -d "/mnt/c/Users/$username/Documents/WindowsPowerShell/" ] 
 then
     cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 else
-    mkdir /mnt/c/Users/$username/Documents/PowerShell/ && cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+    mkdir /mnt/c/Users/$username/Documents/WindowsPowerShell/ && cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
 fi
 
 if [ -d "/mnt/c/Users/$username/.starship/" ]
