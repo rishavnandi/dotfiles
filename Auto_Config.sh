@@ -135,9 +135,9 @@ echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
 
 echo "----------------Download Anaconda Icon For Windows Terminal----------------"
-if [ -d "/mnt/c/Users/$username/scoop/apps/miniconda3/current/" ]
+if [ -d "/mnt/c/Users/$username/miniconda3/" ]
 then
-    cd /mnt/c/Users/$username/scoop/apps/miniconda3/current/ && wget -O anaconda.png https://img.icons8.com/fluency/48/000000/anaconda--v2.png
+    cd /mnt/c/Users/$username/miniconda3/ && wget -O anaconda.png https://img.icons8.com/fluency/48/000000/anaconda--v2.png
 else
     echo "Miniconda Not Installed"
 fi
