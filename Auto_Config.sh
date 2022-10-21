@@ -89,6 +89,10 @@ wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A
 echo "----------------Download FxSound----------------"
 wget -O fxsound.exe https://download.fxsound.com/fxsoundlatest
 
+echo "----------------Download NerdFonts----------------"
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraMono.zip
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip
+
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
 wget https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd_0.23.1_amd64.deb
