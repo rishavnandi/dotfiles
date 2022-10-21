@@ -67,6 +67,7 @@ echo "----------------Setup Command Prompt----------------"
 sudo cat starship.lua > /mnt/c/Users/$username/AppData/Local/clink/starship.lua
 
 echo "----------------Setup Windows Terminal----------------"
+cd /mnt/c/Users/$username/AppData/Local/Packages/
 terminal_folder=$(ls | grep Terminal)
 sudo cat settings.json > /mnt/c/Users/$username/AppData/Local/Packages/$terminal_folder/LocalState/settings.json
 
