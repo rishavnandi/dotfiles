@@ -18,6 +18,7 @@ echo "
 echo "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
 echo "----------------Make Sure User Has Ownership Of All Files----------------"
+
 echo "----------------Enter Unix Username----------------"
 read user
 sudo chown -R "$user" /home/$user/
@@ -30,6 +31,7 @@ echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
 sudo apt install dos2unix
 sudo dos2unix /home/$user/.bashrc
+
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
@@ -43,6 +45,7 @@ else
 fi
 
 echo "----------------Setup PowerShell Profile----------------"
+
 echo "----------------Enter Windows Username----------------"
 read username
 if [ -d "/mnt/c/Users/$username/Documents/WindowsPowerShell/" ] 
