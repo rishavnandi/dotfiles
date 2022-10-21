@@ -17,13 +17,17 @@ echo "
 
 echo "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
+echo "----------------Make Sure User Has Ownership Of All Files----------------"
+echo "----------------Enter Unix Username----------------"
+read user
+sudo chown -R "$user" .
+
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
 sudo apt install build-essential software-properties-common neovim neofetch git curl wget -y
 
 echo "----------------Setup Bashrc----------------"
 echo "----------------Enter Unix Username----------------"
-read user
 sudo cat bashrc > /home/$user/.bashrc
 sudo apt install dos2unix
 sudo dos2unix /home/$user/.bashrc
