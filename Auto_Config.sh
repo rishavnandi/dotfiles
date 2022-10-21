@@ -25,6 +25,8 @@ echo "----------------Setup Bashrc----------------"
 echo "----------------Enter Unix Username----------------"
 read user
 cat bashrc > /home/$user/.bashrc
+sudo apt install dos2unix
+dos2unix /home/$user/.bashrc
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
@@ -32,9 +34,9 @@ echo "----------------Setup Starship For Bash----------------"
 curl -sS https://starship.rs/install.sh | sh
 if [ -d "/home/$user/.config/" ] 
 then
-    cat starship.toml > /home/$user/.config/starship.toml 
+    cat linux_starship.toml > /home/$user/.config/starship.toml 
 else
-    mkdir /home/$user/.config/ && cat starship.toml > /home/$user/.config/starship.toml
+    mkdir /home/$user/.config/ && cat linux_starship.toml > /home/$user/.config/starship.toml
 fi
 
 echo "----------------Setup PowerShell Profile----------------"
@@ -49,9 +51,9 @@ fi
 
 if [ -d "/mnt/c/Users/$username/.starship/" ]
 then
-    cat starship.toml > /mnt/c/Users/$username/.starship/starship.toml
+    cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 else
-    mkdir /mnt/c/Users/$username/.starship/ && cat starship.toml > /mnt/c/Users/$username/.starship/starship.toml
+    mkdir /mnt/c/Users/$username/.starship/ && cat win_starship.toml > /mnt/c/Users/$username/.starship/starship.toml
 fi
 
 if [ -d "/mnt/c/Users/$username/.config/winfetch/" ]
