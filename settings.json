@@ -54,10 +54,10 @@
                 "source": "Windows.Terminal.Wsl"
             },
             {
-                "commandline": "cmd.exe /K C:\\Users\\risha\\scoop\\apps\\miniconda3\\current\\Scripts\\activate.bat C:\\Users\\risha\\scoop\\apps\\miniconda3\\current",
+                "commandline": "cmd.exe /K C:\\Users\\risha\\miniconda3\\Scripts\\activate.bat C:\\Users\\risha\\miniconda3",
                 "guid": "{5caa77b6-628a-4cb7-9c26-8ff2008c3803}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\scoop\\apps\\miniconda3\\current\\anaconda.png",
+                "icon": "C:\\Users\\risha\\miniconda3\\anaconda.png",
                 "name": "Anaconda"
             },
             {
