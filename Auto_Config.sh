@@ -82,9 +82,21 @@ wget https://github.com/adyanth/QuickLook.Plugin.FolderViewer/releases/download/
 wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/download/0.1.0/QuickLook.Plugin.TorrentViewer.qlplugin
 wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/releases/download/1.0.1/QuickLook.Plugin.JupyterNotebookViewer.qlplugin
 
+echo "----------------Download directx----------------"
+wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe
+
+echo "----------------Download VC++----------------"
+wget https://aka.ms/vs/17/release/vc_redist.x86.exe
+wget https://aka.ms/vs/17/release/vc_redist.x64.exe
+wget -O vc_x86.exe https://aka.ms/highdpimfc2013x86enu
+wget -O vc_x64.exe https://aka.ms/highdpimfc2013x64enu
+
 echo "----------------Download NerdFonts----------------"
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraMono.zip
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip
+
+echo "----------------Download MSI Afterburner----------------"
+wget -O msi_afterburner.zip https://download.msi.com/uti_exe/vga/MSIAfterburnerSetup.zip?__token__=exp=1666547492~acl=/*~hmac=463980000f9c517f86604b4c1fdb8fa176f0cc81ef0e3742deaca7242697dc69
 
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
@@ -130,7 +142,6 @@ then
 else
     echo "Miniconda Not Installed"
 fi
-
 
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"

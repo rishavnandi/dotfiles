@@ -16,15 +16,6 @@ Write-Host "----------------https://github.com/rishavnandi/Dotfiles-------------
 Write-Host "----------------Installing Scoop----------------"
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 
-Write-Host "----------------Add Required Buckets For All The Apps----------------"
-scoop install git
-scoop bucket add main
-scoop bucket add extras
-scoop bucket add nerd-fonts
-scoop bucket add starise_Scoop-Gaming https://github.com/starise/Scoop-Gaming
-scoop bucket add anderlli0053_DEV-tools https://github.com/anderlli0053/DEV-tools
-scoop bucket add nonportable
-
 Write-Host "----------------Installing All The Apps----------------"
 winget install -e --id Microsoft.DotNet.Runtime.6
 winget install -e --id M2Team.NanaZip
@@ -52,7 +43,6 @@ winget install -e --id Rufus.Rufus
 winget install -e --id Microsoft.PowerToys
 scoop install lsd
 scoop install winfetch
-scoop install msiafterburner
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
