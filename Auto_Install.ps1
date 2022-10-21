@@ -35,10 +35,8 @@ scoop install wemod
 scoop install windirstat
 scoop install notepadplusplus
 scoop install clink
-scoop install vcredist2013
-scoop uninstall vcredist2013
-scoop install vcredist2022
-scoop uninstall vcredist2022
+scoop install vcredist
+scoop uninstall vcredist2005 vcredist2008 vcredist2010 vcredist2012 vcredist2013 vcredist
 scoop install googlechrome
 scoop install wireguard-np
 scoop install virtualbox-np
@@ -53,7 +51,6 @@ scoop install telegram
 scoop install lsd
 scoop install winfetch
 scoop install starship
-scoop install FiraCode-NF
 scoop install rufus
 scoop install powertoys
 
