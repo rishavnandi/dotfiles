@@ -50,7 +50,7 @@ echo "----------------Enter Windows Username----------------"
 read username
 if [ -d "/mnt/c/Users/$username/Documents/WindowsPowerShell/" ] 
 then
-    sudo cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+    sudo cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
 else
     sudo mkdir /mnt/c/Users/$username/Documents/WindowsPowerShell/ && sudo cat ps_profile.ps1 > /mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
 fi
