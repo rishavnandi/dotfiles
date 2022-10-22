@@ -160,7 +160,7 @@ cd /mnt/c/Users/risha/Pictures/
 wget -O ubuntu.png https://img.icons8.com/color/48/000000/ubuntu--v1.png
 wget -O fedora.png https://img.icons8.com/fluency/48/000000/fedora.png
 wget -O powershell.png https://img.icons8.com/color/48/000000/powershell.png
-wget -O cmd.png https://img.icons8.com/ios-filled/50/000000/command-line.png
+wget -O cmd.png https://img.icons8.com/color/48/000000/command-line.png
 
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"
