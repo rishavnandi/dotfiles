@@ -19,7 +19,7 @@ cd .\Downloads\dotfiles\
 - First make sure your user has ownership of all files and folders in the dotfiles folder
 ```bash
 cd /home/<username>/
-sudo chown -R "rishav" .
+sudo chown -R "<username>" .
 ```
 
 ```bash
