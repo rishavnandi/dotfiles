@@ -22,7 +22,7 @@ read user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip fish dos2unix -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
@@ -156,7 +156,7 @@ else
 fi
 
 echo "----------------Download Titlebar Icons For Windows Terminal----------------"
-cd /mnt/c/Users/risha/Pictures/
+cd /mnt/c/Users/risha/Pictures/ && mkdir icons && cd icons
 wget -O ubuntu.png https://img.icons8.com/color/48/000000/ubuntu--v1.png
 wget -O fedora.png https://img.icons8.com/fluency/48/000000/fedora.png
 wget -O powershell.png https://img.icons8.com/color/48/000000/powershell.png
