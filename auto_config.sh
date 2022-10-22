@@ -155,6 +155,13 @@ else
     echo "Miniconda Not Installed"
 fi
 
+echo "----------------Download Titlebar Icons For Windows Terminal----------------"
+cd /mnt/c/Users/risha/Pictures/
+wget -O ubuntu.png https://img.icons8.com/color/48/000000/ubuntu--v1.png
+wget -O fedora.png https://img.icons8.com/fluency/48/000000/fedora.png
+wget -O powershell.png https://img.icons8.com/color/48/000000/powershell.png
+wget -O cmd.png https://img.icons8.com/external-creatype-glyph-colourcreatype/64/000000/external-cmd-essential-ui-v2-creatype-glyph-colourcreatype.png
+
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"
 read first
