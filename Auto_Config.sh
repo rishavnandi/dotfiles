@@ -28,7 +28,7 @@ cd $running_dir
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip fish -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
@@ -46,6 +46,17 @@ then
 else
     sudo mkdir /home/$user/.config/ && sudo cat linux_starship.toml > /home/$user/.config/starship.toml
 fi
+
+echo "----------------Setup Fish Config----------------"
+if [ -d "/home/$user/.config/fish/" ]
+then
+    sudo cat fish_config > /home/$user/.config/fish/config.fish
+else
+    sudo mkdir /home/$user/.config/fish/ && sudo cat fish_config > /home/$user/.config/fish/config.fish
+fi
+
+echo "----------------Change Default Shell To Fish----------------"
+chsh -s /usr/bin/fish
 
 echo "----------------Setup PowerShell Profile----------------"
 

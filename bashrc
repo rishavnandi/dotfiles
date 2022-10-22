@@ -137,6 +137,7 @@ case $_distro in
     *gentoo*)                ICON="";;
     *mageia*)                ICON="";;
     *centos*)                ICON="";;
+    *redhat*)                ICON="";;
     *opensuse*|*tumbleweed*) ICON="";;
     *sabayon*)               ICON="";;
     *slackware*)             ICON="";;
