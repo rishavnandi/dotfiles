@@ -31,7 +31,6 @@ winget install -e --id Google.Chrome
 winget install -e --id WireGuard.WireGuard
 winget install -e --id Oracle.VirtualBox
 winget install -e --id Zoom.Zoom
-winget install -e --id Hashicorp.Vagrant
 winget install -e --id FxSoundLLC.FxSound
 winget install -e --id QL-Win.QuickLook
 winget install -e --id Obsidian.Obsidian

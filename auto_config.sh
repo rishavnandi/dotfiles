@@ -17,22 +17,15 @@ echo "
 
 echo "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
-echo "----------------Make Sure User Has Ownership Of All Files----------------"
-
 echo "----------------Enter Unix Username----------------"
 read user
-running_dir=$pwd
-cd /home/$user/
-sudo chown -R "$user" .
-cd $running_dir
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip fish -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip fish dos2unix -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
-sudo apt install dos2unix
 sudo dos2unix /home/$user/.bashrc
 
 echo "----------------Disable Directory Highlights----------------"
@@ -100,6 +93,9 @@ wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/rel
 
 echo "----------------Download directx----------------"
 wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe
+
+echo "----------------Download Vagrant----------------"
+wget https://releases.hashicorp.com/vagrant/2.3.2/vagrant_2.3.2_windows_amd64.msi
 
 echo "----------------Download VC++----------------"
 wget https://aka.ms/vs/17/release/vc_redist.x86.exe
