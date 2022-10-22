@@ -1,6 +1,8 @@
 set fish_greeting
 
-# some more ls aliases
+set -x LS_COLORS "ow=34;01"
+
+#ls aliases
 alias ls="lsd"
 alias ll='ls -l'
 alias la='ls -a'
