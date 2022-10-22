@@ -50,8 +50,8 @@
             {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
+                "icon": "C:\\Users\\risha\\Pictures\\icons\\ubuntu.png",
                 "name": "Ubuntu",
-                "icon": "C:\\Users\\risha\\Pictures\\ubuntu.png",
                 "source": "Windows.Terminal.Wsl"
             },
             {
@@ -65,14 +65,14 @@
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\Pictures\\cmd.png",
+                "icon": "C:\\Users\\risha\\Pictures\\icons\\cmd.png",
                 "name": "Command Prompt"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\Pictures\\powershell.png",
+                "icon": "C:\\Users\\risha\\Pictures\\icons\\powershell.png",
                 "name": "Windows PowerShell"
             }
         ]
