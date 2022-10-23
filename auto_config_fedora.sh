@@ -73,6 +73,9 @@ pip3 install ansible-lint
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
 
+echo "----------------Setup Locales To Avoid Locale Set Error In WSL----------------"
+dnf install langpacks-en glibc-all-langpacks -y
+
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"
 read first
