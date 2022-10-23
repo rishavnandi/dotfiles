@@ -4,8 +4,8 @@
     "actions": 
     [
         {
-            "command": "paste",
-            "keys": "ctrl+v"
+            "command": "find",
+            "keys": "ctrl+shift+f"
         },
         {
             "command": 
@@ -16,8 +16,8 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "find",
-            "keys": "ctrl+shift+f"
+            "command": "paste",
+            "keys": "ctrl+v"
         },
         {
             "command": 
@@ -52,6 +52,13 @@
                 "hidden": false,
                 "icon": "C:\\Users\\risha\\Pictures\\icons\\ubuntu.png",
                 "name": "Ubuntu",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{aa8efdb5-3cbe-50b2-a332-9203dc1ee217}",
+                "hidden": false,
+                "name": "Fedora",
+                "icon": "C:\\Users\\risha\\Pictures\\icons\\fedora.png",
                 "source": "Windows.Terminal.Wsl"
             },
             {
