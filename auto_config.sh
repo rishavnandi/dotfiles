@@ -117,10 +117,9 @@ sudo apt install ./lsd_0.23.1_amd64.deb -y
 rm lsd_0.23.1_amd64.deb
 
 echo "----------------Setup Vagrant For Ubuntu----------------"
-cd /home/$user/
-wget https://releases.hashicorp.com/vagrant/2.3.2/vagrant_2.3.2-1_amd64.deb
-sudo apt install ./vagrant_2.3.2-1_amd64.deb -y
-rm vagrant_2.3.2-1_amd64.deb
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install vagrant
 vagrant plugin install virtualbox_WSL2
 vagrant plugin install vagrant-vbguest
 vagrant autocomplete install --bash
