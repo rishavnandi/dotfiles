@@ -49,8 +49,7 @@ else
 fi
 
 echo "----------------Change Default Shell To Fish----------------"
-chsh -s /usr/bin/fish
-
+sudo sed -i 's#/usr/bin/bash#/usr/bin/fish#g' /etc/passwd
 
 echo "----------------Setup Vagrant For Fedora----------------"
 sudo dnf install -y dnf-plugins-core
