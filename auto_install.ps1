@@ -40,10 +40,11 @@ winget install -e --id Telegram.TelegramDesktop
 winget install -e --id Starship.Starship
 winget install -e --id Rufus.Rufus
 winget install -e --id Microsoft.PowerToys
+winget install -e --id Notion.Notion
+winget install -e --id opticos.gwsl
 winget install nahimic
 winget install easywsl
 winget install "msi center pro"
-winget install opticos.gwsl
 scoop install lsd
 scoop install winfetch
 
