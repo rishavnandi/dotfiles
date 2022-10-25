@@ -171,3 +171,4 @@ echo "----------------Enter GitHub Email----------------"
 read gitemail
 git config --global user.name "$first $last"
 git config --global user.email "$gitemail"
+git config --global credential.helper store
