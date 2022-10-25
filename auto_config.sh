@@ -142,6 +142,7 @@ sudo apt install python3-pip -y
 echo "----------------Setup Ansible----------------"
 pip3 install ansible
 pip3 install ansible-lint
+pip3 install molecule
 
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
