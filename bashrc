@@ -94,6 +94,18 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 
+# custom aliases
+alias cleanup="sudo apt autoremove"
+alias update="sudo apt update && sudo apt upgrade -y"
+alias install="sudo apt install"
+alias uninstall="sudo apt purge"
+alias gin="git init"
+alias ga="git add ."
+alias gc="git commit -m"
+alias gp="git push"
+alias gb="git checkout -b"
+alias gpull="git pull"
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
