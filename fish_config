@@ -9,6 +9,18 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 
+# custom aliases
+alias cleanup="sudo apt autoremove"
+alias update="sudo apt update && sudo apt upgrade -y"
+alias install="sudo apt install"
+alias uninstall="sudo apt purge"
+alias gin="git init"
+alias ga="git add ."
+alias gc="git commit -m"
+alias gp="git push"
+alias gb="git checkout -b"
+alias gpull="git pull"
+
 # Distro name
 function _fishblocks_distro_name -d 'Returns linux distribution name'
         set distro_name
