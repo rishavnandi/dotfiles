@@ -22,7 +22,7 @@ read user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip bat ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
