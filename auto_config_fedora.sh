@@ -22,7 +22,7 @@ read user
 
 echo "----------------Setup Common Software----------------"
 sudo dnf update -y
-sudo dnf install lsd neovim neofetch git curl wget unzip ranger feh cmatrix lynx fzf speedtest-cli fish dos2unix -y
+sudo dnf install lsd neovim neofetch git curl wget unzip ranger feh cmatrix lynx bat fzf speedtest-cli fish dos2unix -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
