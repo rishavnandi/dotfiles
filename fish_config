@@ -20,6 +20,7 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
+alias cat="batcat"
 
 # Distro name
 function _fishblocks_distro_name -d 'Returns linux distribution name'
