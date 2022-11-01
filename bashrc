@@ -105,6 +105,7 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
+alias cat="batcat"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
