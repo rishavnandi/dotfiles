@@ -3,7 +3,7 @@
 
 - Clone or download the repo
 ```powershell
-git clone https://github.com/rishavnandi/dotfiles.git
+git clone https://github.com/rishavnandi/wsl_dotfiles.git
 ```
 - Ease the execution policy (Type into an admin powershell window)
 ```powershell
@@ -12,7 +12,7 @@ Set-ExecutionPolicy Unrestricted
 
 - Open powershell as admin and navigate to the dotfiles folder and execute the script (Below command assumes you downloaded repo to downloads folder)
 ```powershell
-cd .\Downloads\dotfiles\
+cd .\Downloads\wsl_dotfiles\
 .\auto_install.ps1
 ``` 
 - Now run the script in your wsl instance (Below command assumes you downloaded repo to downloads folder)
