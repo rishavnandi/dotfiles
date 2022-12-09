@@ -44,6 +44,12 @@ winget install -e --id Notion.Notion
 winget install -e --id opticos.gwsl
 winget install -e --id Valve.Steam
 winget install -e --id EpicGames.EpicGamesLauncher
+winget install -e --id Brave.Brave
+winget install -e --id Discord.Discord
+winget install -e --id REALiX.HWiNFO
+winget install -e --id Microsoft.WingetCreate
+winget install -e --id Ubisoft.Connect
+winget install -e --id LedgerHQ.LedgerLive
 winget install nahimic
 winget install easywsl
 winget install "msi center pro"
