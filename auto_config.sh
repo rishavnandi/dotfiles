@@ -28,6 +28,13 @@ echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
 sudo dos2unix /home/$user/.bashrc
 
+echo "----------------Setup Zshrc----------------"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+sudo cat zshrc > /home/$user/.zshrc
+sudo dos2unix /home/$user/.zshrc
+
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
 
@@ -95,7 +102,7 @@ echo "----------------Download directx----------------"
 wget https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe
 
 echo "----------------Download Vagrant----------------"
-wget https://releases.hashicorp.com/vagrant/2.3.2/vagrant_2.3.2_windows_amd64.msi
+wget https://releases.hashicorp.com/vagrant/2.3.4/vagrant_2.3.4_windows_amd64.msi
 
 echo "----------------Download VC++----------------"
 wget https://aka.ms/vs/17/release/vc_redist.x86.exe
@@ -108,7 +115,7 @@ wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraMono.z
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip
 
 echo "----------------Download MSI Afterburner----------------"
-wget -O msi_afterburner.zip https://download.msi.com/uti_exe/vga/MSIAfterburnerSetup.zip?__token__=exp=1666547492~acl=/*~hmac=463980000f9c517f86604b4c1fdb8fa176f0cc81ef0e3742deaca7242697dc69
+wget https://files02.tchspt.com/temp/MSIAfterburnerSetup464.zip
 
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
