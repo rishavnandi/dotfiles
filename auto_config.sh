@@ -169,6 +169,9 @@ wget -O fedora.png https://img.icons8.com/fluency/48/000000/fedora.png
 wget -O powershell.png https://img.icons8.com/color/48/000000/powershell.png
 wget -O cmd.png https://img.icons8.com/color/48/000000/command-line.png
 
+echo "----------------Apt Mirror Updater----------------"
+pip3 install apt-mirror-updater
+
 echo "----------------Setup Git----------------"
 echo "----------------Enter First Name----------------"
 read first
