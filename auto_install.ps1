@@ -51,6 +51,8 @@ winget install -e --id Microsoft.WingetCreate
 winget install -e --id Ubisoft.Connect
 winget install -e --id LedgerHQ.LedgerLive
 winget install -e --id Docker.DockerDesktop
+winget install -e --id Microsoft.VCRedist.2015+.x64
+winget install -e --id Microsoft.VCRedist.2015+.x86
 winget install nahimic
 winget install easywsl
 winget install "msi center pro"
