@@ -28,12 +28,6 @@ echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
 sudo dos2unix /home/$user/.bashrc
 
-echo "----------------Setup Zshrc----------------"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-sudo cat zshrc > /home/$user/.zshrc
-sudo dos2unix /home/$user/.zshrc
 
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' > /home/$user/.dircolors
@@ -163,7 +157,7 @@ else
 fi
 
 echo "----------------Download Titlebar Icons For Windows Terminal----------------"
-cd /mnt/c/Users/risha/Pictures/ && mkdir icons && cd icons
+cd /mnt/c/Users/$username/Pictures/ && mkdir icons && cd icons
 wget -O ubuntu.png https://img.icons8.com/color/48/000000/ubuntu--v1.png
 wget -O fedora.png https://img.icons8.com/fluency/48/000000/fedora.png
 wget -O powershell.png https://img.icons8.com/color/48/000000/powershell.png
@@ -182,3 +176,10 @@ read gitemail
 git config --global user.name "$first $last"
 git config --global user.email "$gitemail"
 git config --global credential.helper store
+
+echo "----------------Setup Zshrc----------------"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+sudo cat zshrc > /home/$user/.zshrc
+sudo dos2unix /home/$user/.zshrc
