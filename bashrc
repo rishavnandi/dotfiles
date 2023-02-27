@@ -176,8 +176,11 @@ export PATH="/home/rishav/.local/bin:$PATH"
 export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/risha
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
 
-neofetch
+# Load autojump
+. /usr/share/autojump/autojump.bash
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+neofetch

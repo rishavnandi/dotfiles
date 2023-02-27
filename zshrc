@@ -6,7 +6,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(zsh-autosuggestions zsh-syntax-highlighting copyfile) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -82,6 +82,9 @@ eval "$(starship init zsh)"
 
 # Export PATH
 export PATH="/home/rishav/.local/bin:$PATH"
+
+# Load autojump
+. /usr/share/autojump/autojump.zsh
 
 # Export Configs For Vagrant 
 export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/risha

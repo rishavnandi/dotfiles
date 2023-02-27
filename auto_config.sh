@@ -19,10 +19,11 @@ echo "----------------https://github.com/rishavnandi/Dotfiles----------------"
 
 echo "----------------Enter Unix Username----------------"
 read user
+sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip bat ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip bat ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix autojump openjdk-19-jdk -y
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
@@ -49,8 +50,6 @@ else
     sudo mkdir /home/$user/.config/fish/ && sudo cat fish_config > /home/$user/.config/fish/config.fish
 fi
 
-echo "----------------Change Default Shell To Fish----------------"
-chsh -s /usr/bin/fish
 
 echo "----------------Setup PowerShell Profile----------------"
 
@@ -105,7 +104,6 @@ wget -O vc_x86.exe https://aka.ms/highdpimfc2013x86enu
 wget -O vc_x64.exe https://aka.ms/highdpimfc2013x64enu
 
 echo "----------------Download NerdFonts----------------"
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraMono.zip
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip
 
 echo "----------------Download MSI Afterburner----------------"
@@ -178,8 +176,20 @@ git config --global user.email "$gitemail"
 git config --global credential.helper store
 
 echo "----------------Setup Zshrc----------------"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 sudo cat zshrc > /home/$user/.zshrc
 sudo dos2unix /home/$user/.zshrc
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+if [ -d "/home/$user/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]
+then
+    echo "zsh-autosuggestions Already Installed"
+else
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+if [ -d "/home/$user/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]
+then
+    echo "zsh-syntax-highlighting Already Installed"
+else
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+echo "----------------Change Default Shell To Zsh----------------"
+chsh -s $(which zsh)
