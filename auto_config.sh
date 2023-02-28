@@ -23,7 +23,8 @@ sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip bat ranger feh cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix autojump openjdk-19-jdk -y
+sudo apt install build-essential software-properties-common neovim neofetch git curl wget unzip bat ranger feh conntrack cmatrix icdiff lynx fzf speedtest-cli rename fish dos2unix autojump openjdk-19-jdk -y
+
 
 echo "----------------Setup Bashrc----------------"
 sudo cat bashrc > /home/$user/.bashrc
@@ -39,7 +40,7 @@ if [ -d "/home/$user/.config/" ]
 then
     sudo cat linux_starship.toml > /home/$user/.config/starship.toml 
 else
-    sudo mkdir /home/$user/.config/ && sudo cat linux_starship.toml > /home/$user/.config/starship.toml
+    sudo mkdir /home/$user/.config/ && sudo chown -R $user /home/$user/.config/ &&  sudo cat linux_starship.toml > /home/$user/.config/starship.toml
 fi
 
 echo "----------------Setup Fish Config----------------"
@@ -47,9 +48,12 @@ if [ -d "/home/$user/.config/fish/" ]
 then
     sudo cat fish_config > /home/$user/.config/fish/config.fish
 else
-    sudo mkdir /home/$user/.config/fish/ && sudo cat fish_config > /home/$user/.config/fish/config.fish
+    sudo mkdir /home/$user/.config/fish/ && sudo chown -R $user /home/$user/.config/ && sudo cat fish_config > /home/$user/.config/fish/config.fish
 fi
 
+echo "----------------Enable systemd----------------"
+sudo touch /etc/wsl.conf
+sudo cat wsl.conf > /etc/wsl.conf
 
 echo "----------------Setup PowerShell Profile----------------"
 
@@ -139,9 +143,17 @@ echo "----------------Setup pip----------------"
 sudo apt install python3-pip -y
 
 echo "----------------Setup Ansible----------------"
+sudo apt install -y gcc python3-dev libkrb5-dev && sudo apt install python3-pip -y && pip3 install --upgrade pip && pip3 install --upgrade virtualenv && sudo apt install krb5-user -y && pip3 install pywinrm
 pip3 install ansible
 pip3 install ansible-lint
 pip3 install molecule
+
+echo "----------------Setup minikube----------------"
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+chmod +x minikube
+sudo mv minikube /usr/local/bin/
+minikube config set driver docker
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.ioa/release/stable.txt)/bin/linux/amd64/kubectl"
 
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
@@ -176,8 +188,6 @@ git config --global user.email "$gitemail"
 git config --global credential.helper store
 
 echo "----------------Setup Zshrc----------------"
-sudo cat zshrc > /home/$user/.zshrc
-sudo dos2unix /home/$user/.zshrc
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 if [ -d "/home/$user/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]
 then
@@ -190,6 +200,8 @@ then
     echo "zsh-syntax-highlighting Already Installed"
 else
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+sudo cat zshrc > /home/$user/.zshrc
+sudo dos2unix /home/$user/.zshrc
 
 echo "----------------Change Default Shell To Zsh----------------"
-chsh -s $(which zsh)
+chsh -s /usr/bin/zsh

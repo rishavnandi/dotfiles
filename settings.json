@@ -50,36 +50,29 @@
             {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\Pictures\\icons\\ubuntu.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\ubuntu.png",
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl"
             },
             {
-                "guid": "{aa8efdb5-3cbe-50b2-a332-9203dc1ee217}",
-                "hidden": false,
-                "name": "Fedora",
-                "icon": "C:\\Users\\risha\\Pictures\\icons\\fedora.png",
-                "source": "Windows.Terminal.Wsl"
-            },
-            {
-                "commandline": "cmd.exe /K C:\\Users\\risha\\miniconda3\\Scripts\\activate.bat C:\\Users\\risha\\miniconda3",
+                "commandline": "cmd.exe /K C:\\Users\\rishav\\miniconda3\\Scripts\\activate.bat C:\\Users\\rishav\\miniconda3",
                 "guid": "{5caa77b6-628a-4cb7-9c26-8ff2008c3803}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\miniconda3\\anaconda.png",
+                "icon": "C:\\Users\\rishav\\miniconda3\\anaconda.png",
                 "name": "Anaconda"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\Pictures\\icons\\cmd.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\cmd.png",
                 "name": "Command Prompt"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "icon": "C:\\Users\\risha\\Pictures\\icons\\powershell.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\powershell.png",
                 "name": "Windows PowerShell"
             }
         ]
