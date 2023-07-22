@@ -40,7 +40,6 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
-alias cat="batcat"
 
 # find out which distribution we are running on
 LFILE="/etc/*-release"
@@ -87,7 +86,7 @@ export PATH="/home/rishav/.local/bin:$PATH"
 . /usr/share/autojump/autojump.zsh
 
 # Export Configs For Vagrant 
-export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/risha
+export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/rishav
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
 
-neofetch
+nitch

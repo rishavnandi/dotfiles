@@ -105,7 +105,6 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
-alias cat="batcat"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -173,7 +172,7 @@ eval "$(starship init bash)"
 export PATH="/home/rishav/.local/bin:$PATH"
 
 # Export Configs For Vagrant 
-export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/risha
+export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/rishav
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
 
 # Load autojump
@@ -183,4 +182,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-neofetch
+nitch

@@ -22,23 +22,20 @@ winget install -e --id Microsoft.VCRedist.2015+.x86
 winget install -e --id Microsoft.VCRedist.2013.x64
 winget install -e --id Microsoft.VCRedist.2013.x86
 winget install -e --id Microsoft.DotNet.Runtime.6
-winget install -e --id M2Team.NanaZip
+winget install -e --id 7zip.7zip
 winget install -e --id Git.Git
 winget install -e --id VideoLAN.VLC
 winget install -e --id Anaconda.Miniconda3
 winget install -e --id WeMod.WeMod
-winget install -e --id WinDirStat.WinDirStat
+winget install -e --id AntibodySoftware.WizTree
 winget install -e --id Notepad++.Notepad++
 winget install -e --id chrisant996.Clink
 winget install -e --id Google.Chrome
 winget install -e --id WireGuard.WireGuard
 winget install -e --id Oracle.VirtualBox
 winget install -e --id Zoom.Zoom
-winget install -e --id FxSoundLLC.FxSound
 winget install -e --id QL-Win.QuickLook
-winget install -e --id Obsidian.Obsidian
 winget install -e --id Microsoft.VisualStudioCode
-winget install -e --id WhatsApp.WhatsApp
 winget install -e --id Telegram.TelegramDesktop
 winget install -e --id Starship.Starship
 winget install -e --id Rufus.Rufus
@@ -54,13 +51,11 @@ winget install -e --id Valve.Steam
 winget install -e --id Docker.DockerDesktop
 winget install -e --id Discord.Discord
 winget install -e --id SoftDeluxe.FreeDownloadManager
-winget install -e --id AmazonVideo.PrimeVideo_pwbj9vvecjh7j
 winget install -e --id OBSProject.OBSStudio
 winget install -e --id Hashicorp.Vagrant
 winget install -e --id Iterate.Cyberduck
-winget install nahimic
-winget install easywsl
 winget install "msi center pro"
+winget install 9NKSQGP7F2NH
 scoop install lsd
 scoop install winfetch
 
