@@ -105,6 +105,12 @@ wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.z
 echo "----------------Download MSI Afterburner----------------"
 wget https://files03.techspot.com/temp/MSIAfterburnerSetup465.exe
 
+echo "----------------Download Choeazycopy----------------"
+wget https://github.com/Cinchoo/ChoEazyCopy/releases/download/v2.0.0.2-beta3/ChoEazyCopy.zip
+
+echo "----------------Download Throttlestop----------------"
+wget https://us3-dl.techpowerup.com/files/kpsqeI_LDly4xnsjkigojg/1690101173/ThrottleStop_9.6.zip
+
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
 wget https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd_0.23.1_amd64.deb
