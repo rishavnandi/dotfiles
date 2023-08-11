@@ -56,6 +56,7 @@ winget install -e --id OBSProject.OBSStudio
 winget install -e --id Hashicorp.Vagrant
 winget install -e --id Iterate.Cyberduck
 winget install -e --id Guru3D.Afterburner
+winget install -e --id Guru3D.RTSS
 winget install "msi center pro"
 winget install 9NKSQGP7F2NH
 scoop install lsd
