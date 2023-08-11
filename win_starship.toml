@@ -80,7 +80,7 @@ python_binary = "python3"
 
 [nodejs]
 format = "via [ $version](bold green) "
-disabled = true
+disabled = false
 
 [ruby]
 format = "via [ $version]($style) "

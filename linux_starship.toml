@@ -81,29 +81,29 @@ disabled = false
 # 
 [terraform]
 format = "via [ terraform $version]($style) 壟 [$workspace]($style) "
-disabled = true
+disabled = false
 
 [vagrant]
 format = "via [ vagrant $version]($style) "
-disabled = true
+disabled = false
 
 [docker_context]
 format = "via [ $context](bold blue) "
-disabled = true
+disabled = false
 
 [helm]
 format = "via [ $version](bold purple) "
-disabled = true
+disabled = false
 
 [python]
 symbol = " "
 python_binary = "python3"
-disabled = true
+disabled = false
 
 [nodejs]
 format = "via [ $version](bold green) "
-disabled = true
+disabled = false
 
 [ruby]
 format = "via [ $version]($style) "
-disabled = true
+disabled = false

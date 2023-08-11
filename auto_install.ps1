@@ -22,6 +22,7 @@ winget install -e --id Microsoft.VCRedist.2015+.x86
 winget install -e --id Microsoft.VCRedist.2013.x64
 winget install -e --id Microsoft.VCRedist.2013.x86
 winget install -e --id Microsoft.DotNet.Runtime.6
+winget install -e --id Microsoft.DirectX
 winget install -e --id 7zip.7zip
 winget install -e --id Git.Git
 winget install -e --id VideoLAN.VLC
@@ -54,6 +55,7 @@ winget install -e --id SoftDeluxe.FreeDownloadManager
 winget install -e --id OBSProject.OBSStudio
 winget install -e --id Hashicorp.Vagrant
 winget install -e --id Iterate.Cyberduck
+winget install -e --id Guru3D.Afterburner
 winget install "msi center pro"
 winget install 9NKSQGP7F2NH
 scoop install lsd
