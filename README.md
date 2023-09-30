@@ -50,3 +50,4 @@ Set-ExecutionPolicy Restricted
 - winfetch.ps1 -> C:\Users\risha\\.config\winfetch\config.ps1
 
 ![image](https://github.com/rishavnandi/wsl_dotfiles/assets/101431112/1108297f-1cf5-4121-9258-e23e3dbee106)
+![image](https://github.com/rishavnandi/wsl_dotfiles/assets/101431112/65aab98f-b94e-4b75-8cb8-6f19205ac0c6)
