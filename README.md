@@ -49,6 +49,6 @@ Set-ExecutionPolicy Restricted
 - starship.lua -> C:\Users\risha\AppData\Local\clink\starship.lua
 - winfetch.ps1 -> C:\Users\risha\\.config\winfetch\config.ps1
 
-![Screenshot (7)](https://user-images.githubusercontent.com/101431112/193418437-42984393-b815-47d2-8694-77a0dd91f1b1.png)
+![image](https://github.com/rishavnandi/wsl_dotfiles/assets/101431112/1108297f-1cf5-4121-9258-e23e3dbee106)
 ![Screenshot (9)](https://user-images.githubusercontent.com/101431112/193451745-a8c41663-be9d-44cd-81ce-a24cb82e68bb.png)
 ![Screenshot (3)](https://user-images.githubusercontent.com/101431112/196135275-9083721c-7ea9-4e7d-bde4-f36ef5d5bfa9.png)
