@@ -4,6 +4,15 @@
     "actions": 
     [
         {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "keys": "alt+shift+d"
+        },
+        {
             "command": "find",
             "keys": "ctrl+shift+f"
         },
@@ -18,20 +27,17 @@
         {
             "command": "paste",
             "keys": "ctrl+v"
-        },
-        {
-            "command": 
-            {
-                "action": "splitPane",
-                "split": "auto",
-                "splitMode": "duplicate"
-            },
-            "keys": "alt+shift+d"
         }
     ],
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
     "profiles": 
     {
         "defaults": 
@@ -40,7 +46,7 @@
             "font": 
             {
                 "face": "FiraCode Nerd Font Mono",
-                "size": 12
+                "size": 12.0
             },
             "opacity": 90,
             "scrollbarState": "hidden"
@@ -50,30 +56,31 @@
             {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
-                "icon": "C:\\Users\\rishav\\Pictures\\icons\\ubuntu.png",
+                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\ubuntu.png",
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl"
             },
             {
-                "commandline": "cmd.exe /K C:\\Users\\rishav\\miniconda3\\Scripts\\activate.bat C:\\Users\\rishav\\miniconda3",
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\powershell.png",
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\Rishav Nandi\\miniconda3\\shell\\condabin\\conda-hook.ps1'",
+                
                 "guid": "{5caa77b6-628a-4cb7-9c26-8ff2008c3803}",
                 "hidden": false,
-                "icon": "C:\\Users\\rishav\\miniconda3\\anaconda.png",
+                "icon": "C:\\Users\\Rishav Nandi\\miniconda3\\anaconda.png",
                 "name": "Anaconda"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "icon": "C:\\Users\\rishav\\Pictures\\icons\\cmd.png",
+                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\cmd.png",
                 "name": "Command Prompt"
-            },
-            {
-                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
-                "icon": "C:\\Users\\rishav\\Pictures\\icons\\powershell.png",
-                "name": "Windows PowerShell"
             }
         ]
     },
@@ -287,6 +294,29 @@
             "yellow": "#C4A000"
         },
         {
+            "background": "#300A24",
+            "black": "#171421",
+            "blue": "#0037DA",
+            "brightBlack": "#767676",
+            "brightBlue": "#08458F",
+            "brightCyan": "#2C9FB3",
+            "brightGreen": "#26A269",
+            "brightPurple": "#A347BA",
+            "brightRed": "#C01C28",
+            "brightWhite": "#F2F2F2",
+            "brightYellow": "#A2734C",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#3A96DD",
+            "foreground": "#FFFFFF",
+            "green": "#26A269",
+            "name": "Ubuntu-ColorScheme",
+            "purple": "#881798",
+            "red": "#C21A23",
+            "selectionBackground": "#FFFFFF",
+            "white": "#CCCCCC",
+            "yellow": "#A2734C"
+        },
+        {
             "background": "#000000",
             "black": "#000000",
             "blue": "#000080",
@@ -309,5 +339,6 @@
             "white": "#C0C0C0",
             "yellow": "#808000"
         }
-    ]
+    ],
+    "themes": []
 }

@@ -27,7 +27,6 @@ winget install -e --id 7zip.7zip
 winget install -e --id Git.Git
 winget install -e --id VideoLAN.VLC
 winget install -e --id Anaconda.Miniconda3
-winget install -e --id WeMod.WeMod
 winget install -e --id AntibodySoftware.WizTree
 winget install -e --id Notepad++.Notepad++
 winget install -e --id chrisant996.Clink
@@ -37,7 +36,6 @@ winget install -e --id Oracle.VirtualBox
 winget install -e --id Zoom.Zoom
 winget install -e --id QL-Win.QuickLook
 winget install -e --id Microsoft.VisualStudioCode
-winget install -e --id Telegram.TelegramDesktop
 winget install -e --id Starship.Starship
 winget install -e --id Rufus.Rufus
 winget install -e --id Microsoft.PowerToys
@@ -45,22 +43,28 @@ winget install -e --id Notion.Notion
 winget install -e --id EpicGames.EpicGamesLauncher
 winget install -e --id Brave.Brave
 winget install -e --id REALiX.HWiNFO
-winget install -e --id Microsoft.WingetCreate
 winget install -e --id LedgerHQ.LedgerLive
 winget install -e --id Ubisoft.Connect
 winget install -e --id Valve.Steam
 winget install -e --id Docker.DockerDesktop
-winget install -e --id Discord.Discord
 winget install -e --id SoftDeluxe.FreeDownloadManager
-winget install -e --id OBSProject.OBSStudio
 winget install -e --id Hashicorp.Vagrant
 winget install -e --id Iterate.Cyberduck
 winget install -e --id Guru3D.Afterburner
 winget install -e --id Guru3D.RTSS
-winget install -e --id Google.NearbyShare
-winget install -e --id Microsoft.VisualStudio.2022.Community
+winget install -e --id Wagnardsoft.DisplayDriverUninstaller
+winget install -e --id AmazonVideo.PrimeVideo_pwbj9vvecjh7j
+winget install -e --id Google.QuickShare
+winget install -e --id Spotify.Spotify
+winget install -e --id WhatsApp.WhatsApp
+winget install -e --id WinSCP.WinSCP
+winget install -e --id Ventoy.Ventoy
+winget install -e --id TradingView.TradingViewDesktop
+winget install -e --id Termius.Termius
+winget install -e --id Spicetify.Spicetify
+winget install -e --id SomePythonThings.WingetUIStore
+winget install -e --id Microsoft.WingetCreate
 winget install "msi center pro"
-winget install 9NKSQGP7F2NH
 scoop install lsd
 scoop install winfetch
 
