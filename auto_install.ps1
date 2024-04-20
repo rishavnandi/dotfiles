@@ -53,10 +53,8 @@ winget install -e --id Iterate.Cyberduck
 winget install -e --id Guru3D.Afterburner
 winget install -e --id Guru3D.RTSS
 winget install -e --id Wagnardsoft.DisplayDriverUninstaller
-winget install -e --id AmazonVideo.PrimeVideo_pwbj9vvecjh7j
 winget install -e --id Google.QuickShare
 winget install -e --id Spotify.Spotify
-winget install -e --id WhatsApp.WhatsApp
 winget install -e --id WinSCP.WinSCP
 winget install -e --id Ventoy.Ventoy
 winget install -e --id TradingView.TradingViewDesktop

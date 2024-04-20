@@ -98,6 +98,9 @@ wget https://github.com/Vencord/Vesktop/releases/download/v1.5.1/Vesktop-Setup-1
 echo "----------------Download LM Studio----------------"
 wget https://releases.lmstudio.ai/windows/0.2.20/latest/LM-Studio-0.2.20-Setup.exe
 
+echo "----------------Download Materialgram----------------"
+wget https://github.com/kukuruzka165/materialgram/releases/download/v4.16.7.1/win64_materialgram_v4.16.7.1.zip
+
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
 wget https://github.com/lsd-rs/lsd/releases/download/v1.1.2/lsd_1.1.2_amd64.deb
