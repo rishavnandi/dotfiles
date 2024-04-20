@@ -56,7 +56,7 @@
             {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
-                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\ubuntu.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\ubuntu.png",
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl"
             },
@@ -64,22 +64,22 @@
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\powershell.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\powershell.png",
                 "name": "Windows PowerShell"
             },
             {
-                "commandline": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\Rishav Nandi\\miniconda3\\shell\\condabin\\conda-hook.ps1'",
+                "commandline": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\rishav\\miniconda3\\shell\\condabin\\conda-hook.ps1'",
                 
                 "guid": "{5caa77b6-628a-4cb7-9c26-8ff2008c3803}",
                 "hidden": false,
-                "icon": "C:\\Users\\Rishav Nandi\\miniconda3\\anaconda.png",
+                "icon": "C:\\Users\\rishav\\miniconda3\\anaconda.png",
                 "name": "Anaconda"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "icon": "C:\\Users\\Rishav Nandi\\Pictures\\icons\\cmd.png",
+                "icon": "C:\\Users\\rishav\\Pictures\\icons\\cmd.png",
                 "name": "Command Prompt"
             }
         ]
