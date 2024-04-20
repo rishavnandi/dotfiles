@@ -65,6 +65,7 @@ winget install -e --id Spicetify.Spicetify
 winget install -e --id SomePythonThings.WingetUIStore
 winget install -e --id Microsoft.WingetCreate
 winget install "msi center pro"
+winget install 9NKSQGP7F2NH
 scoop install lsd
 scoop install winfetch
 
