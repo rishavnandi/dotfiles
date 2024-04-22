@@ -59,13 +59,14 @@ winget install -e --id WinSCP.WinSCP
 winget install -e --id Ventoy.Ventoy
 winget install -e --id TradingView.TradingViewDesktop
 winget install -e --id Termius.Termius
-winget install -e --id Spicetify.Spicetify
 winget install -e --id SomePythonThings.WingetUIStore
 winget install -e --id Microsoft.WingetCreate
 winget install "msi center pro"
 winget install 9NKSQGP7F2NH
 scoop install lsd
 scoop install winfetch
+
+iwr -useb https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1 | iex
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
