@@ -23,7 +23,7 @@ sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common gnupg neovim git curl wget unzip bat rename zsh dos2unix autojump openjdk-19-jdk -y
+sudo apt install build-essential software-properties-common gnupg neovim git curl wget unzip bat rename zsh dos2unix autojump openjdk-19-jdk ca-certificates apt-transport-https -y
 
 echo "----------------Setup Nitch----------------"
 wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
@@ -125,6 +125,30 @@ sudo apt install python3-pip -y && pip3 install --upgrade pip
 pip3 install virtualenv && pip3 install --upgrade virtualenv
 pip3 install ansible
 pip3 install ansible-lint
+
+echo "----------------Setup Docker Engine----------------"
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+    sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+echo "----------------Setup Kubectl----------------"
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+echo "----------------Setup MiniKube----------------"
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo apt install ./minikube_latest_amd64.
+rm minikube_latest_amd64.deb
 
 echo "----------------Enable hushlogin----------------"
 touch /home/$user/.hushlogin
