@@ -23,7 +23,7 @@ sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common gnupg neovim git curl wget unzip bat rename zsh dos2unix autojump openjdk-19-jdk ca-certificates apt-transport-https -y
+sudo apt install build-essential software-properties-common gnupg neovim git curl wget unzip bat rename zsh dos2unix autojump openjdk-21-jdk ca-certificates apt-transport-https -y
 
 echo "----------------Setup Nitch----------------"
 wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
@@ -77,39 +77,27 @@ wget https://github.com/QL-Win/QuickLook.Plugin.EpubViewer/releases/download/1/Q
 wget https://github.com/QL-Win/QuickLook.Plugin.OfficeViewer/releases/download/4/QuickLook.Plugin.OfficeViewer.qlplugin
 wget https://github.com/canheo136/QuickLook.Plugin.ApkViewer/releases/download/1.3.5/QuickLook.Plugin.ApkViewer.qlplugin
 wget https://github.com/adyanth/QuickLook.Plugin.FolderViewer/releases/download/1.3/QuickLook.Plugin.FolderViewer.qlplugin
-wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/download/0.2.0/QuickLook.Plugin.TorrentViewer.qlplugin
+wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/download/0.2.2/QuickLook.Plugin.TorrentViewer.qlplugin
 wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/releases/download/1.0.1/QuickLook.Plugin.JupyterNotebookViewer.qlplugin
 
 echo "----------------Download Vagrant----------------"
-wget https://releases.hashicorp.com/vagrant/2.4.1/vagrant_2.4.1_windows_amd64.msi
+wget https://releases.hashicorp.com/vagrant/2.4.3/vagrant_2.4.3_windows_amd64.msi
 
 echo "----------------Download NerdFonts----------------"
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
 
 echo "----------------Download Choeazycopy----------------"
-wget https://github.com/Cinchoo/ChoEazyCopy/releases/download/v2.0.0.2-beta3/ChoEazyCopy.zip
-
-echo "----------------Download Throttlestop----------------"
-wget https://us3-dl.techpowerup.com/files/kpsqeI_LDly4xnsjkigojg/1690101173/ThrottleStop_9.6.zip
-
-echo "----------------Download Vesktop----------------"
-wget https://github.com/Vencord/Vesktop/releases/download/v1.5.1/Vesktop-Setup-1.5.1.exe
-
-echo "----------------Download LM Studio----------------"
-wget https://releases.lmstudio.ai/windows/0.2.20/latest/LM-Studio-0.2.20-Setup.exe
-
-echo "----------------Download Materialgram----------------"
-wget https://github.com/kukuruzka165/materialgram/releases/download/v4.16.7.1/win64_materialgram_v4.16.7.1.zip
+wget https://github.com/Cinchoo/ChoEazyCopy/releases/download/v2.0.0.3/ChoEazyCopy.zip
 
 echo "----------------Setup lsd For Ubuntu----------------"
 cd /home/$user/
-wget https://github.com/lsd-rs/lsd/releases/download/v1.1.2/lsd_1.1.2_amd64.deb
-sudo apt install ./lsd_1.1.2_amd64.deb
-rm lsd_1.1.2_amd64.deb
+wget https://github.com/lsd-rs/lsd/releases/download/v1.1.5/lsd_1.1.5_amd64.deb
+sudo apt install ./lsd_1.1.5_amd64.deb
+rm lsd_1.1.5_amd64.deb
 
 echo "----------------Setup Vagrant For Ubuntu----------------"
-wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update && sudo apt install vagrant
 vagrant plugin install virtualbox_WSL2
 vagrant plugin install vagrant-vbguest
@@ -125,17 +113,6 @@ sudo apt install python3-pip -y && pip3 install --upgrade pip
 pip3 install virtualenv && pip3 install --upgrade virtualenv
 pip3 install ansible
 pip3 install ansible-lint
-
-echo "----------------Setup Docker Engine----------------"
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
-    sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo "----------------Setup Kubectl----------------"
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg

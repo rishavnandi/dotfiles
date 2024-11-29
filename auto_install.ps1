@@ -61,6 +61,17 @@ winget install -e --id TradingView.TradingViewDesktop
 winget install -e --id Termius.Termius
 winget install -e --id SomePythonThings.WingetUIStore
 winget install -e --id Microsoft.WingetCreate
+winget install -e --id CoreyButler.NVMforWindows
+winget install -e --id Zen-Team.Zen-Browser.Optimized
+winget install -e --id Intel.IntelDriverAndSupportAssistant
+winget install -e --id Python.Python.3.12
+winget install -e --id Anysphere.Cursor
+winget install -e --id restic.restic
+winget install -e --id Ollama.Ollama
+winget install -e --id Microsoft.WindowsTerminal
+winget install -e --id Telegram.Unigram
+winget install -e --id TechPowerUp.ThrottleStop
+winget install -e --id Vencord.Vesktop
 winget install "msi center pro"
 winget install 9NKSQGP7F2NH
 scoop install lsd
