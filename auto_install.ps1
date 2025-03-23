@@ -17,67 +17,154 @@ Write-Host "----------------Installing Scoop----------------"
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 
 Write-Host "----------------Installing All The Apps----------------"
-winget install -e --id Microsoft.VCRedist.2015+.x64
-winget install -e --id Microsoft.VCRedist.2015+.x86
-winget install -e --id Microsoft.VCRedist.2013.x64
-winget install -e --id Microsoft.VCRedist.2013.x86
-winget install -e --id Microsoft.DotNet.Runtime.6
-winget install -e --id Microsoft.DirectX
-winget install -e --id 7zip.7zip
-winget install -e --id Git.Git
-winget install -e --id VideoLAN.VLC
-winget install -e --id Anaconda.Miniconda3
-winget install -e --id AntibodySoftware.WizTree
-winget install -e --id Notepad++.Notepad++
-winget install -e --id chrisant996.Clink
-winget install -e --id Google.Chrome
-winget install -e --id WireGuard.WireGuard
-winget install -e --id Oracle.VirtualBox
-winget install -e --id Zoom.Zoom
-winget install -e --id QL-Win.QuickLook
-winget install -e --id Microsoft.VisualStudioCode
-winget install -e --id Starship.Starship
-winget install -e --id Rufus.Rufus
-winget install -e --id Microsoft.PowerToys
-winget install -e --id Notion.Notion
-winget install -e --id EpicGames.EpicGamesLauncher
-winget install -e --id Brave.Brave
-winget install -e --id REALiX.HWiNFO
-winget install -e --id LedgerHQ.LedgerLive
-winget install -e --id Ubisoft.Connect
-winget install -e --id Valve.Steam
-winget install -e --id Docker.DockerDesktop
-winget install -e --id SoftDeluxe.FreeDownloadManager
-winget install -e --id Hashicorp.Vagrant
-winget install -e --id Iterate.Cyberduck
-winget install -e --id Guru3D.Afterburner
-winget install -e --id Guru3D.RTSS
-winget install -e --id Wagnardsoft.DisplayDriverUninstaller
-winget install -e --id Google.QuickShare
-winget install -e --id Spotify.Spotify
-winget install -e --id WinSCP.WinSCP
-winget install -e --id Ventoy.Ventoy
-winget install -e --id TradingView.TradingViewDesktop
-winget install -e --id Termius.Termius
-winget install -e --id SomePythonThings.WingetUIStore
-winget install -e --id Microsoft.WingetCreate
-winget install -e --id CoreyButler.NVMforWindows
-winget install -e --id Zen-Team.Zen-Browser.Optimized
-winget install -e --id Intel.IntelDriverAndSupportAssistant
-winget install -e --id Python.Python.3.12
-winget install -e --id Anysphere.Cursor
-winget install -e --id restic.restic
-winget install -e --id Ollama.Ollama
-winget install -e --id Microsoft.WindowsTerminal
-winget install -e --id Telegram.Unigram
-winget install -e --id TechPowerUp.ThrottleStop
-winget install -e --id Vencord.Vesktop
+# Define all application IDs as an array
+$appIDs = @(
+    "Microsoft.VCRedist.2015+.x64",
+    "Microsoft.VCRedist.2015+.x86",
+    "Microsoft.VCRedist.2013.x64",
+    "Microsoft.VCRedist.2013.x86",
+    "Microsoft.DotNet.Runtime.6",
+    "Microsoft.DirectX",
+    "7zip.7zip",
+    "Git.Git",
+    "VideoLAN.VLC",
+    "Anaconda.Miniconda3",
+    "AntibodySoftware.WizTree",
+    "Notepad++.Notepad++",
+    "chrisant996.Clink",
+    "Google.Chrome",
+    "WireGuard.WireGuard",
+    "Oracle.VirtualBox",
+    "Zoom.Zoom",
+    "QL-Win.QuickLook",
+    "Microsoft.VisualStudioCode",
+    "Starship.Starship",
+    "Rufus.Rufus",
+    "Microsoft.PowerToys",
+    "Notion.Notion",
+    "EpicGames.EpicGamesLauncher",
+    "Brave.Brave",
+    "LedgerHQ.LedgerLive",
+    "Ubisoft.Connect",
+    "Valve.Steam",
+    "Docker.DockerDesktop",
+    "SoftDeluxe.FreeDownloadManager",
+    "Hashicorp.Vagrant",
+    "Iterate.Cyberduck",
+    "Guru3D.Afterburner",
+    "Guru3D.RTSS",
+    "Google.QuickShare",
+    "Spotify.Spotify",
+    "WinSCP.WinSCP",
+    "Ventoy.Ventoy",
+    "TradingView.TradingViewDesktop",
+    "Termius.Termius",
+    "CoreyButler.NVMforWindows",
+    "Intel.IntelDriverAndSupportAssistant",
+    "Python.Python.3.12",
+    "restic.restic",
+    "Microsoft.WindowsTerminal",
+    "Telegram.Unigram",
+    "SaeraSoft.CaesiumImageCompressor",
+    "Tailscale.Tailscale",
+    "Google.PlatformTools",
+    "Gyan.FFMpeg",
+    "Vencord.Vesktop"
+)
+
+# Loop through each app and install it
+foreach ($app in $appIDs) {
+    Write-Host "Installing $app..."
+    winget install -e --id $app
+}
+
+# Apps that dont have IDs
 winget install "msi center pro"
 winget install 9NKSQGP7F2NH
 scoop install lsd
 scoop install winfetch
 
+Write-Host "----------------Installing Spicetify----------------"
 iwr -useb https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1 | iex
 
 Write-Host "----------------Restore Legacy Context Menu----------------"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+
+Write-Host "----------------Enabling Dark Mode----------------"
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0 -PropertyType DWORD -Force
+
+Write-Host "----------------Move Start Button To The Left----------------"
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAl" -Value 0 -PropertyType DWORD -Force
+
+Write-Host "----------------Change Explorer View Mode to Compact----------------"
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "UseCompactMode" -Value 1 -PropertyType DWORD -Force
+
+Write-Host "----------------Set Explorer to Open This PC----------------"
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Value 1 -PropertyType DWORD -Force
+
+Write-Host "----------------Show Hidden Files and Extensions----------------"
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value 0 -PropertyType DWORD -Force
+
+Write-Host "----------------Set Screen to Never Turn Off----------------"
+powercfg -change -monitor-timeout-ac 0
+
+Write-Host "----------------Set Sleep Timeout to Never----------------"
+powercfg -change -standby-timeout-ac 0
+
+Write-Host "----------------Turn Hibernate Off----------------"
+powercfg -h off
+
+Write-Host "----------------Disable Taskbar search box----------------"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Value 0 -Type DWORD -Force
+
+Write-Host "----------------Remove Widgets/Weather/News----------------"
+
+$settings = [PSCustomObject]@{
+    Path = "SOFTWARE\Policies\Microsoft\Dsh"
+    Value = 0
+    Name = "AllowNewsandInterests"
+} | group Path
+
+foreach ($setting in $settings) {
+    $registry = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey($setting.Name, $true)
+    if ($null -eq $registry) {
+        $registry = [Microsoft.Win32.Registry]::LocalMachine.CreateSubKey($setting.Name)
+    }
+    $setting.Group | % {
+        if ($_.Type) {
+            $registry.SetValue($_.Name, $_.Value)
+        } else {
+            $registry.SetValue($_.Name, $_.Value, $_.Type)
+        }
+    }
+    $registry.Dispose()
+}
+
+Write-Host "----------------Remove Copilot----------------"
+
+$settings = [PSCustomObject]@{
+    Path = "SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    Value = 0
+    Name = "ShowCopilotButton"
+} | group Path
+
+foreach ($setting in $settings) {
+    $registry = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($setting.Name, $true)
+    if ($null -eq $registry) {
+        $registry = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey($setting.Name, $true)
+    }
+    $setting.Group | % {
+        if ($_.Type) {
+            $registry.SetValue($_.Name, $_.Value)
+        } else {
+            $registry.SetValue($_.Name, $_.Value, $_.Type)
+        }
+    }
+    $registry.Dispose()
+}
+
+Write-Host "----------------Restarting Explorer----------------"
+Stop-Process -Name explorer -Force
+Start-Process explorer

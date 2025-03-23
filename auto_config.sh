@@ -23,14 +23,10 @@ sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common gnupg neovim git curl wget unzip bat rename zsh dos2unix autojump openjdk-21-jdk ca-certificates apt-transport-https -y
+sudo apt install build-essential software-properties-common gnupg nano git curl wget unzip bat rename zsh dos2unix autojump openjdk-21-jdk ca-certificates apt-transport-https -y
 
 echo "----------------Setup Nitch----------------"
 wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
-
-echo "----------------Setup Bashrc----------------"
-sudo cat bashrc >/home/$user/.bashrc
-sudo dos2unix /home/$user/.bashrc
 
 echo "----------------Disable Directory Highlights----------------"
 dircolors -p | sed 's/;42/;01/' >/home/$user/.dircolors
@@ -80,8 +76,8 @@ wget https://github.com/adyanth/QuickLook.Plugin.FolderViewer/releases/download/
 wget https://github.com/Cologler/QuickLook.Plugin.TorrentViewer/releases/download/0.2.2/QuickLook.Plugin.TorrentViewer.qlplugin
 wget https://github.com/zhangkaihua88/QuickLook.Plugin.JupyterNotebookViewer/releases/download/1.0.1/QuickLook.Plugin.JupyterNotebookViewer.qlplugin
 
-echo "----------------Download Vagrant----------------"
-wget https://releases.hashicorp.com/vagrant/2.4.3/vagrant_2.4.3_windows_amd64.msi
+# echo "----------------Download Vagrant----------------"
+# wget https://releases.hashicorp.com/vagrant/2.4.3/vagrant_2.4.3_windows_amd64.msi
 
 echo "----------------Download NerdFonts----------------"
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
@@ -111,8 +107,7 @@ terraform -install-autocomplete
 echo "----------------Setup Ansible----------------"
 sudo apt install python3-pip -y && pip3 install --upgrade pip
 pip3 install virtualenv && pip3 install --upgrade virtualenv
-pip3 install ansible
-pip3 install ansible-lint
+pip3 install ansible ansible-lint molecule
 
 echo "----------------Setup Kubectl----------------"
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -121,10 +116,18 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
 sudo apt-get install -y kubectl
+mkdir -p /home/$user/.kube
+
+echo "----------------Setup Helm----------------"
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 
 echo "----------------Setup MiniKube----------------"
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
-sudo apt install ./minikube_latest_amd64.
+sudo apt install ./minikube_latest_amd64.deb
 rm minikube_latest_amd64.deb
 
 echo "----------------Enable hushlogin----------------"
@@ -167,8 +170,14 @@ if [ -d "/home/$user/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 else
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
-sudo cat zshrc >/home/$user/.zshrc
-sudo dos2unix /home/$user/.zshrc
 
 echo "----------------Change Default Shell To Zsh----------------"
 chsh -s /usr/bin/zsh
+
+echo "----------------Setup Zshrc----------------"
+sudo cat zshrc >/home/$user/.zshrc
+sudo dos2unix /home/$user/.zshrc
+
+echo "----------------Setup Bashrc----------------"
+sudo cat bashrc >/home/$user/.bashrc
+sudo dos2unix /home/$user/.bashrc
