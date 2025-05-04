@@ -23,7 +23,7 @@ sudo chown -R $user /home/$user
 
 echo "----------------Setup Common Software----------------"
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential software-properties-common gnupg nano git curl wget unzip bat rename zsh dos2unix autojump openjdk-21-jdk ca-certificates apt-transport-https -y
+sudo apt install build-essential software-properties-common gnupg nano git curl wget unzip bat rename zsh dos2unix autojump openjdk-24-jdk ca-certificates apt-transport-https -y
 
 echo "----------------Setup Nitch----------------"
 wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
@@ -110,7 +110,7 @@ pip3 install virtualenv && pip3 install --upgrade virtualenv
 pip3 install ansible ansible-lint molecule
 
 echo "----------------Setup Kubectl----------------"
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
