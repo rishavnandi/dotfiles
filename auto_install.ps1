@@ -31,6 +31,7 @@ $appIDs = @(
     "Microsoft.VCRedist.2008.x86",
     "Microsoft.DotNet.Runtime.6",
     "Microsoft.DirectX",
+    "Spotify.Spotify",
     "7zip.7zip",
     "Git.Git",
     "VideoLAN.VLC",
@@ -60,7 +61,6 @@ $appIDs = @(
     "Guru3D.Afterburner",
     "Guru3D.RTSS",
     "Google.QuickShare",
-    "Spotify.Spotify",
     "WinSCP.WinSCP",
     "Ventoy.Ventoy",
     "TradingView.TradingViewDesktop",
@@ -77,6 +77,7 @@ $appIDs = @(
     "Vencord.Vesktop"
     "Kopia.KopiaUI",
     "ShareX.ShareX",
+    "ente-io.auth-desktop"
     "Microsoft.PowerShell"
 )
 
