@@ -74,11 +74,15 @@ $appIDs = @(
     "Tailscale.Tailscale",
     "Google.PlatformTools",
     "Gyan.FFMpeg",
-    "Vencord.Vesktop"
+    "Vencord.Vesktop",
     "Kopia.KopiaUI",
     "ShareX.ShareX",
-    "ente-io.auth-desktop"
-    "Microsoft.PowerShell"
+    "ente-io.auth-desktop",
+    "Microsoft.PowerShell",
+    "ar51an.iPerf3",
+    "garethgeorge.Backrest",
+    "Google.GoogleDrive",
+    "WeMod.WeMod"
 )
 
 # Loop through each app and install it
@@ -127,52 +131,6 @@ powercfg -h off
 
 Write-Host "----------------Disable Taskbar search box----------------"
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Value 0 -Type DWORD -Force
-
-Write-Host "----------------Remove Widgets/Weather/News----------------"
-
-$settings = [PSCustomObject]@{
-    Path = "SOFTWARE\Policies\Microsoft\Dsh"
-    Value = 0
-    Name = "AllowNewsandInterests"
-} | group Path
-
-foreach ($setting in $settings) {
-    $registry = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey($setting.Name, $true)
-    if ($null -eq $registry) {
-        $registry = [Microsoft.Win32.Registry]::LocalMachine.CreateSubKey($setting.Name)
-    }
-    $setting.Group | % {
-        if ($_.Type) {
-            $registry.SetValue($_.Name, $_.Value)
-        } else {
-            $registry.SetValue($_.Name, $_.Value, $_.Type)
-        }
-    }
-    $registry.Dispose()
-}
-
-Write-Host "----------------Remove Copilot----------------"
-
-$settings = [PSCustomObject]@{
-    Path = "SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    Value = 0
-    Name = "ShowCopilotButton"
-} | group Path
-
-foreach ($setting in $settings) {
-    $registry = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($setting.Name, $true)
-    if ($null -eq $registry) {
-        $registry = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey($setting.Name, $true)
-    }
-    $setting.Group | % {
-        if ($_.Type) {
-            $registry.SetValue($_.Name, $_.Value)
-        } else {
-            $registry.SetValue($_.Name, $_.Value, $_.Type)
-        }
-    }
-    $registry.Dispose()
-}
 
 Write-Host "----------------Restarting Explorer----------------"
 Stop-Process -Name explorer -Force

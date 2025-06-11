@@ -29,7 +29,7 @@
 # Configure which disks are shown
 # $ShowDisks = @("C:", "D:")
 # Show all available disks
-$ShowDisks = @("*")
+$ShowDisks = @("C:", "D:")
 
 # Configure which package managers are shown
 # disabling unused ones will improve speed
@@ -70,21 +70,21 @@ $batterystyle = 'textbar'
     # "custom_time"  # use custom info line
     "uptime"
     # "ps_pkgs"  # takes some time
-    "pkgs"
+    # "pkgs"
     "pwsh"
-    "resolution"
-    "terminal"
+    # "resolution"
+    # "terminal"
     # "theme"
     "cpu"
     "gpu"
     # "cpu_usage"  # takes some time
     "memory"
     "disk"
-    "battery"
+    # "battery"
     # "locale"
     # "weather"
     "local_ip"
-    "public_ip"
+    # "public_ip"
     "blank"
     "colorbar"
 )

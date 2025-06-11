@@ -49,6 +49,12 @@ else
     sudo mkdir /mnt/c/Users/$username/Documents/WindowsPowerShell/ && sudo cat ps_profile.ps1 >/mnt/c/Users/$username/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
 fi
 
+if [ -d "/mnt/c/Users/$username/Documents/PowerShell/" ]; then
+    sudo cat ps_profile.ps1 >/mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+else
+    sudo mkdir /mnt/c/Users/$username/Documents/PowerShell/ && sudo cat ps_profile.ps1 >/mnt/c/Users/$username/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+fi
+
 if [ -d "/mnt/c/Users/$username/.starship/" ]; then
     sudo cat win_starship.toml >/mnt/c/Users/$username/.starship/starship.toml
 else
