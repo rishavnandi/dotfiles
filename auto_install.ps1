@@ -82,7 +82,9 @@ $appIDs = @(
     "ar51an.iPerf3",
     "garethgeorge.Backrest",
     "Google.GoogleDrive",
-    "WeMod.WeMod"
+    "WeMod.WeMod",
+    "Genymobile.scrcpy",
+    "KDE.KDEConnect"
 )
 
 # Loop through each app and install it
