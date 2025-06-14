@@ -84,7 +84,8 @@ $appIDs = @(
     "Google.GoogleDrive",
     "WeMod.WeMod",
     "Genymobile.scrcpy",
-    "KDE.KDEConnect"
+    "KDE.KDEConnect",
+    "mortenn.BrowserPicker",
 )
 
 # Loop through each app and install it
