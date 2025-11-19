@@ -5,13 +5,18 @@ add_newline = true
 
 # Change the default prompt format
 format = """\
-[╭╴](238)$env_var\
+[╭╴](238)$os\
 $all[╰─](238)$character"""
 
 # Change the default prompt characters
 [character]
-success_symbol = "[](238)"
-error_symbol = "[](238)"
+success_symbol = "[](238)"
+error_symbol = "[](238)"
+
+# Show OS icon (Windows logo)
+[os]
+disabled = false
+format = "[$symbol](white) "
 
 # Shows the username
 [username]

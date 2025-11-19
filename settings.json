@@ -58,10 +58,10 @@
         "name": "Command Prompt"
       },
       {
-        "commandline": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\rishav\\miniconda3\\shell\\condabin\\conda-hook.ps1'",
+        "commandline": "%windir%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& '%USERPROFILE%\\miniconda3\\shell\\condabin\\conda-hook.ps1'",
         "guid": "{5caa77b6-628a-4cb7-9c26-8ff2008c3803}",
         "hidden": false,
-        "icon": "C:\\Users\\rishav\\miniconda3\\anaconda.png",
+        "icon": "%USERPROFILE%\\miniconda3\\anaconda.png",
         "name": "Anaconda"
       },
       {

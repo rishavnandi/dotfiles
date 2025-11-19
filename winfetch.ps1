@@ -1,65 +1,16 @@
 # ===== WINFETCH CONFIGURATION =====
 
-# $image = "~/winfetch.png"
-# $noimage = $true
-
-# Display image using ASCII characters
-# $ascii = $true
-
-# Set the version of Windows to derive the logo from.
-# $logo = "Windows 10"
-
-# Specify width for image/logo
-# $imgwidth = 40
-
-# Make the logo blink
-# $blink = $true
-
-# Display all built-in info segments.
-# $all = $true
-
-# Add a custom info line
-# function info_custom_time {
-#     return @{
-#         title = "Time"
-#         content = (Get-Date)
-#     }
-# }
-
 # Configure which disks are shown
-# $ShowDisks = @("C:", "D:")
-# Show all available disks
 $ShowDisks = @("C:", "D:")
 
-# Configure which package managers are shown
-# disabling unused ones will improve speed
-# $ShowPkgs = @("winget", "scoop", "choco")
-
-# Use the following option to specify custom package managers.
-# Create a function with that name as suffix, and which returns
-# the number of packages. Two examples are shown here:
-# $CustomPkgs = @("cargo", "just-install")
-# function info_pkg_cargo {
-#     return (cargo install --list | Where-Object {$_ -like "*:" }).Length
-# }
-# function info_pkg_just-install {
-#     return (just-install list).Length
-# }
-
-# Configure how to show info for levels
-# Default is for text only.
-# 'bar' is for bar only.
-# 'textbar' is for text + bar.
-# 'bartext' is for bar + text.
+# Configure info display style
+# Options: 'text', 'bar', 'textbar', 'bartext'
 $cpustyle = 'textbar'
 $memorystyle = 'textbar'
 $diskstyle = 'textbar'
 $batterystyle = 'textbar'
 
-
-# Remove the '#' from any of the lines in
-# the following to **enable** their output.
-
+# Enable/disable info segments
 @(
     "title"
     "dashes"
@@ -67,24 +18,13 @@ $batterystyle = 'textbar'
     "computer"
     "kernel"
     "motherboard"
-    # "custom_time"  # use custom info line
     "uptime"
-    # "ps_pkgs"  # takes some time
-    # "pkgs"
     "pwsh"
-    # "resolution"
-    # "terminal"
-    # "theme"
     "cpu"
     "gpu"
-    # "cpu_usage"  # takes some time
     "memory"
     "disk"
-    # "battery"
-    # "locale"
-    # "weather"
     "local_ip"
-    # "public_ip"
     "blank"
     "colorbar"
 )

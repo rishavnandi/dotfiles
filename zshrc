@@ -10,19 +10,7 @@ plugins=(zsh-autosuggestions zsh-syntax-highlighting copyfile)
 
 source $ZSH/oh-my-zsh.sh
 
-# enable color support of ls and also add handy aliases
-# if [ -x /usr/bin/dircolors ]; then
-#     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-#     alias ls='ls --color=auto'
-#     #alias dir='dir --color=auto'
-#     #alias vdir='vdir --color=auto'
-
-#     alias grep='grep --color=auto'
-#     alias fgrep='fgrep --color=auto'
-#     alias egrep='egrep --color=auto'
-# fi
-
-# some more ls aliases
+# ls aliases
 alias ls="lsd"
 alias ll='ls -l'
 alias la='ls -a'
@@ -41,52 +29,31 @@ alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
 
-# find out which distribution we are running on
-LFILE="/etc/*-release"
-MFILE="/System/Library/CoreServices/SystemVersion.plist"
-_distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
-
-# set an icon based on the distro
-# make sure your font is compatible with https://github.com/lukas-w/font-logos
-case $_distro in
-*kali*) ICON="ﴣ" ;;
-*arch*) ICON="" ;;
-*debian*) ICON="" ;;
-*raspbian*) ICON="" ;;
-*ubuntu*) ICON="" ;;
-*elementary*) ICON="" ;;
-*fedora*) ICON="" ;;
-*coreos*) ICON="" ;;
-*gentoo*) ICON="" ;;
-*mageia*) ICON="" ;;
-*centos*) ICON="" ;;
-*redhat*) ICON="" ;;
-*opensuse* | *tumbleweed*) ICON="" ;;
-*sabayon*) ICON="" ;;
-*slackware*) ICON="" ;;
-*linuxmint*) ICON="" ;;
-*alpine*) ICON="" ;;
-*aosc*) ICON="" ;;
-*nixos*) ICON="" ;;
-*devuan*) ICON="" ;;
-*manjaro*) ICON="" ;;
-*rhel*) ICON="" ;;
-*macos*) ICON="" ;;
-*) ICON="" ;;
-esac
-
-export STARSHIP_DISTRO="$ICON "
-export STARSHIP_CONFIG=~/.config/starship.toml
+# Initialize Starship prompt (handles distro icons automatically via the 'os' module)
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 eval "$(starship init zsh)"
 
 # Export PATH
-export PATH="/home/rishav/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
-# Load autojump
-. /usr/share/autojump/autojump.zsh
+# Export Configs For Vagrant (uses dynamic USER variable)
+if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+    WIN_USER=$(powershell.exe -Command "[Environment]::UserName" 2>/dev/null | tr -d '\r' || echo "$USER")
+    export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/$WIN_USER"
+    export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+fi
 
-# Export Configs For Vagrant
-export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH=/mnt/c/Users/rishav
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+# Load autojump if available
+if [ -f /usr/share/autojump/autojump.zsh ]; then
+    . /usr/share/autojump/autojump.zsh
+fi
 
-nitch
+# Load NVM if available
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Show system info on new terminal (only if nitch is installed)
+if command -v nitch &>/dev/null; then
+    nitch
+fi

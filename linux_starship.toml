@@ -8,18 +8,18 @@ command_timeout = 1000
 
 # Change the default prompt format
 format = """\
-[╭╴](238)$env_var\
+[╭╴](238)$os\
 $all[╰─](238)$character"""
 
 # Change the default prompt characters
 [character]
-success_symbol = "[](238)"
-error_symbol = "[](238)"
+success_symbol = "[](238)"
+error_symbol = "[](238)"
 
-# Shows an icon that should be included by zshrc script based on the distribution or os
-[env_var.STARSHIP_DISTRO]
-format = '[$env_value](white)'
-variable = "STARSHIP_DISTRO"
+# Show OS/distro icon (automatically detected by Starship)
+[os]
+disabled = false
+format = "[$symbol](white) "
 
 # Shows the username
 [username]

@@ -1,5 +1,13 @@
+# PowerShell Profile Configuration
+
+# Initialize Starship prompt (handles OS icon automatically)
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\starship.toml"
-$ENV:STARSHIP_DISTRO = "者"
 Invoke-Expression (&starship init powershell)
+
+# Aliases
 Set-Alias l lsd
-winfetch
+
+# Show system info on new terminal (only if winfetch is available)
+if (Get-Command winfetch -ErrorAction SilentlyContinue) {
+    winfetch
+}
