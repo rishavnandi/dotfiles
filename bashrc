@@ -41,11 +41,17 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-alias ls="lsd"
-alias ll='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
+if command -v lsd &>/dev/null; then
+    alias ls="lsd"
+    alias ll='ls -l'
+    alias la='ls -a'
+    alias lla='ls -la'
+    alias lt='ls --tree'
+else
+    alias ll='ls -l'
+    alias la='ls -a'
+    alias lla='ls -la'
+fi
 
 # custom aliases
 alias cleanup="sudo apt autoremove"
@@ -79,12 +85,13 @@ if ! shopt -oq posix; then
     fi
 fi
 
-    fi
+# Initialize Starship prompt (handles distro icons automatically via the 'os' module)
+if command -v starship &>/dev/null; then
+    export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+    eval "$(starship init bash)"
 fi
 
-# Initialize Starship prompt (handles distro icons automatically via the 'os' module)
-export STARSHIP_CONFIG="$HOME/.config/starship.toml"
-eval "$(starship init bash)"# Export PATH
+# Export PATH
 export PATH="$HOME/.local/bin:$PATH"
 
 # Export Configs For Vagrant (uses dynamic USER variable)
@@ -101,8 +108,8 @@ fi
 
 # Load NVM if available
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 
 # Show system info on new terminal (only if nitch is installed)
 if command -v nitch &>/dev/null; then

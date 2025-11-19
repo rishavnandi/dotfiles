@@ -2,7 +2,7 @@
 
 # Initialize Starship prompt (handles OS icon automatically)
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\starship.toml"
-Invoke-Expression (&starship init powershell)
+Invoke-Expression (&starship init powershell | Out-String)
 
 # Aliases
 Set-Alias l lsd

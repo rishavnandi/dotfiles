@@ -2,6 +2,7 @@
 
 # Exit on error, undefined variables, and pipe failures
 set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
 
 # Version variables for downloads
 NERD_FONT_VERSION="3.1.1"
@@ -281,10 +282,25 @@ fi
 
 echo "----------------Setup Ansible----------------"
 if ! command -v ansible &>/dev/null; then
-    log_info "Installing Ansible and related tools"
-    sudo apt install -y python3-pip
-    sudo -u "$user" pip3 install --user --upgrade pip
-    sudo -u "$user" pip3 install --user virtualenv ansible ansible-lint molecule
+    log_info "Installing Ansible and related tools using uv"
+    
+    # Install uv
+    log_info "Installing uv"
+    sudo -u "$user" sh -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    
+    # Locate uv (default install location is ~/.local/bin or ~/.cargo/bin)
+    if [ -f "/home/$user/.local/bin/uv" ]; then
+        UV_BIN="/home/$user/.local/bin/uv"
+    elif [ -f "/home/$user/.cargo/bin/uv" ]; then
+        UV_BIN="/home/$user/.cargo/bin/uv"
+    else
+        UV_BIN="uv"
+    fi
+
+    log_info "Installing tools with uv"
+    sudo -u "$user" "$UV_BIN" tool install ansible
+    sudo -u "$user" "$UV_BIN" tool install ansible-lint
+    sudo -u "$user" "$UV_BIN" tool install molecule
 else
     log_warn "Ansible already installed, skipping"
 fi
@@ -425,12 +441,20 @@ fi
 
 echo "----------------Setup Zshrc----------------"
 log_info "Copying zshrc configuration"
+if [ -f "/home/$user/.zshrc" ]; then
+    cp "/home/$user/.zshrc" "/home/$user/.zshrc.bak"
+    log_info "Backed up existing .zshrc to .zshrc.bak"
+fi
 cp zshrc "/home/$user/.zshrc"
 dos2unix "/home/$user/.zshrc"
 chown "$user:$user" "/home/$user/.zshrc"
 
 echo "----------------Setup Bashrc----------------"
 log_info "Copying bashrc configuration"
+if [ -f "/home/$user/.bashrc" ]; then
+    cp "/home/$user/.bashrc" "/home/$user/.bashrc.bak"
+    log_info "Backed up existing .bashrc to .bashrc.bak"
+fi
 cp bashrc "/home/$user/.bashrc"
 dos2unix "/home/$user/.bashrc"
 chown "$user:$user" "/home/$user/.bashrc"
