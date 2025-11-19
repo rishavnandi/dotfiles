@@ -66,11 +66,7 @@ Set-ExecutionPolicy Restricted -Scope CurrentUser
 - Restart your terminal to apply all changes
 - Enjoy your new setup!
 
-## Improvements
-
-See [IMPROVEMENTS.md](IMPROVEMENTS.md) for a detailed list of all improvements made to the scripts.
-
-### Key Improvements:
+## Key Improvements
 - ✅ No more hardcoded usernames or paths
 - ✅ Proper error handling with colored output
 - ✅ Idempotent - safe to re-run
