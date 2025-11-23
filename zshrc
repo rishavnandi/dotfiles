@@ -6,7 +6,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-autosuggestions zsh-syntax-highlighting copyfile)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting copyfile extract)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -34,6 +34,10 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
+alias gst="git status"
+alias glog="git log --oneline --graph --decorate"
+alias gco="git checkout"
+alias gd="git diff"
 
 # Initialize Starship prompt (handles distro icons automatically via the 'os' module)
 if command -v starship &>/dev/null; then
@@ -42,7 +46,7 @@ if command -v starship &>/dev/null; then
 fi
 
 # Export PATH
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 # Export Configs For Vagrant (uses dynamic USER variable)
 if [ -n "${WSL_DISTRO_NAME:-}" ]; then

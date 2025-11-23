@@ -285,8 +285,10 @@ if ! command -v ansible &>/dev/null; then
     log_info "Installing Ansible and related tools using uv"
     
     # Install uv
-    log_info "Installing uv"
-    sudo -u "$user" sh -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    if ! command -v uv &>/dev/null; then
+        log_info "Installing uv"
+        sudo -u "$user" sh -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    fi
     
     # Locate uv (default install location is ~/.local/bin or ~/.cargo/bin)
     if [ -f "/home/$user/.local/bin/uv" ]; then

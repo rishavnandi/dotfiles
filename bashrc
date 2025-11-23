@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -64,6 +64,10 @@ alias gc="git commit -m"
 alias gp="git push"
 alias gb="git checkout -b"
 alias gpull="git pull"
+alias gst="git status"
+alias glog="git log --oneline --graph --decorate"
+alias gco="git checkout"
+alias gd="git diff"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -92,7 +96,7 @@ if command -v starship &>/dev/null; then
 fi
 
 # Export PATH
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 # Export Configs For Vagrant (uses dynamic USER variable)
 if [ -n "${WSL_DISTRO_NAME:-}" ]; then
