@@ -5,7 +5,7 @@ set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 # Version variables for downloads
-NERD_FONT_VERSION="3.1.1"
+NERD_FONT_VERSION="2.3.3"
 LSD_VERSION="1.1.5"
 KUBECTL_VERSION="1.31"
 MINIKUBE_VERSION="latest"
