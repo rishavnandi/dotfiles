@@ -1,0 +1,119 @@
+# ~/.config/starship.toml
+
+add_newline = false
+command_timeout = 1200
+format = "$os$username$hostname$directory$git_branch$git_status$status$cmd_duration$jobs$python$nodejs$golang$rust$terraform$docker_context$kubernetes$aws$container$character"
+
+[os]
+disabled = false
+format = "[$symbol](bold white) "
+
+[os.symbols]
+Macos = ""
+
+[username]
+show_always = true
+style_user = "bold white"
+style_root = "bold red"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "bold yellow"
+format = "[@$hostname]($style) "
+
+[directory]
+style = "bold cyan"
+truncation_length = 3
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only = " "
+read_only_style = "bold red"
+format = "[in](dimmed white) [$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "[on](dimmed white) [$symbol$branch]($style) "
+
+[git_status]
+style = "bold yellow"
+format = "([\\[$all_status$ahead_behind\\]]($style) )"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+staged = "+${count}"
+modified = "~${count}"
+deleted = "-${count}"
+untracked = "?${count}"
+stashed = "*${count}"
+conflicted = "!${count}"
+
+[status]
+disabled = false
+symbol = "✖ "
+style = "bold red"
+format = "[$symbol$status]($style) "
+map_symbol = true
+
+[jobs]
+symbol = " "
+style = "dimmed white"
+number_threshold = 1
+format = "[$symbol$number]($style) "
+
+[cmd_duration]
+min_time = 500
+style = "dimmed white"
+format = "[took $duration]($style) "
+
+[python]
+symbol = " "
+style = "bold yellow"
+format = "[$symbol$version( \\($virtualenv\\))]($style) "
+
+[nodejs]
+symbol = " "
+style = "bold green"
+format = "[$symbol$version]($style) "
+
+[golang]
+symbol = " "
+style = "bold cyan"
+format = "[$symbol$version]($style) "
+
+[rust]
+symbol = " "
+style = "bold red"
+format = "[$symbol$version]($style) "
+
+[terraform]
+symbol = "󱁢 "
+style = "bold 105"
+format = "[$symbol$workspace]($style) "
+
+[docker_context]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$context]($style) "
+
+[kubernetes]
+disabled = false
+symbol = "☸ "
+style = "bold cyan"
+format = "[$symbol$context( \\($namespace\\))]($style) "
+
+[aws]
+symbol = " "
+style = "bold 208"
+format = "[$symbol$profile( \\($region\\))]($style) "
+
+[container]
+symbol = "⬢ "
+style = "bold blue"
+format = "[$symbol$name]($style) "
+
+[character]
+success_symbol = "[-->](bold green)"
+error_symbol = "[-->](bold red)"
+vicmd_symbol = "[-->](bold yellow)"

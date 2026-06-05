@@ -6,9 +6,16 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting copyfile extract)
+plugins=(git zsh-autosuggestions copyfile extract you-should-use fzf-tab history-substring-search zsh-syntax-highlighting)
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
+
+# fzf key bindings & completion (Ctrl+T files, Ctrl+R history, Alt+C dirs)
+source <(fzf --zsh)
+
+# history-substring-search key bindings (Up/Down arrows)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # ls aliases
 if command -v lsd &>/dev/null; then
@@ -24,10 +31,6 @@ else
 fi
 
 # custom aliases
-alias cleanup="sudo apt autoremove"
-alias update="sudo apt update && sudo apt upgrade -y"
-alias install="sudo apt install"
-alias uninstall="sudo apt purge"
 alias gin="git init"
 alias ga="git add ."
 alias gc="git commit -m"
@@ -39,33 +42,27 @@ alias glog="git log --oneline --graph --decorate"
 alias gco="git checkout"
 alias gd="git diff"
 
+# Export PATH
+typeset -U PATH path
+path=(
+    $HOME/.antigravity-ide/antigravity-ide/bin
+    $HOME/.bun/bin
+    $HOME/.local/bin
+    $HOME/.cargo/bin
+    $path
+    $HOME/.lmstudio/bin
+)
+
 # Initialize Starship prompt (handles distro icons automatically via the 'os' module)
 if command -v starship &>/dev/null; then
     export STARSHIP_CONFIG="$HOME/.config/starship.toml"
     eval "$(starship init zsh)"
 fi
 
-# Export PATH
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-
-# Export Configs For Vagrant (uses dynamic USER variable)
-if [ -n "${WSL_DISTRO_NAME:-}" ]; then
-    WIN_USER=$(powershell.exe -Command "[Environment]::UserName" 2>/dev/null | tr -d '\r' || echo "$USER")
-    export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/$WIN_USER"
-    export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
-fi
-
-# Load autojump if available
-if [ -f /usr/share/autojump/autojump.zsh ]; then
-    . /usr/share/autojump/autojump.zsh
-fi
+eval "$(zoxide init zsh)"
 
 # Load NVM if available
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
-# Show system info on new terminal (only if nitch is installed)
-if command -v nitch &>/dev/null; then
-    nitch
-fi
+[ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
