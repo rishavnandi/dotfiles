@@ -56,6 +56,7 @@ brew update
 echo "----------------Add Homebrew Taps----------------"
 TAPS=(
     getkimchi/tap
+    jundot/omlx
     oven-sh/bun
     theboredteam/boring-notch
 )
@@ -72,6 +73,7 @@ echo "----------------Install Homebrew Formulae----------------"
 FORMULAE=(
     ansible
     ansible-lint
+    aria2
     bat
     btop
     cmake
@@ -90,6 +92,7 @@ FORMULAE=(
     neovim
     nvm
     opencode
+    p7zip
     ruff
     rust
     smartmontools
@@ -146,6 +149,7 @@ CASKS=(
     requestly
     spotify
     tailscale-app
+    the-unarchiver
     tradingview
     vagrant
     vesktop
