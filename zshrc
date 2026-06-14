@@ -11,7 +11,9 @@ plugins=(git zsh-autosuggestions copyfile extract you-should-use fzf-tab history
 source "$ZSH/oh-my-zsh.sh"
 
 # fzf key bindings & completion (Ctrl+T files, Ctrl+R history, Alt+C dirs)
-source <(fzf --zsh)
+if command -v fzf &>/dev/null; then
+    source <(fzf --zsh)
+fi
 
 # history-substring-search key bindings (Up/Down arrows)
 bindkey '^[[A' history-substring-search-up
@@ -59,7 +61,9 @@ if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 fi
 
-eval "$(zoxide init zsh)"
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+fi
 
 # Load NVM if available
 export NVM_DIR="$HOME/.nvm"
