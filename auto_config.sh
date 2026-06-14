@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 set -euo pipefail
 
@@ -35,7 +35,7 @@ echo "
 
 echo "----------------https://github.com/rishavnandi/dotfiles----------------"
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="${0:A:h}"
 
 echo "----------------Install Homebrew----------------"
 if ! command -v brew &>/dev/null; then
@@ -115,7 +115,7 @@ for f in "${FORMULAE[@]}"; do
         log_warn "Formula $short already installed"
     else
         log_info "Installing formula: $f"
-        brew install "$f" || log_error "Failed to install $f"
+        brew install "$f" || { log_error "Failed to install $f"; exit 1; }
     fi
 done
 
@@ -164,13 +164,14 @@ for c in "${CASKS[@]}"; do
         log_warn "Cask $c already installed"
     else
         log_info "Installing cask: $c"
-        brew install --cask "$c" || log_error "Failed to install $c"
+        brew install --cask "$c" || { log_error "Failed to install $c"; exit 1; }
     fi
 done
 
 echo "----------------Install FiraCode Nerd Font----------------"
 FONT_DIR="/Library/Fonts"
-if ls "$FONT_DIR"/FiraCode*Nerd*.{ttf,otf} &>/dev/null; then
+font_matches=("$FONT_DIR"/FiraCode*Nerd*.{ttf,otf}(N))
+if (( ${#font_matches[@]} )); then
     log_warn "FiraCode Nerd Font already installed in $FONT_DIR"
 else
     log_info "Downloading FiraCode Nerd Font v${NERD_FONT_VERSION}"
@@ -197,21 +198,29 @@ fi
 
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-declare -A OMZ_PLUGINS=(
-    [zsh-autosuggestions]="https://github.com/zsh-users/zsh-autosuggestions"
-    [zsh-syntax-highlighting]="https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    [you-should-use]="https://github.com/MichaelAquilina/zsh-you-should-use"
-    [fzf-tab]="https://github.com/Aloxaf/fzf-tab"
-    [zsh-history-substring-search]="https://github.com/zsh-users/zsh-history-substring-search"
+OMZ_PLUGIN_NAMES=(
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    you-should-use
+    fzf-tab
+    zsh-history-substring-search
+)
+OMZ_PLUGIN_URLS=(
+    https://github.com/zsh-users/zsh-autosuggestions
+    https://github.com/zsh-users/zsh-syntax-highlighting.git
+    https://github.com/MichaelAquilina/zsh-you-should-use
+    https://github.com/Aloxaf/fzf-tab
+    https://github.com/zsh-users/zsh-history-substring-search
 )
 
-for plugin in "${!OMZ_PLUGINS[@]}"; do
+for i in {1..${#OMZ_PLUGIN_NAMES[@]}}; do
+    plugin="${OMZ_PLUGIN_NAMES[$i]}"
     target="$ZSH_CUSTOM/plugins/$plugin"
     if [[ -d "$target" ]]; then
         log_warn "Oh My Zsh plugin $plugin already installed"
     else
         log_info "Installing oh-my-zsh plugin: $plugin"
-        git clone --depth=1 "${OMZ_PLUGINS[$plugin]}" "$target"
+        git clone --depth=1 "${OMZ_PLUGIN_URLS[$i]}" "$target"
     fi
 done
 
