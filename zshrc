@@ -48,7 +48,6 @@ alias gd="git diff"
 typeset -U PATH path
 path=(
     $HOME/.antigravity-ide/antigravity-ide/bin
-    $HOME/.bun/bin
     $HOME/.local/bin
     $HOME/.cargo/bin
     $path
@@ -70,3 +69,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/rishav/.lmstudio/bin"
+# End of LM Studio CLI section
+
