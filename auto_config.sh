@@ -56,7 +56,6 @@ brew update
 echo "----------------Add Homebrew Taps----------------"
 TAPS=(
     getkimchi/tap
-    jundot/omlx
     oven-sh/bun
     theboredteam/boring-notch
 )
@@ -81,6 +80,7 @@ FORMULAE=(
     fzf
     gh
     gnupg
+    go
     helm
     k9s
     kubernetes-cli
@@ -93,6 +93,7 @@ FORMULAE=(
     nvm
     opencode
     p7zip
+    ripgrep
     ruff
     rust
     smartmontools
@@ -104,6 +105,7 @@ FORMULAE=(
     uv
     watch
     wget
+    yt-dlp
     zoxide
     getkimchi/tap/kimchi
     oven-sh/bun/bun
@@ -123,9 +125,12 @@ echo "----------------Install Homebrew Casks----------------"
 CASKS=(
     android-platform-tools
     antigravity
+    antigravity-cli
+    arc
     blip
     boring-notch
     brave-browser
+    bruno
     chatgpt
     claude
     codex-app
@@ -137,6 +142,7 @@ CASKS=(
     free-download-manager
     google-chrome
     hiddenbar
+    keka
     linearmouse
     lm-studio
     microsoft-teams
@@ -146,9 +152,12 @@ CASKS=(
     orbstack
     protonvpn
     raycast
+    redis-insight
     requestly
     spotify
+    stats
     tailscale-app
+    termius
     the-unarchiver
     tradingview
     vagrant
@@ -271,3 +280,9 @@ fi
 
 log_info "Setup completed successfully!"
 log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
+
+# ----------------Manual Installs (not available via Homebrew)----------------
+# The following apps need to be installed manually:
+#   - O+Connect
+#   - oMLX
+#   - Switchbar
