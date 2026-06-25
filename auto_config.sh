@@ -76,12 +76,14 @@ FORMULAE=(
     bat
     btop
     cmake
+    duf
     fd
     fzf
     gh
     gnupg
     go
     helm
+    inxi
     k9s
     kubernetes-cli
     lazydocker
@@ -102,6 +104,7 @@ FORMULAE=(
     starship
     tldr
     tmux
+    ty
     uv
     watch
     wget
@@ -135,13 +138,11 @@ CASKS=(
     claude
     codex-app
     copilot-cli
-    cursor
     dbeaver-community
     dockdoor
     ente-auth
     free-download-manager
     google-chrome
-    hiddenbar
     keka
     linearmouse
     lm-studio
@@ -158,7 +159,6 @@ CASKS=(
     stats
     tailscale-app
     termius
-    the-unarchiver
     tradingview
     vagrant
     vesktop
@@ -166,6 +166,7 @@ CASKS=(
     vlc
     warp
     whatsapp
+    zed
 )
 
 for c in "${CASKS[@]}"; do
@@ -283,6 +284,8 @@ log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
 
 # ----------------Manual Installs (not available via Homebrew)----------------
 # The following apps need to be installed manually:
+#   - GameHub
 #   - O+Connect
 #   - oMLX
 #   - Switchbar
+#   - Unsloth Studio
