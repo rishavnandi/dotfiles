@@ -13,6 +13,20 @@ log_info()  { echo -e "${GREEN}[INFO]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 
+DRY_RUN=false
+if [[ "${1:-}" == "--dry-run" || "${1:-}" == "-n" ]]; then
+    DRY_RUN=true
+    log_warn "DRY RUN MODE — no changes will be made"
+fi
+
+run_cmd() {
+    if $DRY_RUN; then
+        log_info "[dry-run] $*"
+        return 0
+    fi
+    "$@"
+}
+
 if [[ "$(uname)" != "Darwin" ]]; then
     log_error "This script is macOS only."
     exit 1
@@ -40,7 +54,7 @@ DOTFILES_DIR="${0:A:h}"
 echo "----------------Install Homebrew----------------"
 if ! command -v brew &>/dev/null; then
     log_info "Installing Homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    run_cmd /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     if [[ -x /opt/homebrew/bin/brew ]]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     elif [[ -x /usr/local/bin/brew ]]; then
@@ -51,7 +65,7 @@ else
 fi
 
 log_info "Updating Homebrew"
-brew update
+run_cmd brew update
 
 echo "----------------Add Homebrew Taps----------------"
 TAPS=(
@@ -64,7 +78,7 @@ for tap in "${TAPS[@]}"; do
         log_warn "Tap $tap already added"
     else
         log_info "Tapping $tap"
-        brew tap "$tap"
+        run_cmd brew tap "$tap"
     fi
 done
 
@@ -120,7 +134,7 @@ for f in "${FORMULAE[@]}"; do
         log_warn "Formula $short already installed"
     else
         log_info "Installing formula: $f"
-        brew install "$f" || { log_error "Failed to install $f"; exit 1; }
+        run_cmd brew install "$f" || { log_error "Failed to install $f"; exit 1; }
     fi
 done
 
@@ -174,7 +188,7 @@ for c in "${CASKS[@]}"; do
         log_warn "Cask $c already installed"
     else
         log_info "Installing cask: $c"
-        brew install --cask "$c" || { log_error "Failed to install $c"; exit 1; }
+        run_cmd brew install --cask "$c" || { log_error "Failed to install $c"; exit 1; }
     fi
 done
 
@@ -184,24 +198,28 @@ font_matches=("$FONT_DIR"/FiraCode*Nerd*.{ttf,otf}(N))
 if (( ${#font_matches[@]} )); then
     log_warn "FiraCode Nerd Font already installed in $FONT_DIR"
 else
-    log_info "Downloading FiraCode Nerd Font v${NERD_FONT_VERSION}"
-    TMP_FONT_DIR="$(mktemp -d)"
-    trap 'rm -rf "$TMP_FONT_DIR"' EXIT
-    curl -fsSL -o "$TMP_FONT_DIR/FiraCode.zip" \
-        "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraCode.zip"
-    unzip -q "$TMP_FONT_DIR/FiraCode.zip" -d "$TMP_FONT_DIR/FiraCode"
-    log_info "Installing fonts to $FONT_DIR (sudo required)"
-    sudo find "$TMP_FONT_DIR/FiraCode" -type f \( -iname "*.ttf" -o -iname "*.otf" \) \
-        -exec cp {} "$FONT_DIR/" \;
-    rm -rf "$TMP_FONT_DIR"
-    trap - EXIT
-    log_info "FiraCode Nerd Font v${NERD_FONT_VERSION} installed"
+    if $DRY_RUN; then
+        log_info "[dry-run] Would download and install FiraCode Nerd Font v${NERD_FONT_VERSION}"
+    else
+        log_info "Downloading FiraCode Nerd Font v${NERD_FONT_VERSION}"
+        TMP_FONT_DIR="$(mktemp -d)"
+        trap 'rm -rf "$TMP_FONT_DIR"' EXIT
+        curl -fsSL -o "$TMP_FONT_DIR/FiraCode.zip" \
+            "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraCode.zip"
+        unzip -q "$TMP_FONT_DIR/FiraCode.zip" -d "$TMP_FONT_DIR/FiraCode"
+        log_info "Installing fonts to $FONT_DIR (sudo required)"
+        sudo find "$TMP_FONT_DIR/FiraCode" -type f \( -iname "*.ttf" -o -iname "*.otf" \) \
+            -exec cp {} "$FONT_DIR/" \;
+        rm -rf "$TMP_FONT_DIR"
+        trap - EXIT
+        log_info "FiraCode Nerd Font v${NERD_FONT_VERSION} installed"
+    fi
 fi
 
 echo "----------------Setup Oh My Zsh----------------"
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     log_info "Installing Oh My Zsh"
-    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    run_cmd env RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
     log_warn "Oh My Zsh already installed"
 fi
@@ -230,26 +248,26 @@ for i in {1..${#OMZ_PLUGIN_NAMES[@]}}; do
         log_warn "Oh My Zsh plugin $plugin already installed"
     else
         log_info "Installing oh-my-zsh plugin: $plugin"
-        git clone --depth=1 "${OMZ_PLUGIN_URLS[$i]}" "$target"
+        run_cmd git clone --depth=1 "${OMZ_PLUGIN_URLS[$i]}" "$target"
     fi
 done
 
 echo "----------------Symlink Dotfiles----------------"
-mkdir -p "$HOME/.config"
+run_cmd mkdir -p "$HOME/.config"
 
 link_file() {
     local src="$1"
     local dest="$2"
     if [[ -L "$dest" ]]; then
         log_warn "Symlink already exists: $dest"
-        ln -sfn "$src" "$dest"
+        run_cmd ln -sfn "$src" "$dest"
         return
     fi
     if [[ -e "$dest" ]]; then
         log_info "Backing up existing $dest to $dest.bak"
-        mv "$dest" "$dest.bak"
+        run_cmd mv "$dest" "$dest.bak"
     fi
-    ln -s "$src" "$dest"
+    run_cmd ln -s "$src" "$dest"
     log_info "Linked $dest -> $src"
 }
 
@@ -263,10 +281,10 @@ ZSH_PATH="$(command -v zsh)"
 if [[ "${SHELL:-}" != "$ZSH_PATH" ]]; then
     if ! grep -qx "$ZSH_PATH" /etc/shells; then
         log_info "Adding $ZSH_PATH to /etc/shells"
-        echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+        run_cmd bash -c 'echo "$1" | sudo tee -a /etc/shells >/dev/null' _ "$ZSH_PATH"
     fi
     log_info "Changing default shell to $ZSH_PATH"
-    chsh -s "$ZSH_PATH"
+    run_cmd chsh -s "$ZSH_PATH"
 else
     log_warn "Default shell already set to zsh"
 fi
@@ -276,11 +294,15 @@ if [[ -f "$HOME/.hushlogin" ]]; then
     log_warn ".hushlogin already exists"
 else
     log_info "Creating .hushlogin"
-    touch "$HOME/.hushlogin"
+    run_cmd touch "$HOME/.hushlogin"
 fi
 
-log_info "Setup completed successfully!"
-log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
+if ! $DRY_RUN; then
+    log_info "Setup completed successfully!"
+    log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
+else
+    log_info "Dry run complete — no changes were made"
+fi
 
 # ----------------Manual Installs (not available via Homebrew)----------------
 # The following apps need to be installed manually:
