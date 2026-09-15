@@ -47,6 +47,7 @@ alias gd="git diff"
 # Export PATH
 typeset -U PATH path
 path=(
+    $HOME/.bun/bin
     $HOME/.antigravity-ide/antigravity-ide/bin
     $HOME/.local/bin
     $HOME/.cargo/bin
@@ -74,3 +75,4 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$PATH:/Users/rishav/.lmstudio/bin"
 # End of LM Studio CLI section
 
+zstyle ':completion:*' menu select

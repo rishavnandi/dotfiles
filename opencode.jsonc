@@ -3,7 +3,7 @@
 
   "permission": {
     "edit": "ask",
-    "task": "ask",
+    "task": "allow",
     "todowrite": "allow",
     "lsp": "allow",
     "webfetch": "allow",
@@ -35,13 +35,15 @@
 
   "lsp": true,
 
+  "plugin": ["@dietrichgebert/ponytail"],
+
+  // Context7 works without a key (lower rate limits). For higher limits, register once
+  // via OAuth with `npx ctx7 setup --opencode`, then add:
+  //   "headers": { "CONTEXT7_API_KEY": "{file:~/.config/opencode/context7.key}" }
   "mcp": {
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "<YOUR_CONTEXT7_API_KEY>",
-      },
       "enabled": true,
     },
   },
