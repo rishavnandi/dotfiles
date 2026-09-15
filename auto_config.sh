@@ -69,7 +69,7 @@ run_cmd brew update
 
 echo "----------------Add Homebrew Taps----------------"
 TAPS=(
-    getkimchi/tap
+    hashicorp/tap
     oven-sh/bun
     theboredteam/boring-notch
 )
@@ -90,6 +90,7 @@ FORMULAE=(
     bat
     btop
     cmake
+    croc
     duf
     fd
     fzf
@@ -107,6 +108,7 @@ FORMULAE=(
     mole
     neovim
     nvm
+    oci-cli
     opencode
     p7zip
     ripgrep
@@ -124,7 +126,7 @@ FORMULAE=(
     wget
     yt-dlp
     zoxide
-    getkimchi/tap/kimchi
+    hashicorp/tap/terraform
     oven-sh/bun/bun
 )
 
@@ -142,41 +144,39 @@ echo "----------------Install Homebrew Casks----------------"
 CASKS=(
     android-platform-tools
     antigravity
-    antigravity-cli
-    arc
     blip
     boring-notch
     brave-browser
     bruno
     chatgpt
     claude
-    codex-app
-    copilot-cli
+    cursor
     dbeaver-community
     dockdoor
     ente-auth
     free-download-manager
+    gamehub
     google-chrome
+    hiddenbar
     keka
     linearmouse
     lm-studio
     microsoft-teams
-    notion
     obsidian
     openchamber
     orbstack
     protonvpn
     raycast
     redis-insight
-    requestly
     spotify
     stats
     tailscale-app
+    telegram
     termius
     tradingview
+    utm
     vagrant
     vesktop
-    visual-studio-code
     vlc
     warp
     whatsapp
@@ -252,6 +252,16 @@ for i in {1..${#OMZ_PLUGIN_NAMES[@]}}; do
     fi
 done
 
+echo "----------------Setup LazyVim----------------"
+if [[ -d "$HOME/.config/nvim" ]]; then
+    log_warn "Neovim config already exists at $HOME/.config/nvim"
+else
+    log_info "Cloning LazyVim starter"
+    run_cmd git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
+    run_cmd rm -rf "$HOME/.config/nvim/.git"
+    log_info "LazyVim starter installed — run 'nvim' to install plugins"
+fi
+
 echo "----------------Symlink Dotfiles----------------"
 run_cmd mkdir -p "$HOME/.config"
 
@@ -275,6 +285,9 @@ link_file "$DOTFILES_DIR/zshrc"         "$HOME/.zshrc"
 link_file "$DOTFILES_DIR/zprofile"      "$HOME/.zprofile"
 link_file "$DOTFILES_DIR/gitconfig"     "$HOME/.gitconfig"
 link_file "$DOTFILES_DIR/starship.toml" "$HOME/.config/starship.toml"
+
+run_cmd mkdir -p "$HOME/.config/opencode"
+link_file "$DOTFILES_DIR/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
 
 echo "----------------Set Zsh As Default Shell----------------"
 ZSH_PATH="$(command -v zsh)"
@@ -306,8 +319,6 @@ fi
 
 # ----------------Manual Installs (not available via Homebrew)----------------
 # The following apps need to be installed manually:
-#   - GameHub
 #   - O+Connect
 #   - oMLX
 #   - Switchbar
-#   - Unsloth Studio
