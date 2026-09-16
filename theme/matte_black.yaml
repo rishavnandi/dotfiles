@@ -1,0 +1,45 @@
+# Matte Black, AMOLED — the terminal half of the theme.
+#
+# Palette from Omarchy's matte-black theme by Taha YVR:
+# https://github.com/tahayvr/matteblack.nvim (lua/matteblack/colors.lua)
+#
+# Upstream Matte Black is a deliberately *matte* dark grey (background #121212),
+# not AMOLED. This keeps every accent and ANSI colour from upstream but crushes
+# the background to pure #000000 so OLED pixels actually switch off, and lifts
+# the foreground to the colourscheme's fg1 since #bebebe reads dim on black.
+# Matched in Neovim by the override in matteblack.lua.
+#
+# Warp lists user themes by file name, so this shows as "Matte Black".
+
+# Accent colour for UI elements.
+accent: "#e68e0d"
+
+# Terminal background colour — pure black, unlike upstream's #121212.
+background: "#000000"
+
+# Whether the theme is lighter or darker.
+details: darker
+
+# Foreground lifted to the colourscheme's fg1, since #bebebe is dim on pure black.
+foreground: "#EAEAEA"
+
+# ANSI escape colours, taken from the colourscheme's terminal_color_0..15.
+terminal_colors:
+  normal:
+    black: "#333333"
+    red: "#B91C1C"
+    green: "#129B70"
+    yellow: "#F59E0B"
+    blue: "#325DCA"
+    magenta: "#8D20B2"
+    cyan: "#1EA7A0"
+    white: "#BEBEBE"
+  bright:
+    black: "#8A8A8D"
+    red: "#E62222"
+    green: "#22C55E"
+    yellow: "#F1CB42"
+    blue: "#3C71F6"
+    magenta: "#B027DE"
+    cyan: "#24D0C7"
+    white: "#FFFFFF"

@@ -161,6 +161,9 @@ DOTFILE_LINKS=(
     "$DOTFILES_DIR/gitconfig|$HOME/.gitconfig"
     "$DOTFILES_DIR/starship.toml|$HOME/.config/starship.toml"
     "$DOTFILES_DIR/opencode.jsonc|$HOME/.config/opencode/opencode.jsonc"
+    # One file per app, all from the same Matte Black palette. See theme/.
+    "$DOTFILES_DIR/theme/matteblack.lua|$HOME/.config/nvim/lua/plugins/matteblack.lua"
+    "$DOTFILES_DIR/theme/matte_black.yaml|$HOME/.warp/themes/matte_black.yaml"
 )
 
 # ----------------Desired state: oh-my-zsh plugins----------------
