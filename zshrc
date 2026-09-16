@@ -1,6 +1,16 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+# Homebrew shellenv: sets HOMEBREW_PREFIX, PATH and the zsh completions fpath.
+# Apple Silicon installs to /opt/homebrew, Intel to /usr/local. This runs before
+# oh-my-zsh sources compinit so brew's completions are registered, and it keeps
+# `brew` available in non-login shells too (zprofile only covers login shells).
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv zsh)"
+fi
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -70,9 +80,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/rishav/.lmstudio/bin"
-# End of LM Studio CLI section
 
 zstyle ':completion:*' menu select
