@@ -35,7 +35,7 @@
 
   "lsp": true,
 
-  "plugin": ["@dietrichgebert/ponytail"],
+  "plugin": ["@dietrichgebert/ponytail", "opencode-cmd-provider"],
 
   // Context7 works without a key (lower rate limits). For higher limits, register once
   // via OAuth with `npx ctx7 setup --opencode`, then add:
