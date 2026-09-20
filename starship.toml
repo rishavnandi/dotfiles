@@ -2,7 +2,7 @@
 
 add_newline = false
 command_timeout = 1200
-scan_timeout = 100
+scan_timeout = 2000
 format = "$os$username$hostname$directory$git_branch$git_status$status$cmd_duration$jobs$python$nodejs$golang$rust$terraform$docker_context$kubernetes$aws$container$character"
 
 [os]
