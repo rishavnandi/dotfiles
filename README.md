@@ -49,6 +49,37 @@ brew bundle check --file=Brewfile     # what's missing?
 brew bundle dump --file=Brewfile --force   # re-snapshot this machine
 ```
 
+### Peekaboo (macOS automation)
+
+`peekaboo` is wired into `opencode.jsonc` as a local MCP server, so the agent can screenshot the
+screen, read the accessibility tree, and click and type inside your real apps — including Safari
+and Chrome with your own profiles and logins.
+
+Unlike every other tool here it needs two macOS privacy grants, and they cannot be scripted:
+
+| Grant | Where | Needed by |
+|---|---|---|
+| Screen Recording | System Settings → Privacy & Security → Screen & System Audio Recording | seeing the screen |
+| Accessibility | System Settings → Privacy & Security → Accessibility | clicking, typing, reading UI |
+
+Grants are per **host app**, not per user or per terminal, and each MCP client is a separate host.
+Grant both to:
+
+- **Warp** (`dev.warp.Warp-Stable`) — for `opencode` in the terminal
+- **OpenChamber** (`dev.openchamber.desktop`) — for the desktop app, which runs its own bundled
+  opencode (`OpenChamber.app/Contents/Resources/opencode-cli/`) rather than the Homebrew one
+
+Granting one does not cover the other. Peekaboo reports what the selected host actually has:
+
+```sh
+peekaboo permissions status      # add --no-remote to check the local runtime
+peekaboo bridge status           # which host answered the last check
+```
+
+Peekaboo's tools default to `ask`, with the ones that cannot change anything — `see`, `image`,
+`inspect_ui`, `permissions`, `dock`, `analyze`, `verify_state`, `sleep` — set to `allow`. Anything
+that clicks, types or moves the cursor still needs approval.
+
 ## macOS defaults
 
 `MACOS_DEFAULTS` in `auto_config.sh` is a single table of `domain|key|type|value` rows used
@@ -120,10 +151,17 @@ Warp expects is not verifiable from outside the app.
 | `gitconfig` | `~/.gitconfig` |
 | `starship.toml` | `~/.config/starship.toml` |
 | `opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
+| `opencode/ponytail-plugin.js` | `~/.config/opencode/plugins/ponytail-plugin.js` |
+| `cli.json` | `~/.config/opencode/cli.json` |
 | `theme/matteblack.lua` | `~/.config/nvim/lua/plugins/matteblack.lua` |
 | `theme/matte_black.yaml` | `~/.warp/themes/matte_black.yaml` |
 
 `auto_config.sh`, `Brewfile` and `README.md` are used in place and are not symlinked.
+
+OpenCode is **V2 only** (`anomalyco/tap/opencode-v2`, 2.x). It conflicts with homebrew-core's
+`opencode` (1.x) — both install an `opencode` binary — so the upgrade is uninstall-then-install.
+The terminal binary and OpenChamber's bundled one both read `opencode.jsonc`. V2 replaced
+`tui.jsonc` with `cli.json`, so the old TUI config is gone rather than kept.
 
 ## Not automated
 
@@ -132,3 +170,5 @@ These need manual install or are interactive:
 - `O+Connect`, `oMLX`, `Switchbar` — no Homebrew cask
 - App Store apps and Safari extensions
 - `gh auth login`
+- Screen Recording + Accessibility for peekaboo, granted per host app (Warp, OpenChamber) — see
+  [Peekaboo](#peekaboo-macos-automation). `auto_config.sh --verify` warns when a host is missing them.

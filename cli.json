@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+
+  // Built-in TPS metrics in the assistant footer (no plugin required)
+  "session": {
+    "tps": true
+  }
+}
