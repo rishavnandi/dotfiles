@@ -24,7 +24,7 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 # ----------------Sections and options----------------
 # Every phase below is a run_<section>/verify_<section> pair, so --only and
 # --verify can address them independently.
-ALL_SECTIONS=(brew font omz nvim dotfiles shell macos dock touchid)
+ALL_SECTIONS=(brew font omz nvim dotfiles opencode shell macos dock touchid)
 
 usage() {
     cat <<EOF
@@ -160,8 +160,15 @@ DOTFILE_LINKS=(
     "$DOTFILES_DIR/zprofile|$HOME/.zprofile"
     "$DOTFILES_DIR/gitconfig|$HOME/.gitconfig"
     "$DOTFILES_DIR/starship.toml|$HOME/.config/starship.toml"
+    # OpenCode V2 (brew anomalyco/tap/opencode-v2). Both the terminal binary and
+    # OpenChamber's bundled one read this file.
     "$DOTFILES_DIR/opencode.jsonc|$HOME/.config/opencode/opencode.jsonc"
-    "$DOTFILES_DIR/tui.jsonc|$HOME/.config/opencode/tui.jsonc"
+    "$DOTFILES_DIR/cli.json|$HOME/.config/opencode/cli.json"
+    # ponytail shim. Auto-discovered from ~/.config/opencode/plugins/, so it
+    # needs no config entry. The package default-exports a V1 function, which
+    # this loader rejects; the shim re-exports it as { id, setup }.
+    # Test: node --test opencode/
+    "$DOTFILES_DIR/opencode/ponytail-plugin.js|$HOME/.config/opencode/plugins/ponytail-plugin.js"
     # One file per app, all from the same Matte Black palette. See theme/.
     "$DOTFILES_DIR/theme/matteblack.lua|$HOME/.config/nvim/lua/plugins/matteblack.lua"
     "$DOTFILES_DIR/theme/matte_black.yaml|$HOME/.warp/themes/matte_black.yaml"
@@ -465,6 +472,74 @@ verify_dotfiles() {
     return 0
 }
 
+# ----------------OpenCode plugin dependencies----------------
+# ponytail ships a plugin entrypoint the V2 loader rejects, so
+# ponytail-plugin.js re-exports it as { id, setup }. That shim resolves the
+# package from the opencode config dir, so the package has to be installed
+# there. Its package.json is gitignored, so this cannot be expressed in
+# dotfiles and has to be installed here — without it the plugin loads nothing
+# and ponytail's skills and commands silently go missing.
+OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
+OPENCODE_PKGS=(@dietrichgebert/ponytail)
+
+opencode_pkg_installed() {
+    [[ -d "$OPENCODE_CONFIG_DIR/node_modules/$1" ]]
+}
+
+run_opencode() {
+    echo "----------------OpenCode Plugin Deps----------------"
+    if ! command -v bun &>/dev/null; then
+        log_warn "bun not found; skipping opencode plugin deps (ponytail will not load)"
+        return 0
+    fi
+    local pkg
+    for pkg in "${OPENCODE_PKGS[@]}"; do
+        if opencode_pkg_installed "$pkg"; then
+            log_info "ok: $pkg already installed"
+            continue
+        fi
+        # bun add needs a package.json in the target dir. On a fresh machine
+        # the whole config dir is absent, so create it and let bun init one.
+        run_cmd mkdir -p "$OPENCODE_CONFIG_DIR"
+        run_cmd zsh -c "cd '$OPENCODE_CONFIG_DIR' && bun add '$pkg'"
+    done
+}
+
+verify_opencode() {
+    local drift=false pkg
+    for pkg in "${OPENCODE_PKGS[@]}"; do
+        if opencode_pkg_installed "$pkg"; then
+            log_info "ok: $pkg"
+        else
+            log_warn "drift: $pkg not installed in $OPENCODE_CONFIG_DIR"
+            drift=true
+        fi
+    done
+    # peekaboo is the one OpenCode dependency whose install is in the Brewfile,
+    # so verify_brew already covers the binary. What it cannot cover is the
+    # TCC grants, which are per *host app* and cannot be scripted — Warp and
+    # OpenChamber each need their own. Warn, do not report drift: a machine
+    # with no Screen Recording grant yet is a normal intermediate state, and
+    # the grants are re-checked every time this runs anyway.
+    if command -v peekaboo &>/dev/null; then
+        # `status` is a read-only special parameter in zsh.
+        local peek_perms
+        peek_perms="$(peekaboo permissions status 2>&1 || true)"
+        if print -r -- "$peek_perms" | grep -q 'Accessibility (Required): Not Granted'; then
+            log_warn "peekaboo: Accessibility not granted for $(print -r -- "$peek_perms" | grep -m1 '^Source:')"
+            log_warn "  grant Screen Recording + Accessibility per host app (Warp, OpenChamber) — see README"
+        else
+            log_info "ok: peekaboo permissions"
+        fi
+    else
+        log_warn "drift: peekaboo not installed (run ${SCRIPT_NAME} --only brew)"
+        drift=true
+    fi
+
+    if $drift; then return 1; fi
+    return 0
+}
+
 run_shell() {
     echo "----------------Set Zsh As Default Shell----------------"
     local zsh_path
@@ -550,7 +625,6 @@ DOCK_APPS=(
     "/Applications/Google Chrome.app"
     "/Applications/Warp.app"
     "/Applications/OpenChamber.app"
-    "/Applications/Cursor.app"
     "/Applications/Zed.app"
     "/Applications/OrbStack.app"
     "/Applications/DBeaver.app"

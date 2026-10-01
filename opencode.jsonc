@@ -1,50 +1,87 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  "permission": {
-    "edit": "ask",
-    "task": "allow",
-    "todowrite": "allow",
-    "lsp": "allow",
-    "webfetch": "allow",
-    "websearch": "allow",
-    "read": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "bash": {
-      "git status*": "allow",
-      "git log*": "allow",
-      "git diff*": "allow",
-      "git show*": "allow",
-      "git branch*": "allow",
-      "git remote -v": "allow",
-      "git config --get*": "allow",
-      "ls*": "allow",
-      "cat*": "allow",
-      "pwd": "allow",
-      "echo*": "allow",
-      "find*": "allow",
-      "grep*": "allow",
-      "head*": "allow",
-      "tail*": "allow",
-      "which*": "allow",
-      "*": "ask",
-    },
-  },
+  "permissions": [
+    { "action": "edit", "resource": "*", "effect": "ask" },
+    { "action": "subagent", "resource": "*", "effect": "allow" },
+    { "action": "todowrite", "resource": "*", "effect": "allow" },
+    { "action": "webfetch", "resource": "*", "effect": "allow" },
+    { "action": "websearch", "resource": "*", "effect": "allow" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "glob", "resource": "*", "effect": "allow" },
+    { "action": "grep", "resource": "*", "effect": "allow" },
+    { "action": "list", "resource": "*", "effect": "allow" },
+    // Peekaboo drives the real screen, the real Safari/Chrome profiles and the
+    // real keyboard/mouse. Default ask, then allow only what cannot change
+    // anything.
+    //
+    // Permissions are per tool name, not per action, so a tool that mixes reads
+    // and writes stays ask. That rules out: window (list + close/move/resize),
+    // app (list + launch/quit/hide), menu and dialog (list + click/input),
+    // clipboard (get + save), space (list + move-window), browser (has
+    // fill_form and raw call), capture (can activate a target), and agent
+    // (delegates to a model that can itself mutate).
+    { "action": "peekaboo_*", "resource": "*", "effect": "ask" },
+    { "action": "peekaboo_see", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_image", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_inspect_ui", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_permissions", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_dock", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_analyze", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_verify_state", "resource": "*", "effect": "allow" },
+    { "action": "peekaboo_sleep", "resource": "*", "effect": "allow" },
+    { "action": "shell", "resource": "git status*", "effect": "allow" },
+    { "action": "shell", "resource": "git log*", "effect": "allow" },
+    { "action": "shell", "resource": "git diff*", "effect": "allow" },
+    { "action": "shell", "resource": "git show*", "effect": "allow" },
+    { "action": "shell", "resource": "git branch*", "effect": "allow" },
+    { "action": "shell", "resource": "git remote -v", "effect": "allow" },
+    { "action": "shell", "resource": "git config --get*", "effect": "allow" },
+    { "action": "shell", "resource": "ls*", "effect": "allow" },
+    { "action": "shell", "resource": "cat*", "effect": "allow" },
+    { "action": "shell", "resource": "pwd", "effect": "allow" },
+    { "action": "shell", "resource": "echo*", "effect": "allow" },
+    { "action": "shell", "resource": "find*", "effect": "allow" },
+    { "action": "shell", "resource": "grep*", "effect": "allow" },
+    { "action": "shell", "resource": "head*", "effect": "allow" },
+    { "action": "shell", "resource": "tail*", "effect": "allow" },
+    { "action": "shell", "resource": "which*", "effect": "allow" },
+    { "action": "shell", "resource": "*", "effect": "ask" }
+  ],
 
   "lsp": true,
 
-  "plugin": ["@dietrichgebert/ponytail", "opencode-cmd-provider"],
+  // ponytail is not listed here. The package default-exports a V1 plugin
+  // function; this loader requires an object with `id` + `setup` (or `effect`),
+  // so naming it fails with:
+  //   "Plugin must export a default definition with an id and an effect or setup
+  //    function."
+  // That is a module-shape problem, not a config-key one. ./ponytail-plugin.js
+  // re-exports the package in the required shape and is auto-discovered from
+  // ~/.config/opencode/plugins/, so it needs no entry here.
+  "plugins": ["opencode-cmd-provider"],
 
   // Context7 works without a key (lower rate limits). For higher limits, register once
   // via OAuth with `npx ctx7 setup --opencode`, then add:
   //   "headers": { "CONTEXT7_API_KEY": "{file:~/.config/opencode/context7.key}" }
   "mcp": {
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-      "enabled": true,
-    },
-  },
+    "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp"
+      },
+      // Native macOS automation: screenshots, accessibility tree, clicking and
+      // typing in real apps. Reads and writes the actual screen, so the tools
+      // are gated in `permissions` above.
+      // Launched from the bare binary rather than `npx @steipete/peekaboo`: the
+      // Brewfile install lands on PATH (see auto_config.sh `verify_opencode`),
+      // and this avoids re-resolving an npm version on every connection.
+      // Needs Screen Recording + Accessibility granted to the *host* app —
+      // Warp and OpenChamber both, see README.
+      "peekaboo": {
+        "type": "local",
+        "command": ["peekaboo", "mcp"]
+      }
+    }
+  }
 }

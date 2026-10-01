@@ -3,7 +3,9 @@
 # auto_config.sh drives this file; edit it here, not in the script.
 
 # --- Taps (third-party) ---
+tap "anomalyco/tap"
 tap "hashicorp/tap"
+tap "openclaw/tap"
 tap "oven-sh/bun"
 tap "theboredteam/boring-notch"
 
@@ -33,7 +35,12 @@ brew "mole"
 brew "neovim"
 brew "nvm"
 brew "oci-cli"
-brew "opencode"
+# V2 (2.x). Conflicts with homebrew-core's `opencode` (1.x) — both install an
+# `opencode` binary, so this is uninstall-then-install, never side by side.
+brew "anomalyco/tap/opencode-v2"
+# Native macOS automation exposed to OpenCode as an MCP server (`peekaboo mcp`).
+# Needs Screen Recording + Accessibility granted per host app — see README.
+brew "openclaw/tap/peekaboo"
 brew "p7zip"
 brew "ripgrep"
 brew "ruff"
@@ -46,6 +53,7 @@ brew "tlrc"
 brew "tmux"
 brew "ty"
 brew "uv"
+brew "vercel"
 brew "watch"
 brew "wget"
 brew "yt-dlp"
