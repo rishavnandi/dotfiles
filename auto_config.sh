@@ -24,7 +24,7 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 # ----------------Sections and options----------------
 # Every phase below is a run_<section>/verify_<section> pair, so --only and
 # --verify can address them independently.
-ALL_SECTIONS=(brew font omz nvim dotfiles opencode shell macos dock touchid)
+ALL_SECTIONS=(brew font apps omz nvim dotfiles opencode shell macos dock touchid)
 
 usage() {
     cat <<EOF
@@ -152,6 +152,22 @@ check_default_row() {
     fi
     log_warn "drift: $row_domain $row_key = ${got:-<unset>} (want $row_value)"
     return 1
+}
+
+# ----------------Shared temp-dir cleanup----------------
+# Script-scope rather than `local`: the EXIT trap fires at shell exit, by which
+# point a local is already unset and `rm -rf ""` silently leaks the temp dir.
+tmp_dir=""
+tmp_mnt=""
+
+# Ejects anything mounted under $tmp_dir, removes it, and disarms the trap.
+# Safe to call on the success path as well as from the trap itself.
+cleanup_tmp() {
+    [[ -n "$tmp_mnt" ]] && diskutil eject "$tmp_mnt" >/dev/null 2>&1
+    [[ -n "$tmp_dir" ]] && rm -rf "$tmp_dir"
+    tmp_dir=""
+    tmp_mnt=""
+    trap - EXIT
 }
 
 # ----------------Desired state: dotfile symlinks----------------
@@ -344,17 +360,15 @@ run_font() {
     fi
 
     log_info "Downloading FiraCode Nerd Font v${NERD_FONT_VERSION}"
-    local tmp_font_dir
-    tmp_font_dir="$(mktemp -d)"
-    trap 'rm -rf "$tmp_font_dir"' EXIT
-    curl -fsSL -o "$tmp_font_dir/FiraCode.zip" \
+    tmp_dir="$(mktemp -d)"
+    trap cleanup_tmp EXIT
+    curl -fsSL -o "$tmp_dir/FiraCode.zip" \
         "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraCode.zip"
-    unzip -q "$tmp_font_dir/FiraCode.zip" -d "$tmp_font_dir/FiraCode"
+    unzip -q "$tmp_dir/FiraCode.zip" -d "$tmp_dir/FiraCode"
     log_info "Installing fonts to $FONT_DIR (sudo required)"
-    sudo find "$tmp_font_dir/FiraCode" -type f \( -iname "*.ttf" -o -iname "*.otf" \) \
+    sudo find "$tmp_dir/FiraCode" -type f \( -iname "*.ttf" -o -iname "*.otf" \) \
         -exec cp {} "$FONT_DIR/" \;
-    rm -rf "$tmp_font_dir"
-    trap - EXIT
+    cleanup_tmp
     log_info "FiraCode Nerd Font v${NERD_FONT_VERSION} installed"
 }
 
@@ -369,6 +383,97 @@ verify_font() {
     fi
     log_warn "drift: FiraCode Nerd Font is not installed"
     return 1
+}
+
+# ----------------Apps with no Homebrew cask----------------
+# Installed straight from the vendor's dmg/zip. O+ Connect and Switchbar ship a
+# Squirrel updater and move past the pinned version on their own; MacTap has no
+# updater at all, so it tracks the newest GitHub release instead. None needs a
+# sha256 pin — all three are notarized Developer ID, so Gatekeeper verifies
+# the binary on first launch, and a hash kept next to the URL would only be a
+# second value to bump in step with it.
+MACTAP_REPO="jaskirat1616/mactap-app"
+OPLUSCONNECT_URL="https://pc-assistant-eu.allawnofs.com/uploads/web/dmg/2026/09/22/19/05/14/OplusConnect_17.20.0_arm64_export_260916200816_794ab31695.dmg"
+SWITCHBAR_URL="https://cdn-2.webcatalog.io/switchbar/Switchbar-32.12.0-universal.dmg"
+
+# Bundle names exactly as they appear in /Applications. `O+Connect` has no space.
+GUI_APPS=(MacTap "O+Connect" Switchbar)
+
+# Latest MacTap release zip. Returns 1 rather than a blank URL if GitHub is
+# unreachable, so callers never hand curl an empty argument.
+mactap_latest_url() {
+    local repo="$1" tag
+    tag="$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" 2>/dev/null)" || return 1
+    # The trailing `-` is what tells plutil to read stdin; without it plutil
+    # fails with "No files specified".
+    tag="$(print -r -- "$tag" | plutil -extract tag_name raw -o - - 2>/dev/null)" || return 1
+    [[ "$tag" == v* ]] || return 1
+    print -r -- "https://github.com/$repo/releases/download/$tag/MacTap-${tag#v}.zip"
+}
+
+is_installed() { [[ -d "/Applications/$1.app" ]]; }
+
+# install_gui_app <name> <url> <zip|dmg>. No-op when the app is already there.
+install_gui_app() {
+    local name="$1" url="$2" kind="$3"
+
+    if is_installed "$name"; then
+        log_info "$name already installed"
+        return 0
+    fi
+    if $DRY_RUN; then
+        log_info "[dry-run] Would install $name"
+        return 0
+    fi
+
+    log_info "Installing $name"
+    tmp_dir="$(mktemp -d)"
+    trap cleanup_tmp EXIT
+    curl -fsSL -o "$tmp_dir/pkg" "$url"
+
+    if [[ "$kind" == zip ]]; then
+        ditto -x -k "$tmp_dir/pkg" /Applications
+    else
+        hdiutil attach -nobrowse -readonly -quiet "$tmp_dir/pkg" -mountpoint "$tmp_dir/mnt"
+        tmp_mnt="$tmp_dir/mnt"
+        ditto "$(find "$tmp_mnt" -maxdepth 1 -name '*.app' -print -quit)" /Applications
+    fi
+
+    cleanup_tmp
+    log_info "$name installed"
+}
+
+run_apps() {
+    echo "----------------Install apps without a cask----------------"
+
+    # Resolved here rather than in the argument list so a re-run stays offline:
+    # a command substitution would hit the API before install_gui_app's guard ran.
+    local mactap_dl=""
+    if ! is_installed "MacTap"; then
+        if mactap_dl="$(mactap_latest_url "$MACTAP_REPO")"; then
+            install_gui_app "MacTap" "$mactap_dl" zip
+        else
+            log_warn "Could not resolve the latest MacTap release — skipping"
+        fi
+    else
+        log_info "MacTap already installed"
+    fi
+
+    install_gui_app "O+Connect" "$OPLUSCONNECT_URL" dmg
+    install_gui_app "Switchbar" "$SWITCHBAR_URL"    dmg
+}
+
+verify_apps() {
+    local name rc=0
+    for name in "${GUI_APPS[@]}"; do
+        if is_installed "$name"; then
+            log_info "ok: $name present"
+        else
+            log_warn "drift: $name is not installed"
+            rc=1
+        fi
+    done
+    return $rc
 }
 
 run_omz() {
@@ -807,9 +912,7 @@ fi
 log_info "Setup completed successfully!"
 log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
 
-# ----------------Manual installs (not available via Homebrew)----------------
-#   - O+Connect
-#   - oMLX
-#   - Switchbar
-# App Store apps and Safari extensions also have to be installed by hand, and
-# `gh auth login` is interactive.
+# ----------------Manual installs----------------
+# App Store apps and Safari extensions have to be installed by hand, and
+# `gh auth login` is interactive. Apps that exist outside Homebrew but ship a
+# plain dmg/zip (MacTap, O+ Connect, Switchbar) are automated by run_apps above.
