@@ -185,6 +185,10 @@ DOTFILE_LINKS=(
     # this loader rejects; the shim re-exports it as { id, setup }.
     # Test: node --test opencode/
     "$DOTFILES_DIR/opencode/ponytail-plugin.js|$HOME/.config/opencode/plugins/ponytail-plugin.js"
+    # Global operating instructions. Loaded by every session in both the terminal
+    # and OpenChamber, since both read this config dir. Symlinked rather than
+    # generated so the agent's edits to section 6 land straight in the repo.
+    "$DOTFILES_DIR/opencode/AGENTS.md|$HOME/.config/opencode/AGENTS.md"
     # One file per app, all from the same Matte Black palette. See theme/.
     "$DOTFILES_DIR/theme/matteblack.lua|$HOME/.config/nvim/lua/plugins/matteblack.lua"
     "$DOTFILES_DIR/theme/matte_black.yaml|$HOME/.warp/themes/matte_black.yaml"
@@ -560,6 +564,20 @@ verify_dotfiles() {
 OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
 OPENCODE_PKGS=(@dietrichgebert/ponytail)
 
+# VibeWise is a community port (Itskorrah/vibe-wise-universal) of Noah Kim's
+# Claude Code plugin to OpenCode V2. It registers /vibe-wise-learn and
+# /vibe-wise-reset and injects learning context through the context and
+# compaction hooks.
+#
+# Its own installer is project-local — it writes <project>/.opencode/plugins and
+# <project>/.vibe-wise-bundle — which is the wrong shape here. This config dir
+# already serves every project, and both the terminal binary and OpenChamber's
+# bundled one read it. So the bundle is cloned once and the plugin entry is
+# copied in from opencode/vibe-wise/.
+VIBE_WISE_REPO="https://github.com/Itskorrah/vibe-wise-universal.git"
+VIBE_WISE_DIR="$OPENCODE_CONFIG_DIR/vibe-wise"
+VIBE_WISE_ENTRY=("$DOTFILES_DIR/opencode/vibe-wise/index.ts" "$DOTFILES_DIR/opencode/vibe-wise/package.json")
+
 opencode_pkg_installed() {
     [[ -d "$OPENCODE_CONFIG_DIR/node_modules/$1" ]]
 }
@@ -581,15 +599,54 @@ run_opencode() {
         run_cmd mkdir -p "$OPENCODE_CONFIG_DIR"
         run_cmd zsh -c "cd '$OPENCODE_CONFIG_DIR' && bun add '$pkg'"
     done
+
+    # VibeWise. Cloned, not updated in place: the bundle is a git checkout, and
+    # pulling a fork into the config dir that every project loads is not a change
+    # to make unattended. Re-clone to pick up a new version.
+    if [[ -d "$VIBE_WISE_DIR/.git" ]]; then
+        log_info "ok: VibeWise already cloned"
+    elif run_cmd git clone --depth 1 "$VIBE_WISE_REPO" "$VIBE_WISE_DIR"; then
+        log_info "Cloned VibeWise to $VIBE_WISE_DIR"
+    else
+        log_warn "VibeWise clone failed; /vibe-wise-learn will be missing"
+    fi
+
+    # Copied rather than symlinked — see the note in opencode/vibe-wise/index.ts.
+    # Skipped when identical: opencode watches plugins/vibe-wise/index.ts, so an
+    # unconditional cp would reload the plugin on every run.
+    local entry installed
+    for entry in "${VIBE_WISE_ENTRY[@]}"; do
+        installed="$OPENCODE_CONFIG_DIR/plugins/vibe-wise/${entry:t}"
+        if cmp -s "$entry" "$installed" 2>/dev/null; then
+            log_info "ok: plugins/vibe-wise/${entry:t}"
+            continue
+        fi
+        run_cmd mkdir -p "$OPENCODE_CONFIG_DIR/plugins/vibe-wise"
+        run_cmd cp "$entry" "$installed"
+    done
 }
 
 verify_opencode() {
-    local drift=false pkg
+    local drift=false pkg entry
     for pkg in "${OPENCODE_PKGS[@]}"; do
         if opencode_pkg_installed "$pkg"; then
             log_info "ok: $pkg"
         else
             log_warn "drift: $pkg not installed in $OPENCODE_CONFIG_DIR"
+            drift=true
+        fi
+    done
+
+    if [[ -d "$VIBE_WISE_DIR/.git" ]]; then
+        log_info "ok: VibeWise bundle"
+    else
+        log_warn "drift: VibeWise not cloned to $VIBE_WISE_DIR"
+        drift=true
+    fi
+    for entry in "${VIBE_WISE_ENTRY[@]}"; do
+        local installed="$OPENCODE_CONFIG_DIR/plugins/vibe-wise/${entry:t}"
+        if ! cmp -s "$entry" "$installed" 2>/dev/null; then
+            log_warn "drift: $installed differs from ${entry:t} (run ${SCRIPT_NAME} --only opencode)"
             drift=true
         fi
     done
