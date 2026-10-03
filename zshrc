@@ -75,15 +75,14 @@ if command -v zoxide &>/dev/null; then
     eval "$(zoxide init zsh)"
 fi
 
-# Load NVM if available
+# nvm: sourcing nvm.sh costs ~1.4s of startup (it forks dozens of times resolving the
+# default alias), so nvm.sh itself loads on the first `nvm` call. The installed
+# version's bin dir goes on PATH right away so `node`, `npm` and the starship nodejs
+# module are already there. ponytail: newest installed version rather than
+# `nvm alias default` - export NVM_BIN before this line if default points at an lts alias.
 export NVM_DIR="$HOME/.nvm"
-[ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+path=(${NVM_BIN:-$NVM_DIR/versions/node/*(om[1])/bin(N)} $path)
+nvm() { unfunction nvm; source $NVM_DIR/nvm.sh; nvm "$@" }
 
 zstyle ':completion:*' menu select
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/rishav/.lmstudio/bin"
-# End of LM Studio CLI section
 
