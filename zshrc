@@ -82,3 +82,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
 zstyle ':completion:*' menu select
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/rishav/.lmstudio/bin"
+# End of LM Studio CLI section
+
