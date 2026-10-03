@@ -51,14 +51,12 @@ brew bundle dump --file=Brewfile --force   # re-snapshot this machine
 
 ### Apps without a cask
 
-`MacTap`, `O+ Connect` and `Switchbar` have no Homebrew cask, so `run_apps` installs them straight
-from the vendor's dmg/zip into `/Applications`. Each step is skipped when the app is already there,
-so re-running is a no-op.
+`O+ Connect` and `Switchbar` have no Homebrew cask, so `run_apps` installs them straight from the
+vendor's dmg into `/Applications`. Each is skipped when already present, so re-running is a no-op.
 
-O+ Connect and Switchbar are pinned to a known version and update themselves from there (both ship a
-Squirrel updater). MacTap has no in-app updater, so its download URL is resolved from the GitHub
-releases API at install time — there is no version to bump by hand. No sha256 is pinned for any of
-them: all three are notarized Developer ID, so Gatekeeper verifies the binary on first launch.
+Both are pinned to a known version and update themselves from there (each ships a Squirrel
+updater), so the links only need touching if a pinned version is retired. No sha256 is pinned: both
+are notarized Developer ID, so Gatekeeper verifies the binary on first launch.
 
 ### Peekaboo (macOS automation)
 
