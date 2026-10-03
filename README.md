@@ -49,6 +49,17 @@ brew bundle check --file=Brewfile     # what's missing?
 brew bundle dump --file=Brewfile --force   # re-snapshot this machine
 ```
 
+### Apps without a cask
+
+`MacTap`, `O+ Connect` and `Switchbar` have no Homebrew cask, so `run_apps` installs them straight
+from the vendor's dmg/zip into `/Applications`. Each step is skipped when the app is already there,
+so re-running is a no-op.
+
+O+ Connect and Switchbar are pinned to a known version and update themselves from there (both ship a
+Squirrel updater). MacTap has no in-app updater, so its download URL is resolved from the GitHub
+releases API at install time — there is no version to bump by hand. No sha256 is pinned for any of
+them: all three are notarized Developer ID, so Gatekeeper verifies the binary on first launch.
+
 ### Peekaboo (macOS automation)
 
 `peekaboo` is wired into `opencode.jsonc` as a local MCP server, so the agent can screenshot the
@@ -167,7 +178,6 @@ The terminal binary and OpenChamber's bundled one both read `opencode.jsonc`. V2
 
 These need manual install or are interactive:
 
-- `O+Connect`, `oMLX`, `Switchbar` — no Homebrew cask
 - App Store apps and Safari extensions
 - `gh auth login`
 - Screen Recording + Accessibility for peekaboo, granted per host app (Warp, OpenChamber) — see
