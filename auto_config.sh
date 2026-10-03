@@ -386,36 +386,21 @@ verify_font() {
 }
 
 # ----------------Apps with no Homebrew cask----------------
-# Installed straight from the vendor's dmg/zip. O+ Connect and Switchbar ship a
-# Squirrel updater and move past the pinned version on their own; MacTap has no
-# updater at all, so it tracks the newest GitHub release instead. None needs a
-# sha256 pin — all three are notarized Developer ID, so Gatekeeper verifies
-# the binary on first launch, and a hash kept next to the URL would only be a
-# second value to bump in step with it.
-MACTAP_REPO="jaskirat1616/mactap-app"
+# Installed straight from the vendor's dmg. Both ship a Squirrel updater and move
+# past the pinned version on their own. No sha256 pin: both are notarized
+# Developer ID, so Gatekeeper verifies the binary on first launch, and a hash
+# kept next to the URL would only be a second value to bump in step with it.
 OPLUSCONNECT_URL="https://pc-assistant-eu.allawnofs.com/uploads/web/dmg/2026/09/22/19/05/14/OplusConnect_17.20.0_arm64_export_260916200816_794ab31695.dmg"
 SWITCHBAR_URL="https://cdn-2.webcatalog.io/switchbar/Switchbar-32.12.0-universal.dmg"
 
 # Bundle names exactly as they appear in /Applications. `O+Connect` has no space.
-GUI_APPS=(MacTap "O+Connect" Switchbar)
-
-# Latest MacTap release zip. Returns 1 rather than a blank URL if GitHub is
-# unreachable, so callers never hand curl an empty argument.
-mactap_latest_url() {
-    local repo="$1" tag
-    tag="$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" 2>/dev/null)" || return 1
-    # The trailing `-` is what tells plutil to read stdin; without it plutil
-    # fails with "No files specified".
-    tag="$(print -r -- "$tag" | plutil -extract tag_name raw -o - - 2>/dev/null)" || return 1
-    [[ "$tag" == v* ]] || return 1
-    print -r -- "https://github.com/$repo/releases/download/$tag/MacTap-${tag#v}.zip"
-}
+GUI_APPS=("O+Connect" Switchbar)
 
 is_installed() { [[ -d "/Applications/$1.app" ]]; }
 
-# install_gui_app <name> <url> <zip|dmg>. No-op when the app is already there.
+# install_gui_app <name> <url>. No-op when the app is already there.
 install_gui_app() {
-    local name="$1" url="$2" kind="$3"
+    local name="$1" url="$2"
 
     if is_installed "$name"; then
         log_info "$name already installed"
@@ -430,35 +415,23 @@ install_gui_app() {
     tmp_dir="$(mktemp -d)"
     trap cleanup_tmp EXIT
     curl -fsSL -o "$tmp_dir/pkg" "$url"
-
-    if [[ "$kind" == zip ]]; then
-        ditto -x -k "$tmp_dir/pkg" /Applications
-    else
-        hdiutil attach -nobrowse -readonly -quiet "$tmp_dir/pkg" -mountpoint "$tmp_dir/mnt"
-        tmp_mnt="$tmp_dir/mnt"
-        ditto "$(find "$tmp_mnt" -maxdepth 1 -name '*.app' -print -quit)" /Applications
+    hdiutil attach -nobrowse -readonly -quiet "$tmp_dir/pkg" -mountpoint "$tmp_dir/mnt"
+    tmp_mnt="$tmp_dir/mnt"
+    # Both sides are named explicitly. `ditto <bundle> /Applications` unpacks the
+    # bundle's *contents* into that directory instead of creating the app, which
+    # leaves stray Contents/ and Resources/ behind and still exits 0. Keeping the
+    # name here in step with GUI_APPS is also what is_installed checks.
+    if ! ditto "$tmp_mnt/$name.app" "/Applications/$name.app"; then
+        log_warn "Install failed for $name"
+        cleanup_tmp
+        return 1
     fi
-
     cleanup_tmp
     log_info "$name installed"
 }
 
 run_apps() {
     echo "----------------Install apps without a cask----------------"
-
-    # Resolved here rather than in the argument list so a re-run stays offline:
-    # a command substitution would hit the API before install_gui_app's guard ran.
-    local mactap_dl=""
-    if ! is_installed "MacTap"; then
-        if mactap_dl="$(mactap_latest_url "$MACTAP_REPO")"; then
-            install_gui_app "MacTap" "$mactap_dl" zip
-        else
-            log_warn "Could not resolve the latest MacTap release — skipping"
-        fi
-    else
-        log_info "MacTap already installed"
-    fi
-
     install_gui_app "O+Connect" "$OPLUSCONNECT_URL" dmg
     install_gui_app "Switchbar" "$SWITCHBAR_URL"    dmg
 }
@@ -915,4 +888,4 @@ log_info "Restart your terminal or run 'source ~/.zshrc' to apply changes"
 # ----------------Manual installs----------------
 # App Store apps and Safari extensions have to be installed by hand, and
 # `gh auth login` is interactive. Apps that exist outside Homebrew but ship a
-# plain dmg/zip (MacTap, O+ Connect, Switchbar) are automated by run_apps above.
+# plain dmg (O+ Connect, Switchbar) are automated by run_apps above.
