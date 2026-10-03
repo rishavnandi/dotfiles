@@ -161,6 +161,7 @@ Warp expects is not verifiable from outside the app.
 | `starship.toml` | `~/.config/starship.toml` |
 | `opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
 | `opencode/ponytail-plugin.js` | `~/.config/opencode/plugins/ponytail-plugin.js` |
+| `opencode/AGENTS.md` | `~/.config/opencode/AGENTS.md` |
 | `cli.json` | `~/.config/opencode/cli.json` |
 | `theme/matteblack.lua` | `~/.config/nvim/lua/plugins/matteblack.lua` |
 | `theme/matte_black.yaml` | `~/.warp/themes/matte_black.yaml` |
@@ -171,6 +172,30 @@ OpenCode is **V2 only** (`anomalyco/tap/opencode-v2`, 2.x). It conflicts with ho
 `opencode` (1.x) — both install an `opencode` binary — so the upgrade is uninstall-then-install.
 The terminal binary and OpenChamber's bundled one both read `opencode.jsonc`. V2 replaced
 `tui.jsonc` with `cli.json`, so the old TUI config is gone rather than kept.
+
+### Global instructions
+
+`opencode/AGENTS.md` is symlinked to `~/.config/opencode/AGENTS.md`, so it loads in every session in
+both the terminal and OpenChamber. Sections 0–5 are hand-written; section 6 is a capped list of
+rules the agent appends as it learns them, and section 7 tells it how to maintain the file. Edit it
+through the `~/.config/opencode/` path — that resolves inside the global config directory, which
+OpenCode pre-allows, whereas the repo path is an external directory and prompts.
+
+### VibeWise
+
+[Itskorrah/vibe-wise-universal](https://github.com/Itskorrah/vibe-wise-universal) — a community port of
+Noah Kim's [VibeWise](https://github.com/nykooi1/vibe-wise) to OpenCode V2. Adds `/vibe-wise-learn`
+and `/vibe-wise-reset`: the agent asks for your design approach and explains unfamiliar concepts
+before writing the code you agreed to. Learning notes live in `.vibe-wise/` per project — gitignore
+it yourself.
+
+`auto_config.sh` clones the bundle to `~/.config/opencode/vibe-wise/` and copies the plugin entry
+from `opencode/vibe-wise/` into `~/.config/opencode/plugins/vibe-wise/`. Upstream's own installer is
+project-local, which is the wrong shape for a config dir that serves every project. The entry is
+copied rather than symlinked because bun resolves imports from a module's realpath. The bundle is
+cloned once and never pulled unattended; re-clone to update.
+
+`opencode/AGENTS.md` is a trimmed derivative of [TheRealSeanDonahoe/agents-md](https://github.com/TheRealSeanDonahoe/agents-md) (MIT, © 2026 Sean Donahoe) — sections 2+3 merged, session hygiene dropped, project context/learnings/provenance refit as global sections 5/6/7.
 
 ## Not automated
 
