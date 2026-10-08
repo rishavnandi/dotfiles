@@ -26,7 +26,7 @@ for `sudo`.
   -h, --help        Show this help
 ```
 
-Sections, in order: `brew font omz nvim dotfiles shell macos dock touchid`.
+Sections, in order: `brew font apps omz nvim dotfiles opencode shell macos dock touchid`.
 
 ```sh
 ./auto_config.sh --dry-run                 # preview everything

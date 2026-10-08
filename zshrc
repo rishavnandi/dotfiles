@@ -58,7 +58,6 @@ alias gd="git diff"
 typeset -U PATH path
 path=(
     $HOME/.bun/bin
-    $HOME/.antigravity-ide/antigravity-ide/bin
     $HOME/.local/bin
     $HOME/.cargo/bin
     $path

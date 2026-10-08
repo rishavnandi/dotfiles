@@ -195,19 +195,21 @@ DOTFILE_LINKS=(
 )
 
 # ----------------Desired state: oh-my-zsh plugins----------------
+# history-substring-search is deliberately absent: zshrc loads the name
+# `history-substring-search`, which oh-my-zsh ships in its own plugins/ dir.
+# Cloning zsh-users' copy into $ZSH_CUSTOM under a different name was never
+# loaded — the core plugin wins the lookup.
 OMZ_PLUGIN_NAMES=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     you-should-use
     fzf-tab
-    zsh-history-substring-search
 )
 OMZ_PLUGIN_URLS=(
     https://github.com/zsh-users/zsh-autosuggestions
     https://github.com/zsh-users/zsh-syntax-highlighting.git
     https://github.com/MichaelAquilina/zsh-you-should-use
     https://github.com/Aloxaf/fzf-tab
-    https://github.com/zsh-users/zsh-history-substring-search
 )
 
 # ----------------Desired state: macOS defaults----------------
