@@ -51,15 +51,13 @@
 
   "lsp": true,
 
-  // ponytail is not listed here. The package default-exports a V1 plugin
-  // function; this loader requires an object with `id` + `setup` (or `effect`),
-  // so naming it fails with:
-  //   "Plugin must export a default definition with an id and an effect or setup
-  //    function."
-  // That is a module-shape problem, not a config-key one. ./ponytail-plugin.js
-  // re-exports the package in the required shape and is auto-discovered from
-  // ~/.config/opencode/plugins/, so it needs no entry here.
-  "plugins": ["opencode-cmd-provider"],
+  // Plugins are fetched by opencode itself and cached under
+  // ~/.cache/opencode/npm/; nothing is installed into this config dir. V2 reads
+  // the package default export only when it is { id, setup } (a bare V1
+  // function is rejected), which @dietrichgebert/ponytail has shipped since
+  // 4.13.0. Upstream's setup() injects on the context hook but not compaction,
+  // so ponytail's ruleset is not re-injected after a compaction boundary.
+  "plugins": ["opencode-cmd-provider", "@dietrichgebert/ponytail"],
 
   // Context7 works without a key (lower rate limits). For higher limits, register once
   // via OAuth with `npx ctx7 setup --opencode`, then add:

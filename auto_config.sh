@@ -180,11 +180,6 @@ DOTFILE_LINKS=(
     # OpenChamber's bundled one read this file.
     "$DOTFILES_DIR/opencode.jsonc|$HOME/.config/opencode/opencode.jsonc"
     "$DOTFILES_DIR/cli.json|$HOME/.config/opencode/cli.json"
-    # ponytail shim. Auto-discovered from ~/.config/opencode/plugins/, so it
-    # needs no config entry. The package default-exports a V1 function, which
-    # this loader rejects; the shim re-exports it as { id, setup }.
-    # Test: node --test opencode/
-    "$DOTFILES_DIR/opencode/ponytail-plugin.js|$HOME/.config/opencode/plugins/ponytail-plugin.js"
     # Global operating instructions. Loaded by every session in both the terminal
     # and OpenChamber, since both read this config dir. Symlinked rather than
     # generated so the agent's edits to section 6 land straight in the repo.
@@ -557,14 +552,11 @@ verify_dotfiles() {
 }
 
 # ----------------OpenCode plugin dependencies----------------
-# ponytail ships a plugin entrypoint the V2 loader rejects, so
-# ponytail-plugin.js re-exports it as { id, setup }. That shim resolves the
-# package from the opencode config dir, so the package has to be installed
-# there. Its package.json is gitignored, so this cannot be expressed in
-# dotfiles and has to be installed here — without it the plugin loads nothing
-# and ponytail's skills and commands silently go missing.
+# The config dir itself is only a home for opencode.jsonc, cli.json and the
+# VibeWise entry below. npm plugins named in opencode.jsonc's `plugins` list are
+# fetched and cached by opencode (~/.cache/opencode/npm/) — there is nothing to
+# install here for ponytail.
 OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
-OPENCODE_PKGS=(@dietrichgebert/ponytail)
 
 # VibeWise is a community port (Itskorrah/vibe-wise-universal) of Noah Kim's
 # Claude Code plugin to OpenCode V2. It registers /vibe-wise-learn and
@@ -580,28 +572,8 @@ VIBE_WISE_REPO="https://github.com/Itskorrah/vibe-wise-universal.git"
 VIBE_WISE_DIR="$OPENCODE_CONFIG_DIR/vibe-wise"
 VIBE_WISE_ENTRY=("$DOTFILES_DIR/opencode/vibe-wise/index.ts" "$DOTFILES_DIR/opencode/vibe-wise/package.json")
 
-opencode_pkg_installed() {
-    [[ -d "$OPENCODE_CONFIG_DIR/node_modules/$1" ]]
-}
-
 run_opencode() {
     echo "----------------OpenCode Plugin Deps----------------"
-    if ! command -v bun &>/dev/null; then
-        log_warn "bun not found; skipping opencode plugin deps (ponytail will not load)"
-        return 0
-    fi
-    local pkg
-    for pkg in "${OPENCODE_PKGS[@]}"; do
-        if opencode_pkg_installed "$pkg"; then
-            log_info "ok: $pkg already installed"
-            continue
-        fi
-        # bun add needs a package.json in the target dir. On a fresh machine
-        # the whole config dir is absent, so create it and let bun init one.
-        run_cmd mkdir -p "$OPENCODE_CONFIG_DIR"
-        run_cmd zsh -c "cd '$OPENCODE_CONFIG_DIR' && bun add '$pkg'"
-    done
-
     # VibeWise. Cloned, not updated in place: the bundle is a git checkout, and
     # pulling a fork into the config dir that every project loads is not a change
     # to make unattended. Re-clone to pick up a new version.
@@ -629,15 +601,7 @@ run_opencode() {
 }
 
 verify_opencode() {
-    local drift=false pkg entry
-    for pkg in "${OPENCODE_PKGS[@]}"; do
-        if opencode_pkg_installed "$pkg"; then
-            log_info "ok: $pkg"
-        else
-            log_warn "drift: $pkg not installed in $OPENCODE_CONFIG_DIR"
-            drift=true
-        fi
-    done
+    local drift=false entry
 
     if [[ -d "$VIBE_WISE_DIR/.git" ]]; then
         log_info "ok: VibeWise bundle"

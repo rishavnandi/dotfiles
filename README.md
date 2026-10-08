@@ -160,7 +160,6 @@ Warp expects is not verifiable from outside the app.
 | `gitconfig` | `~/.gitconfig` |
 | `starship.toml` | `~/.config/starship.toml` |
 | `opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
-| `opencode/ponytail-plugin.js` | `~/.config/opencode/plugins/ponytail-plugin.js` |
 | `opencode/AGENTS.md` | `~/.config/opencode/AGENTS.md` |
 | `cli.json` | `~/.config/opencode/cli.json` |
 | `theme/matteblack.lua` | `~/.config/nvim/lua/plugins/matteblack.lua` |
