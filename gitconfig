@@ -1,6 +1,17 @@
 [user]
 	email = rishavnandi2@gmail.com
 	name = Rishav Nandi
+	signingkey = ~/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+# Without this trust store, %G? reports N on our own signed commits (they are
+# unverifiable, not unsigned). GitHub does not need it — it verifies against
+# the key registered on the account. Must be the subsection form: this git
+# build rejects `ssh.allowedSignersFile` as a plain key under [gpg].
+[gpg "ssh"]
+	allowedSignersFile = ~/.gitallowed_signers
+[commit]
+	gpgsign = true
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
