@@ -26,7 +26,7 @@ for `sudo`.
   -h, --help        Show this help
 ```
 
-Sections, in order: `brew font apps omz nvim dotfiles opencode shell macos dock touchid`.
+Sections, in order: `brew font apps omz nvim github dotfiles opencode shell macos dock touchid`.
 
 ```sh
 ./auto_config.sh --dry-run                 # preview everything
@@ -57,6 +57,37 @@ vendor's dmg into `/Applications`. Each is skipped when already present, so re-r
 Both are pinned to a known version and update themselves from there (each ships a Squirrel
 updater), so the links only need touching if a pinned version is retired. No sha256 is pinned: both
 are notarized Developer ID, so Gatekeeper verifies the binary on first launch.
+
+### GitHub auth and commit signing
+
+`run_github` registers one SSH key twice on the account, because GitHub keeps the two roles
+separate and a key in one list means nothing in the other:
+
+| Role | Endpoint | What it does |
+|---|---|---|
+| auth key | `POST /user/keys` | authenticates `git push` over SSH |
+| signing key | `POST /user/ssh_signing_keys` | puts the Verified badge on commits and tags |
+
+One key serves both — reusing an auth key for signing is allowed, and there is no limit on signing
+keys. `gitconfig` then sets `gpg.format = ssh` with `user.signingkey`, so every commit is signed
+locally without GPG.
+
+It asks before opening a browser, and only when the scope is actually missing, so a re-run is
+silent:
+
+```
+Set up gh authentication and commit signing now? [y/N]
+```
+
+Answering `n` skips it and leaves push working — you just get unsigned commits. The section needs
+`gh` on `PATH`, so it runs after `brew`.
+
+**Rotating the key breaks two things at once**: `git_allowed_signers` still holds the old public
+key, and `git_allowed_signers` is what makes `git verify-commit` report `Good`. Regenerate it with
+
+```sh
+printf '%s %s\n' "$(git config user.email)" "$(cat ~/.ssh/id_ed25519.pub)" > git_allowed_signers
+```
 
 ### Peekaboo (macOS automation)
 
@@ -158,6 +189,7 @@ Warp expects is not verifiable from outside the app.
 | `zshrc` | `~/.zshrc` |
 | `zprofile` | `~/.zprofile` |
 | `gitconfig` | `~/.gitconfig` |
+| `git_allowed_signers` | `~/.gitallowed_signers` |
 | `starship.toml` | `~/.config/starship.toml` |
 | `opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
 | `opencode/AGENTS.md` | `~/.config/opencode/AGENTS.md` |
@@ -201,6 +233,8 @@ cloned once and never pulled unattended; re-clone to update.
 These need manual install or are interactive:
 
 - App Store apps and Safari extensions
-- `gh auth login`
+- `gh auth login` — handled by `run_github`, but only for the scopes signing needs. Anything
+  beyond `repo`, `read:org`, `gist`, `admin:public_key` and `admin:ssh_signing_key` is still a
+  manual `gh auth refresh`
 - Screen Recording + Accessibility for peekaboo, granted per host app (Warp, OpenChamber) — see
   [Peekaboo](#peekaboo-macos-automation). `auto_config.sh --verify` warns when a host is missing them.

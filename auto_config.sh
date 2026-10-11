@@ -24,7 +24,7 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 # ----------------Sections and options----------------
 # Every phase below is a run_<section>/verify_<section> pair, so --only and
 # --verify can address them independently.
-ALL_SECTIONS=(brew font apps omz nvim dotfiles opencode shell macos dock touchid)
+ALL_SECTIONS=(brew font apps omz nvim github dotfiles opencode shell macos dock touchid)
 
 usage() {
     cat <<EOF
@@ -175,6 +175,7 @@ DOTFILE_LINKS=(
     "$DOTFILES_DIR/zshrc|$HOME/.zshrc"
     "$DOTFILES_DIR/zprofile|$HOME/.zprofile"
     "$DOTFILES_DIR/gitconfig|$HOME/.gitconfig"
+    "$DOTFILES_DIR/git_allowed_signers|$HOME/.gitallowed_signers"
     "$DOTFILES_DIR/starship.toml|$HOME/.config/starship.toml"
     # OpenCode V2 (brew anomalyco/tap/opencode-v2). Both the terminal binary and
     # OpenChamber's bundled one read this file.
@@ -512,6 +513,171 @@ verify_nvim() {
     fi
     log_warn "drift: ~/.config/nvim missing"
     return 1
+}
+
+# ----------------GitHub: auth, auth key, commit signing----------------
+# One SSH key serves two independent registrations on the account: the auth key
+# (what `git push` over SSH authenticates with) and the signing key (what puts
+# the Verified badge on commits). They must be added separately; reusing one for
+# both is allowed and there is no limit on signing keys.
+GH_KEY="$HOME/.ssh/id_ed25519"
+GH_KEY_PUB="$GH_KEY.pub"
+# Read by gh from the OAuth token. admin:public_key writes /user/keys,
+# admin:ssh_signing_key writes /user/ssh_signing_keys; neither implies the other.
+GH_SCOPES="admin:public_key,admin:ssh_signing_key"
+
+gh_login() {
+    # Device flow, so the only interaction is approving in the browser. Runs
+    # unattended otherwise, which is why --skip-ssh-key: gh would otherwise
+    # prompt mid-script to upload a key, and run_github does that itself.
+    if $DRY_RUN; then
+        log_info "[dry-run] Would run: gh auth login --web -h github.com -p ssh --skip-ssh-key -s $GH_SCOPES"
+        return 0
+    fi
+    gh auth login --web -h github.com -p ssh --skip-ssh-key -s "$GH_SCOPES" || {
+        log_warn "gh auth login did not complete — rerun ${SCRIPT_NAME} --only github"
+        return 1
+    }
+}
+
+gh_refresh_scopes() {
+    $DRY_RUN && { log_info "[dry-run] Would run: gh auth refresh -s $GH_SCOPES"; return 0; }
+    gh auth refresh -s "$GH_SCOPES" || {
+        log_warn "gh auth refresh did not complete — rerun ${SCRIPT_NAME} --only github"
+        return 1
+    }
+}
+
+# gh auth status exits non-zero when logged out, and lists each granted scope
+# quoted separately ('a', 'b'), so they are matched one at a time.
+gh_has_scopes() {
+    local scopes
+    scopes="$(gh auth status 2>&1)" || return 1
+    local scope
+    for scope in ${=GH_SCOPES//,/ }; do
+        [[ "$scopes" == *"'$scope'"* ]] || return 1
+    done
+    return 0
+}
+
+# The signing-key list is public, so "already uploaded" is checked without
+# holding the scope — this keeps a rerun from reopening the browser.
+gh_signing_key_uploaded() {
+    [[ -n "$(gh api "/users/$(gh api user --jq .login)/ssh_signing_keys" --jq '.[].key' 2>/dev/null)" ]]
+}
+
+run_github() {
+    echo "----------------GitHub Auth and Commit Signing----------------"
+    if ! command -v gh &>/dev/null; then
+        log_warn "gh is not installed — run ${SCRIPT_NAME} --only brew first"
+        return 1
+    fi
+
+    # The tracked gitconfig turns on commit.gpgsign, and git refuses to write a
+    # commit at all when the signing key is missing. Generate it here, before
+    # run_dotfiles links that config in, or every later commit fails.
+    if [[ ! -f "$GH_KEY_PUB" ]]; then
+        log_info "Generating SSH key $GH_KEY"
+        run_cmd mkdir -p "$HOME/.ssh"
+        run_cmd chmod 700 "$HOME/.ssh"
+        $DRY_RUN || ssh-keygen -t ed25519 -N "" -C "$(git config --global user.email)" -f "$GH_KEY"
+    else
+        log_info "ok: SSH key $GH_KEY"
+    fi
+
+    # gh is interactive over the device flow; so is this question. --dry-run and
+    # a non-tty both skip the prompt so the script stays usable unattended.
+    local reply=""
+    if $DRY_RUN; then
+        log_info "[dry-run] Would ask before opening the browser for gh auth"
+    elif [[ ! -t 0 ]]; then
+        log_warn "No terminal for the confirmation — skipping GitHub setup"
+        return 0
+    else
+        read -r "reply?Set up gh authentication and commit signing now? [y/N] "
+        if [[ "$reply" != [yY]* ]]; then
+            log_warn "Skipped — push still works over SSH, but commits will not be signed"
+            return 0
+        fi
+    fi
+
+    if gh auth status &>/dev/null; then
+        log_info "Already logged in to github.com"
+        gh_has_scopes || { log_info "Granting signing scopes"; gh_refresh_scopes; }
+    else
+        log_info "Opening your browser to log in to github.com (approve, then return here)"
+        gh_login
+    fi
+
+    # Auth key: what `git push` authenticates with. gh does not upload one
+    # because of --skip-ssh-key, so it is registered here if it is missing.
+    # Only trailing whitespace is dropped: the space between the key type and
+    # the key material is part of the format, and GitHub rejects the key
+    # without it. A .pub file can also carry a trailing space GitHub's copy
+    # does not, which would make the check below miss every time.
+    local pubkey
+    pubkey="$(sed -e 's/[[:space:]]*$//' "$GH_KEY_PUB" 2>/dev/null || true)"
+    if [[ -z "$pubkey" ]]; then
+        log_warn "No public key at $GH_KEY_PUB — cannot register it with GitHub"
+        return 1
+    fi
+
+    if gh api /user/keys --jq '.[].key' 2>/dev/null | sed -e 's/[[:space:]]*$//' | grep -qxF "$pubkey"; then
+        log_info "ok: auth key already registered"
+    elif ! $DRY_RUN && gh api --method POST /user/keys -f title="GitHub CLI" -f key="$pubkey"; then
+        log_info "Registered SSH key as an authentication key"
+    else
+        log_warn "Could not register the authentication key — rerun ${SCRIPT_NAME} --only github"
+        $DRY_RUN || return 1
+    fi
+
+    # Signing key: a separate registration, and the one that earns the badge.
+    if gh_signing_key_uploaded; then
+        log_info "ok: signing key already registered"
+    elif ! $DRY_RUN && gh api --method POST /user/ssh_signing_keys -f title="$(hostname -s)" -f key="$pubkey"; then
+        log_info "Registered SSH key as a commit signing key"
+    else
+        log_warn "Could not register the signing key — commits will sign but GitHub will not badge them"
+        $DRY_RUN || return 1
+    fi
+}
+
+verify_github() {
+    local drift=false
+
+    if ! command -v gh &>/dev/null; then
+        log_warn "drift: gh is not installed"
+        drift=true
+    elif ! gh auth status &>/dev/null; then
+        log_warn "drift: not logged in to github.com"
+        drift=true
+    else
+        log_info "ok: gh authenticated to github.com"
+        gh_has_scopes || { log_warn "drift: gh token lacks the signing scopes"; drift=true; }
+    fi
+
+    if [[ ! -f "$GH_KEY_PUB" ]]; then
+        log_warn "drift: $GH_KEY_PUB missing"
+        drift=true
+    else
+        local pubkey
+        pubkey="$(sed -e 's/[[:space:]]*$//' "$GH_KEY_PUB")"
+        gh api /user/keys --jq '.[].key' 2>/dev/null | sed -e 's/[[:space:]]*$//' | grep -qxF "$pubkey" \
+            || { log_warn "drift: SSH key is not an authentication key on the account"; drift=true; }
+        gh_signing_key_uploaded \
+            || { log_warn "drift: SSH key is not a signing key on the account"; drift=true; }
+    fi
+
+    # The signing config only works if git can sign. A commit.gpgsign=true with a
+    # missing key fails the commit outright, so it is checked the same way.
+    local fmt key
+    fmt="$(git config --global --get gpg.format || true)"
+    key="$(git config --global --get user.signingkey || true)"
+    [[ "$fmt" == "ssh" ]] || { log_warn "drift: gpg.format is ${fmt:-<unset>} (want ssh)"; drift=true; }
+    [[ -f "${key/#\~/$HOME}" ]] || { log_warn "drift: user.signingkey ${key:-<unset>} is not a file"; drift=true; }
+
+    if $drift; then return 1; fi
+    return 0
 }
 
 run_dotfiles() {
