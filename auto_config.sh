@@ -580,7 +580,9 @@ run_github() {
         log_info "Generating SSH key $GH_KEY"
         run_cmd mkdir -p "$HOME/.ssh"
         run_cmd chmod 700 "$HOME/.ssh"
-        $DRY_RUN || ssh-keygen -t ed25519 -N "" -C "$(git config --global user.email)" -f "$GH_KEY"
+        # Read the tracked file, not `git config --global`: on a clean install
+        # ~/.gitconfig is not linked in yet, so the key would get a blank comment.
+        $DRY_RUN || ssh-keygen -t ed25519 -N "" -C "$(git config -f "$DOTFILES_DIR/gitconfig" user.email)" -f "$GH_KEY"
     else
         log_info "ok: SSH key $GH_KEY"
     fi
