@@ -63,7 +63,6 @@ brew "oven-sh/bun/bun"
 
 # --- Casks (GUI apps) ---
 cask "android-platform-tools"
-cask "antigravity"
 cask "blip"
 cask "boring-notch"
 cask "brave-browser"
