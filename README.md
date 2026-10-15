@@ -56,8 +56,8 @@ vendor's dmg into `/Applications`. Each is skipped when already present, so re-r
 
 Each run resolves the current build from the vendor — Switchbar from the same `latest-mac.yml`
 its own updater polls, O+ Connect from the signed endpoint its download button calls. There is no
-pinned URL to go stale; if a vendor cannot be reached the script stops rather than installing an
-unknown build. No sha256 is pinned: both are notarized Developer ID, so Gatekeeper verifies the
+pinned URL to go stale. An app whose vendor cannot be reached is reported and skipped; the other
+still installs. No sha256 is pinned: both are notarized Developer ID, so Gatekeeper verifies the
 binary on first launch.
 
 ### GitHub auth and commit signing
