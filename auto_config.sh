@@ -388,12 +388,63 @@ verify_font() {
 }
 
 # ----------------Apps with no Homebrew cask----------------
-# Installed straight from the vendor's dmg. Both ship a Squirrel updater and move
-# past the pinned version on their own. No sha256 pin: both are notarized
-# Developer ID, so Gatekeeper verifies the binary on first launch, and a hash
-# kept next to the URL would only be a second value to bump in step with it.
-OPLUSCONNECT_URL="https://pc-assistant-eu.allawnofs.com/uploads/web/dmg/2026/09/22/19/05/14/OplusConnect_17.20.0_arm64_export_260916200816_794ab31695.dmg"
-SWITCHBAR_URL="https://cdn-2.webcatalog.io/switchbar/Switchbar-32.12.0-universal.dmg"
+# Installed straight from the vendor's dmg, always whatever the vendor currently
+# ships. No sha256 pin: both are notarized Developer ID, so Gatekeeper verifies
+# the binary on first launch, and a hash kept next to the URL would only be a
+# second value to bump in step with it. Both ship their own updater, so whatever
+# lands here moves past this version on its own.
+#
+# M-series only, so O+ Connect is always fetched as macos-arm.
+
+# Switchbar publishes the same feed its own updater polls, which names the
+# current build directly.
+SWITCHBAR_FEED="https://cdn-2.webcatalog.io/switchbar/latest-mac.yml"
+# O+ Connect has no such manifest: the site is a SPA whose download button calls
+# this endpoint through an axios interceptor that signs every request with
+# sha256("<sorted params>&" + unix_ts + secret), sent as the sign header next to
+# ts and appId. The secret exists only inside the shipped bundle.
+OCONNECT_SITE="https://connect.oneplus.com"
+OCONNECT_API="$OCONNECT_SITE/api/v2/updatePackage/queryUrl"
+
+# Newest Switchbar build. The feed lists the same dmg twice (once per arch group
+# in the updater's file array); take the first.
+latest_switchbar_url() {
+    local name
+    name=$(curl -fsSL "$SWITCHBAR_FEED" | grep -oE '[A-Za-z0-9._-]+-universal\.dmg' | head -1) || return 1
+    [[ -n "$name" ]] || return 1
+    print -r -- "${SWITCHBAR_FEED:h}/$name"
+}
+
+# Newest O+ Connect build. Webpack names the bundle chunks by content hash, so
+# both filenames have to be discovered from the page rather than written down.
+# Shortcut: the secret is found by trying every 32-hex literal in the bundle and
+# letting the API pick the real one. If the vendor re-minifies the interceptor
+# this returns 1 and run_apps stops rather than installing an unknown build.
+latest_oconnect_url() {
+    local entry request bundle app_id_var app_id secret ts query sign json url
+    local platform="macos-arm"
+
+    entry=$(curl -fsSL "$OCONNECT_SITE" | grep -oE 'static/index-[A-Za-z0-9_-]+\.js' | head -1) || return 1
+    [[ -n "$entry" ]] || return 1
+    request=$(curl -fsSL "$OCONNECT_SITE/$entry" | grep -oE '\./request-[A-Za-z0-9_-]+\.js' | head -1) || return 1
+    [[ -n "$request" ]] || return 1
+    bundle=$(curl -fsSL "$OCONNECT_SITE/${entry:h}/${request#./}") || return 1
+
+    app_id_var=$(print -r -- "$bundle" | grep -oE 'headers\.appId=[A-Za-z_$][A-Za-z0-9_$]*' | head -1 | cut -d= -f2) || return 1
+    [[ -n "$app_id_var" ]] || return 1
+    app_id=$(print -r -- "$bundle" | grep -oE "$app_id_var=\"[^\"]+\"" | head -1 | cut -d'"' -f2) || return 1
+    [[ -n "$app_id" ]] || return 1
+
+    for secret in ${(f)"$(print -r -- "$bundle" | grep -oE '"[0-9a-f]{32}"' | tr -d '"' | sort -u)"}; do
+        ts=$(date +%s)
+        query="platform=$platform&serverName=${OCONNECT_SITE#https://}"
+        sign=$(printf '%s' "$query$ts$secret" | shasum -a 256 | cut -d' ' -f1)
+        json=$(curl -fsSL -H "appId: $app_id" -H "ts: $ts" -H "sign: $sign" "$OCONNECT_API?$query") || continue
+        url=$(print -r -- "$json" | grep -oE '"downloadUrl":"[^"]+"' | head -1 | cut -d'"' -f4)
+        [[ -n "$url" ]] && { print -r -- "$url"; return 0; }
+    done
+    return 1
+}
 
 # Bundle names exactly as they appear in /Applications. `O+Connect` has no space.
 GUI_APPS=("O+Connect" Switchbar)
@@ -434,8 +485,21 @@ install_gui_app() {
 
 run_apps() {
     echo "----------------Install apps without a cask----------------"
-    install_gui_app "O+Connect" "$OPLUSCONNECT_URL" dmg
-    install_gui_app "Switchbar" "$SWITCHBAR_URL"    dmg
+    local oconnect_url switchbar_url
+
+    oconnect_url=$(latest_oconnect_url) || {
+        log_error "Could not resolve the current O+ Connect build from $OCONNECT_SITE"
+        exit 1
+    }
+    switchbar_url=$(latest_switchbar_url) || {
+        log_error "Could not resolve the current Switchbar build from $SWITCHBAR_FEED"
+        exit 1
+    }
+    log_info "O+Connect: $oconnect_url"
+    log_info "Switchbar:  $switchbar_url"
+
+    install_gui_app "O+Connect" "$oconnect_url" dmg
+    install_gui_app "Switchbar" "$switchbar_url"    dmg
 }
 
 verify_apps() {

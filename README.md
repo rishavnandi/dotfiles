@@ -54,9 +54,11 @@ brew bundle dump --file=Brewfile --force   # re-snapshot this machine
 `O+ Connect` and `Switchbar` have no Homebrew cask, so `run_apps` installs them straight from the
 vendor's dmg into `/Applications`. Each is skipped when already present, so re-running is a no-op.
 
-Both are pinned to a known version and update themselves from there (each ships a Squirrel
-updater), so the links only need touching if a pinned version is retired. No sha256 is pinned: both
-are notarized Developer ID, so Gatekeeper verifies the binary on first launch.
+Each run resolves the current build from the vendor — Switchbar from the same `latest-mac.yml`
+its own updater polls, O+ Connect from the signed endpoint its download button calls. There is no
+pinned URL to go stale; if a vendor cannot be reached the script stops rather than installing an
+unknown build. No sha256 is pinned: both are notarized Developer ID, so Gatekeeper verifies the
+binary on first launch.
 
 ### GitHub auth and commit signing
 
