@@ -419,7 +419,8 @@ latest_switchbar_url() {
 # both filenames have to be discovered from the page rather than written down.
 # Shortcut: the secret is found by trying every 32-hex literal in the bundle and
 # letting the API pick the real one. If the vendor re-minifies the interceptor
-# this returns 1 and run_apps stops rather than installing an unknown build.
+# this returns 1 and run_apps skips O+ Connect rather than installing a build
+# whose origin it cannot confirm.
 latest_oconnect_url() {
     local entry request bundle app_id_var app_id secret ts query sign json url
     local platform="macos-arm"
@@ -487,19 +488,19 @@ run_apps() {
     echo "----------------Install apps without a cask----------------"
     local oconnect_url switchbar_url
 
-    oconnect_url=$(latest_oconnect_url) || {
-        log_error "Could not resolve the current O+ Connect build from $OCONNECT_SITE"
-        exit 1
-    }
-    switchbar_url=$(latest_switchbar_url) || {
-        log_error "Could not resolve the current Switchbar build from $SWITCHBAR_FEED"
-        exit 1
-    }
-    log_info "O+Connect: $oconnect_url"
-    log_info "Switchbar:  $switchbar_url"
+    if oconnect_url=$(latest_oconnect_url); then
+        log_info "O+Connect: $oconnect_url"
+        install_gui_app "O+Connect" "$oconnect_url" dmg
+    else
+        log_error "O+Connect: could not resolve a download URL from $OCONNECT_SITE, skipping"
+    fi
 
-    install_gui_app "O+Connect" "$oconnect_url" dmg
-    install_gui_app "Switchbar" "$switchbar_url"    dmg
+    if switchbar_url=$(latest_switchbar_url); then
+        log_info "Switchbar: $switchbar_url"
+        install_gui_app "Switchbar" "$switchbar_url" dmg
+    else
+        log_error "Switchbar: could not resolve a download URL from $SWITCHBAR_FEED, skipping"
+    fi
 }
 
 verify_apps() {
