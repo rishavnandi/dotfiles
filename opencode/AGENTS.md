@@ -87,14 +87,18 @@ Facts true everywhere here, not per project.
 
 ## 6. Learnings
 
-Rules that survived contact with reality. Appended one line at a time.
+Things that survived contact with reality. Appended one line at a time and marked
+`Rule:` or `Taste:`, so a later prune can tell them apart.
 
-Add a line only when all three hold:
+Two tests apply to every line, whichever kind it is:
 
-- It was a mistake you actually made, not one you can imagine.
 - It generalises past the repo it happened in. Repo-specific truth belongs in that
   repo's own AGENTS.md, not here.
 - It's concrete: "use X for Y", not "be careful with Y".
+
+Each kind then adds one of its own. A `Rule:` needs a mistake you actually made
+and fixed, not one you can imagine. A `Taste:` needs the user to have said it or
+acted on it, since one reply is not a habit.
 
 Before adding, check whether an existing line is a special case of it, and fold it in
 there instead.
@@ -103,16 +107,13 @@ Hard cap of 20 lines. The 21st replaces the weakest, it does not sit beside it. 
 anything that stops being true, and anything you have now ignored twice — a rule you
 keep ignoring is badly worded, so tighten or drop it.
 
-Append here before you finish a task, not at some later point, when any of these
+Write the line before you finish a task, not at some later point, when any of these
 happened:
 
 - You made a mistake, fixed it, and the fix generalises past this repo.
 - The user corrected a choice, praised one, or stated a preference.
 - You found a tool, flag or route that beat the obvious one. Name it.
 
-Mark each line `Rule:` or `Taste:` so the monthly prune can tell them apart. A
-`Taste:` line drops the first criterion above and needs only that it generalises
-past this repo and that the user said it or acted on it. One reply is not taste.
 Skip anything section 0 already covers, since a restatement costs a slot.
 
 ## 7. Maintaining this file
