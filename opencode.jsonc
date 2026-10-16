@@ -55,8 +55,9 @@
   // ~/.cache/opencode/npm/; nothing is installed into this config dir. V2 reads
   // the package default export only when it is { id, setup } (a bare V1
   // function is rejected), which @dietrichgebert/ponytail has shipped since
-  // 4.13.0. Upstream's setup() injects on the context hook but not compaction,
-  // so ponytail's ruleset is not re-injected after a compaction boundary.
+  // 4.13.0. Upstream's setup() injects on the context hook, which runs on every
+  // agent-loop request. Compaction rewrites the conversation, not the system
+  // prompt, so the next loop call re-injects. Only the summarizer skips it.
   "plugins": ["opencode-cmd-provider", "@dietrichgebert/ponytail"],
 
   // Context7 works without a key (lower rate limits). For higher limits, register once
