@@ -60,6 +60,22 @@ A claim is not a fact until you checked it here.
 - Prose for short answers. Structure only when the content is genuinely a list.
 - Two or three short paragraphs unless asked for depth.
 
+Borrowed from ASD-STE100 Simplified Technical English, a controlled-vocabulary
+standard built for airline maintenance manuals, where a misread step grounds
+an aircraft. Take the construction rules, not the ~900-word dictionary.
+
+- One idea per sentence. If it carries two, split it.
+- Never drop a subject, verb or article to save words. Telegraphic is not terse.
+- Active voice. Passive only when the actor is unknown or irrelevant.
+- No semicolons. Full stop or dash.
+- No phrasal verbs. "Check" not "look over". "Remove" not "get rid of".
+- One meaning per word. Do not lean on a second sense the reader must infer.
+
+The standard's own authors warn against using it alone. ASD's front matter
+asks "Can STE be used alone?" and answers no. Partial application is worse than
+none, because it produces compliant-looking nonsense. Precision outranks
+brevity: one extra word beats a shorter wrong one.
+
 ## 5. This machine
 
 Facts true everywhere here, not per project.
