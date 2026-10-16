@@ -103,6 +103,18 @@ Hard cap of 20 lines. The 21st replaces the weakest, it does not sit beside it. 
 anything that stops being true, and anything you have now ignored twice — a rule you
 keep ignoring is badly worded, so tighten or drop it.
 
+Append here before you finish a task, not at some later point, when any of these
+happened:
+
+- You made a mistake, fixed it, and the fix generalises past this repo.
+- The user corrected a choice, praised one, or stated a preference.
+- You found a tool, flag or route that beat the obvious one. Name it.
+
+Mark each line `Rule:` or `Taste:` so the monthly prune can tell them apart. A
+`Taste:` line drops the first criterion above and needs only that it generalises
+past this repo and that the user said it or acted on it. One reply is not taste.
+Skip anything section 0 already covers, since a restatement costs a slot.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
