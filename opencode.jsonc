@@ -60,6 +60,26 @@
   // prompt, so the next loop call re-injects. Only the summarizer skips it.
   "plugins": ["opencode-cmd-provider", "@dietrichgebert/ponytail"],
 
+  // OpenCode seeds a new provider with package
+  // "@opencode/ai/providers/openai-compatible" instead of "", so the plugin's
+  // `if (package === "")` never applies its aisdk: specifier and its own
+  // transport is bypassed. Two consequences on the Go plan: every turn hits
+  // /provider/v1/*, gets 403 upgrade_required, and the plugin's automatic flip
+  // to the legacy /alpha/generate transport never runs, because nothing of the
+  // plugin is in the request path. Naming the package puts it back. baseURL
+  // must be the bare host: OpenCode seeds it with the /provider/v1 suffix and
+  // the plugin appends its own path to it. `plan: go` pins the legacy transport
+  // from turn one instead of waiting for the plan-gate 403 and its flip. Drop
+  // both settings if the plan is upgraded past Go. Claude models answer
+  // MODEL_NOT_IN_PLAN on this plan whatever the route, so they are not a test
+  // for this config.
+  "providers": {
+    "commandcode": {
+      "package": "aisdk:opencode-cmd-provider@latest",
+      "settings": { "baseURL": "https://api.commandcode.ai", "plan": "go" }
+    }
+  },
+
   // Context7 works without a key (lower rate limits). For higher limits, register once
   // via OAuth with `npx ctx7 setup --opencode`, then add:
   //   "headers": { "CONTEXT7_API_KEY": "{file:~/.config/opencode/context7.key}" }
