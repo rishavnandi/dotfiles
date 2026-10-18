@@ -116,14 +116,6 @@ happened:
 
 Skip anything section 0 already covers, since a restatement costs a slot.
 
-Rule: never bundle two independent choices into one multiple-choice question.
-The user answers the one they can see, and the other is silently decided by
-your framing. They cannot correct what they were never asked. One variable per
-question.
-
-Rule: `python3 -m unittest discover -s tests -t .` needs `tests/__init__.py`, else it
-fails with "Start directory is not importable" before running a single test.
-
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite

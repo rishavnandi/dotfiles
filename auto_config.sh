@@ -185,11 +185,6 @@ DOTFILE_LINKS=(
     # and OpenChamber, since both read this config dir. Symlinked rather than
     # generated so the agent's edits to section 6 land straight in the repo.
     "$DOTFILES_DIR/opencode/AGENTS.md|$HOME/.config/opencode/AGENTS.md"
-    # The pooled Command Code gateway's shared secret, read by opencode.jsonc
-    # through {file:...} rather than stored in the config. Gitignored in this
-    # repo because it is public. Absent on machines that do not use the
-    # gateway, which is why run_dotfiles skips missing sources.
-    "$DOTFILES_DIR/opencode/cc-bridge.key|$HOME/.config/opencode/cc-bridge.key"
     # One file per app, all from the same Matte Black palette. See theme/.
     "$DOTFILES_DIR/theme/matteblack.lua|$HOME/.config/nvim/lua/plugins/matteblack.lua"
     "$DOTFILES_DIR/theme/matte_black.yaml|$HOME/.warp/themes/matte_black.yaml"
@@ -759,13 +754,6 @@ run_dotfiles() {
         src="${entry%%|*}"
         dest="${entry#*|}"
         run_cmd mkdir -p "${dest:h}"
-        # A secret file legitimately exists on one machine and not another.
-        # Without this check ln -s would still create the link, leaving a
-        # dangling symlink that reads as a config bug rather than an absent key.
-        if [[ ! -e "$src" ]]; then
-            log_warn "Skipping $dest: $src does not exist on this machine"
-            continue
-        fi
         if [[ -L "$dest" ]]; then
             log_warn "Symlink already exists: $dest"
             run_cmd ln -sfn "$src" "$dest"
@@ -785,11 +773,6 @@ verify_dotfiles() {
     for entry in "${DOTFILE_LINKS[@]}"; do
         src="${entry%%|*}"
         dest="${entry#*|}"
-        # Absent source means the link was deliberately skipped, not drift.
-        if [[ ! -e "$src" && ! -e "$dest" ]]; then
-            log_info "skip: $dest (source absent on this machine)"
-            continue
-        fi
         if [[ -L "$dest" && "$(readlink "$dest")" == "$src" ]]; then
             log_info "ok: $dest -> $src"
         else
