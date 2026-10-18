@@ -24,7 +24,7 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 # ----------------Sections and options----------------
 # Every phase below is a run_<section>/verify_<section> pair, so --only and
 # --verify can address them independently.
-ALL_SECTIONS=(brew font apps omz nvim github dotfiles opencode shell macos dock touchid)
+ALL_SECTIONS=(brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid)
 
 usage() {
     cat <<EOF
@@ -915,6 +915,144 @@ verify_shell() {
     fi
     if $drift; then return 1; fi
     return 0
+}
+
+# ----------------NextDNS (DNS-over-HTTPS)----------------
+# macOS has no field for encrypted DNS in System Settings: the DNS box in
+# Wi-Fi → Details takes bare IPs and sends plaintext port 53. DoH/DoT only
+# reach the resolver through a configuration profile or a local proxy. This
+# section uses the proxy, because a profile cannot be installed unattended.
+#
+# The CLI listens on 127.0.0.1:53 and forwards over DoH, so every process on
+# the machine gets encryption, including ones that ignore system resolvers.
+# -auto-activate points each network service at 127.0.0.1 and restores them
+# when the daemon stops, which is what makes the plaintext IPs in the Wi-Fi
+# pane unnecessary.
+#
+# Coexists with Tailscale: MagicDNS registers 100.100.100.100 as a supplemental
+# resolver for every domain, so tailnet names resolve there and everything else
+# falls through to the default resolver, which is now this proxy.
+#
+# The profile id is a credential — anyone holding it can run queries against
+# the profile and spend its quota — and this repo is public, so it lives in an
+# untracked file rather than here. Get it from my.nextdns.io → Endpoints → ID.
+# The file is read once and trimmed: a trailing newline would otherwise become
+# part of the id and make the config comparison fail forever.
+NEXTDNS_ID_FILE="$DOTFILES_DIR/nextdns.id"
+NEXTDNS_CONF="/etc/nextdns.conf"
+NEXTDNS_PROFILE=""
+if [[ -f "$NEXTDNS_ID_FILE" ]]; then
+    NEXTDNS_PROFILE="$(<"$NEXTDNS_ID_FILE")"
+    NEXTDNS_PROFILE="${NEXTDNS_PROFILE//[[:space:]]/}"
+fi
+
+run_dns() {
+    echo "----------------Configure NextDNS (DNS-over-HTTPS)----------------"
+    if [[ -z "$NEXTDNS_PROFILE" ]]; then
+        log_warn "Skipping NextDNS: no profile id at $NEXTDNS_ID_FILE"
+        return 0
+    fi
+    if ! command -v nextdns &>/dev/null; then
+        log_warn "nextdns is not installed — run ${SCRIPT_NAME} --only brew first"
+        return 1
+    fi
+
+    if nextdns_config_matches; then
+        log_info "ok: NextDNS profile $NEXTDNS_PROFILE configured"
+        # Config on disk is right; make the live state match it. auto-activate
+        # runs at daemon start, so a VPN toggle or a stopped daemon leaves the
+        # resolver on the DHCP servers even though the file is correct.
+        if ! nextdns_active; then
+            log_info "Restarting NextDNS to re-apply resolvers (sudo required)"
+            run_cmd sudo nextdns restart
+        fi
+        return 0
+    fi
+
+    # install rewrites the stored config when given arguments, so this is also
+    # how a changed profile id or flag takes effect. It starts the daemon.
+    #
+    # -listen is pinned because the default is "localhost:53", and the daemon
+    # resolves that through net.LookupHost, which returns ::1 first. Pinning
+    # IPv4 keeps auto-activate's write and nextdns_active's check in agreement.
+    log_info "Installing NextDNS service (sudo required)"
+    run_cmd sudo nextdns install \
+        -profile "$NEXTDNS_PROFILE" \
+        -report-client-info \
+        -auto-activate \
+        -listen 127.0.0.1:53
+}
+
+verify_dns() {
+    local drift=false
+
+    # Machine without the untracked id is deliberately skipped, matching how
+    # run_dotfiles treats a missing secret. Reported, but not drift.
+    if [[ -z "$NEXTDNS_PROFILE" ]]; then
+        log_info "skip: NextDNS (no profile id at $NEXTDNS_ID_FILE)"
+        return 0
+    fi
+    if ! command -v nextdns &>/dev/null; then
+        log_warn "drift: nextdns is not installed (run ${SCRIPT_NAME} --only brew)"
+        return 1
+    fi
+
+    if nextdns_config_matches; then
+        log_info "ok: NextDNS profile $NEXTDNS_PROFILE in $NEXTDNS_CONF"
+    else
+        log_warn "drift: $NEXTDNS_CONF does not set profile $NEXTDNS_PROFILE with auto-activate"
+        drift=true
+    fi
+
+    if nextdns_active; then
+        log_info "ok: nextdns daemon running and 127.0.0.1 is a resolver"
+    else
+        log_warn "drift: nextdns is not answering as the system resolver"
+        drift=true
+    fi
+
+    # Pointless to report "not encrypted" when the network is down, so an
+    # unreachable test endpoint is a warning rather than drift.
+    local probe proto
+    if probe="$(curl -sL --max-time 8 https://test.nextdns.io 2>/dev/null)"; then
+        proto="$(print -r -- "$probe" | sed -n 's/.*"protocol": "\(.*\)",/\1/p')"
+        # The endpoint reports the transport it saw: DOH for an HTTPS POST,
+        # HTTPS/QUIC for HTTP/3. UDP means encryption is not actually in play.
+        if [[ "$proto" == DOH || "$proto" == HTTPS || "$proto" == QUIC ]]; then
+            log_info "ok: queries leave encrypted ($proto)"
+        else
+            log_warn "drift: NextDNS reports protocol ${proto:-unknown} (want DOH)"
+            drift=true
+        fi
+    else
+        log_warn "could not reach test.nextdns.io — skipping encryption check"
+    fi
+
+    if $drift; then return 1; fi
+    return 0
+}
+
+# The config file is 0644, so this reads without sudo. Values are checked one
+# key at a time: the file also holds every other flag at its default, and
+# comparing whole files would report drift over unrelated keys.
+nextdns_config_matches() {
+    [[ -f "$NEXTDNS_CONF" ]] \
+        && grep -qx "profile $NEXTDNS_PROFILE" "$NEXTDNS_CONF" \
+        && grep -qx "auto-activate true" "$NEXTDNS_CONF"
+}
+
+# True when the daemon runs and the system resolver lists it. scutil is the
+# authority here: auto-activate writes 127.0.0.1 into every network service,
+# and this reads back what DNS actually uses rather than trusting the file.
+#
+# Output is captured before grepping: under `set -o pipefail` (which this
+# script sets) a `scutil | grep -q` pipeline reports failure, because grep
+# exits on the first match and scutil dies of SIGPIPE.
+nextdns_active() {
+    pgrep -x nextdns >/dev/null || return 1
+    local resolvers
+    resolvers="$(scutil --dns 2>/dev/null)"
+    grep -q 'nameserver\[[0-9]*\] : 127\.0\.0\.1$' <<< "$resolvers"
 }
 
 run_macos() {

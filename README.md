@@ -12,8 +12,8 @@ cd ~/data/projects/dotfiles
 
 The script installs Homebrew and everything in the `Brewfile`, the FiraCode Nerd Font,
 oh-my-zsh with custom plugins, the LazyVim starter, symlinks the dotfiles, sets zsh as the
-default shell, applies a set of macOS defaults, configures the Dock, and turns on Touch ID
-for `sudo`.
+default shell, configures encrypted DNS, applies a set of macOS defaults, configures the
+Dock, and turns on Touch ID for `sudo`.
 
 ## Usage
 
@@ -26,7 +26,7 @@ for `sudo`.
   -h, --help        Show this help
 ```
 
-Sections, in order: `brew font apps omz nvim github dotfiles opencode shell macos dock touchid`.
+Sections, in order: `brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid`.
 
 ```sh
 ./auto_config.sh --dry-run                 # preview everything
@@ -134,6 +134,37 @@ machine — so a fresh install reproduces them rather than resetting to stock �
 - no window-open animation, quick Mission Control, no toolbar title delay
 
 The light/dark theme is deliberately **not** set here; it is a first-boot choice.
+
+## DNS
+
+macOS has no encrypted-DNS field in System Settings. The DNS box in Wi-Fi → Details takes
+bare IP addresses and sends plaintext queries on port 53, which is why setting NextDNS's
+`45.90.28.138` / `45.90.30.138` there gets filtering but no encryption.
+
+The `dns` section installs the [NextDNS CLI](https://github.com/nextdns/nextdns) instead.
+It listens on `127.0.0.1:53` and forwards over DNS-over-HTTPS, so every process on the
+machine — including ones that ignore the system resolver — gets encrypted queries. The
+`-auto-activate` flag points each network service at `127.0.0.1` and restores them if the
+daemon stops, so the plaintext IPs are not needed in the Wi-Fi pane.
+
+The profile id is read from `nextdns.id`, which is gitignored: the repo is public, and the
+id lets anyone spend the profile's query quota. On a new machine:
+
+```sh
+echo <id from my.nextdns.io → Endpoints> > ~/data/projects/dotfiles/nextdns.id
+./auto_config.sh --only brew,dns
+```
+
+Without that file the section skips itself, and `--verify` reports a skip rather than drift.
+
+This coexists with Tailscale. MagicDNS registers `100.100.100.100` as a supplemental
+resolver for every domain, so `*.ts.net` names resolve there and everything else falls
+through to the default resolver — now this proxy. Leave "Use Tailscale DNS settings" on.
+
+```sh
+curl -sL https://test.nextdns.io    # "protocol": "DOH" once active
+./auto_config.sh --verify --only dns
+```
 
 The Dock is configured separately in `DOCK_DEFAULTS` and `DOCK_APPS`: instant autohide,
 "suggested and recent apps" off, and a fixed pinned set. Anything not listed in `DOCK_APPS`

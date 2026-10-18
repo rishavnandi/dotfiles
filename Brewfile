@@ -33,6 +33,8 @@ brew "lazyssh"
 brew "lsd"
 brew "mole"
 brew "neovim"
+# DNS-over-HTTPS proxy. Configured by the `dns` section in auto_config.sh.
+brew "nextdns"
 brew "nvm"
 brew "oci-cli"
 # V2 (2.x). Conflicts with homebrew-core's `opencode` (1.x) — both install an
