@@ -1,1 +1,7 @@
 .DS_Store
+
+# Local secrets. The dotfiles repo is public, so anything holding a credential
+# lives on disk and is never committed. The config references these by path
+# ({file:...}), which is what keeps them out of the tracked config.
+*.key
+opencode/cc-bridge.key
