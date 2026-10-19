@@ -121,6 +121,10 @@ user.email=...`, and never a `Co-Authored-By:` trailer. GitHub links an author
 by email, so a wrong address leaves the contributor list empty, and the trailer
 adds a second contributor the user has to delete the repo to remove.
 
+Rule: Never rename a host, node, or other resource you did not create without
+asking first. A MagicDNS rename silently breaks every name-based reference to
+it, including `ssh`, and the fix is not obvious from the symptom.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
