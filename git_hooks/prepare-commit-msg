@@ -1,0 +1,16 @@
+#!/bin/sh
+# Strip any Co-Authored-By trailer before the commit is made.
+#
+# GitHub reads that trailer and adds the name in it to the repository's
+# contributor list, next to the person who actually wrote the code. A
+# contributor list is not worth a habit, so this makes it impossible to
+# get it wrong by accident.
+#
+# Installed through core.hooksPath, so it runs for every repository on
+# this machine.
+msg="$1"
+[ -f "$msg" ] || exit 0
+if grep -q '^Co-Authored-By:' "$msg"; then
+	grep -v '^Co-Authored-By:' "$msg" > "$msg.stripped" && mv "$msg.stripped" "$msg"
+fi
+exit 0

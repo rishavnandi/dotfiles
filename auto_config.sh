@@ -176,6 +176,10 @@ DOTFILE_LINKS=(
     "$DOTFILES_DIR/zprofile|$HOME/.zprofile"
     "$DOTFILES_DIR/gitconfig|$HOME/.gitconfig"
     "$DOTFILES_DIR/git_allowed_signers|$HOME/.gitallowed_signers"
+    # A git hook that strips Co-Authored-By trailers, so a commit never
+    # puts a second contributor on a repository. core.hooksPath in the
+    # tracked gitconfig points at the directory this is linked into.
+    "$DOTFILES_DIR/git_hooks/prepare-commit-msg|$HOME/.config/git/hooks/prepare-commit-msg"
     "$DOTFILES_DIR/starship.toml|$HOME/.config/starship.toml"
     # OpenCode V2 (brew anomalyco/tap/opencode-v2). Both the terminal binary and
     # OpenChamber's bundled one read this file.

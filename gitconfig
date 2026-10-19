@@ -12,6 +12,10 @@
 	allowedSignersFile = ~/.gitallowed_signers
 [commit]
 	gpgsign = true
+# The hooks live in the dotfiles repo and are linked in, so the same rule
+# applies to every repository on this machine.
+[core]
+	hooksPath = ~/.config/git/hooks
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
