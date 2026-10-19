@@ -125,6 +125,11 @@ Rule: Never rename a host, node, or other resource you did not create without
 asking first. A MagicDNS rename silently breaks every name-based reference to
 it, including `ssh`, and the fix is not obvious from the symptom.
 
+Rule: When the code depends on how a model behaves, test it against the real
+model with the worst input, not against a stub. OpenCode's read tool returns
+2000 lines of a file and never says the rest is missing, so a long transcript
+was summarised from its first part only, with no error anywhere.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
