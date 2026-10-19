@@ -130,6 +130,10 @@ model with the worst input, not against a stub. OpenCode's read tool returns
 2000 lines of a file and never says the rest is missing, so a long transcript
 was summarised from its first part only, with no error anywhere.
 
+Rule: Pass a string that holds backslashes to awk through the environment, not
+through `-v`. awk unescapes a `-v` value, so a doubled backslash arrives as one
+and the pattern matches nothing without an error.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
