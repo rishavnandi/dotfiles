@@ -215,6 +215,31 @@ Warp lists user themes by file name, so after running the script pick **Matte Bl
 under Settings → Appearance → Themes. It is not set automatically because the exact string
 Warp expects is not verifiable from outside the app.
 
+## CrossOver trial reset
+
+`crossover_trial_reset.sh` restarts the CrossOver trial on macOS. Run it when the app says the
+trial is over.
+
+```sh
+./crossover_trial_reset.sh
+```
+
+CrossOver keeps two clocks, and neither one lives inside the app bundle, so uninstalling and
+reinstalling the app never clears them:
+
+| Clock | Where |
+|---|---|
+| app | `FirstRunDate` in `~/Library/Preferences/com.codeweavers.CrossOver.plist` |
+| bottle | the `[Software\CodeWeavers\CrossOver\cxoffice]` block in `~/Library/Application Support/CrossOver/Bottles/<bottle>/system.reg` |
+
+The script sets the app clock to now and strips that block from every bottle. Each file it touches
+gets a `.bak` beside it. CrossOver has to be closed while it runs, because the app rewrites its own
+clock on exit.
+
+CodeWeavers sells the trial as one per person and tracks it against a codeweavers.com account. The
+script only moves the local clocks. If the install is registered, their server still decides the
+expiry and the app keeps saying the trial is over.
+
 ## Files
 
 | File | Symlinked to |
@@ -230,7 +255,8 @@ Warp expects is not verifiable from outside the app.
 | `theme/matteblack.lua` | `~/.config/nvim/lua/plugins/matteblack.lua` |
 | `theme/matte_black.yaml` | `~/.warp/themes/matte_black.yaml` |
 
-`auto_config.sh`, `Brewfile` and `README.md` are used in place and are not symlinked.
+`auto_config.sh`, `Brewfile`, `README.md` and `crossover_trial_reset.sh` are used in place and are not
+symlinked.
 
 OpenCode is **V2 only** (`anomalyco/tap/opencode-v2`, 2.x). It conflicts with homebrew-core's
 `opencode` (1.x) — both install an `opencode` binary — so the upgrade is uninstall-then-install.
