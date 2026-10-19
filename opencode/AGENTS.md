@@ -116,6 +116,11 @@ happened:
 
 Skip anything section 0 already covers, since a restatement costs a slot.
 
+Rule: Commit with the global git identity, never with `-c user.name=... -c
+user.email=...`, and never a `Co-Authored-By:` trailer. GitHub links an author
+by email, so a wrong address leaves the contributor list empty, and the trailer
+adds a second contributor the user has to delete the repo to remove.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
