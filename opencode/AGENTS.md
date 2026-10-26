@@ -134,6 +134,12 @@ Rule: Pass a string that holds backslashes to awk through the environment, not
 through `-v`. awk unescapes a `-v` value, so a doubled backslash arrives as one
 and the pattern matches nothing without an error.
 
+Rule: Delete sessions with `opencode session delete <id>`, not the OpenChamber
+session tool, which cannot delete; the CLI also removes child sessions.
+
+Rule: Treat a subagent's report as a claim, not a result. Read its diff hunk by
+hunk. A subagent told to insert only duplicated an adjacent paragraph.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
