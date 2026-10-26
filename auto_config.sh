@@ -24,7 +24,7 @@ log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 # ----------------Sections and options----------------
 # Every phase below is a run_<section>/verify_<section> pair, so --only and
 # --verify can address them independently.
-ALL_SECTIONS=(brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid)
+ALL_SECTIONS=(brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid spotify)
 
 usage() {
     cat <<EOF
@@ -1221,6 +1221,96 @@ verify_touchid() {
     fi
     log_warn "drift: Touch ID for sudo is not enabled (/etc/pam.d/sudo_local)"
     return 1
+}
+
+# ----------------Spicetify Marketplace----------------
+# spicetify has no subcommand to install or update Marketplace, so the release
+# zip is fetched directly. /releases/latest/download/ resolves to the newest
+# tag, which keeps the update path identical to the install path.
+SPICETIFY_CONFIG="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
+MARKETPLACE_DIR="$SPICETIFY_CONFIG/CustomApps/marketplace"
+MARKETPLACE_ZIP_URL="https://github.com/spicetify/marketplace/releases/latest/download/marketplace.zip"
+MARKETPLACE_COLOR_URL="https://raw.githubusercontent.com/spicetify/marketplace/main/resources/color.ini"
+
+run_spotify() {
+    echo "----------------Spicetify Marketplace----------------"
+    if ! command -v spicetify &>/dev/null; then
+        log_warn "spicetify is not installed — run ${SCRIPT_NAME} --only brew first"
+        return 1
+    fi
+    if [[ ! -d "/Applications/Spotify.app" ]]; then
+        log_warn "Spotify is not installed — run ${SCRIPT_NAME} --only brew first"
+        return 0
+    fi
+
+    # Spicetify cannot patch Spotify until the app has run once and the user is
+    # logged in, and neither can be scripted. Wait here instead of letting
+    # `spicetify apply` fail later. --dry-run and a non-tty skip the prompt, as
+    # run_github does.
+    local reply=""
+    if $DRY_RUN; then
+        log_info "[dry-run] Would ask before installing Spicetify Marketplace"
+        return 0
+    elif [[ ! -t 0 ]]; then
+        log_warn "No terminal for the confirmation — skipping Spicetify Marketplace"
+        return 0
+    fi
+
+    log_info "Spotify needs one logged-in run before Spicetify can patch it:"
+    log_info "  1. open Spotify and log in"
+    log_info "  2. spicetify backup apply"
+    log_info "  3. quit Spotify"
+    read -r "reply?Install Spicetify Marketplace now? [y/N] "
+    if [[ "$reply" != [yY]* ]]; then
+        log_warn "Skipped — rerun ${SCRIPT_NAME} --only spotify when ready"
+        return 0
+    fi
+
+    log_info "Installing Spicetify Marketplace"
+    tmp_dir="$(mktemp -d)"
+    trap cleanup_tmp EXIT
+    curl -fsSL -o "$tmp_dir/marketplace.zip" "$MARKETPLACE_ZIP_URL"
+    unzip -q -o "$tmp_dir/marketplace.zip" -d "$tmp_dir"
+    # The zip holds marketplace-dist/. Removing the old copy first makes this an
+    # update rather than nesting the new folder inside the old one.
+    rm -rf "$MARKETPLACE_DIR"
+    mkdir -p "${MARKETPLACE_DIR:h}"
+    mv "$tmp_dir/marketplace-dist" "$MARKETPLACE_DIR"
+    cleanup_tmp
+
+    # Marketplace installs themes into the active theme's folder, so one has to
+    # be selected. The placeholder is an empty [Marketplace] section: no colours.
+    if [[ -z "$(spicetify config current_theme)" ]]; then
+        log_info "Selecting the Marketplace placeholder theme"
+        mkdir -p "$SPICETIFY_CONFIG/Themes/marketplace"
+        curl -fsSL -o "$SPICETIFY_CONFIG/Themes/marketplace/color.ini" "$MARKETPLACE_COLOR_URL"
+        spicetify config current_theme marketplace
+    fi
+
+    # Repeating this is safe: spicetify warns and keeps a single entry.
+    spicetify config custom_apps marketplace
+    spicetify apply
+    log_info "Marketplace installed — reopen Spotify and check the sidebar"
+}
+
+verify_spotify() {
+    local drift=false
+
+    if ! command -v spicetify &>/dev/null; then
+        log_warn "drift: spicetify is not installed"
+        drift=true
+    elif [[ ! -d "$MARKETPLACE_DIR" ]]; then
+        log_warn "drift: Spicetify Marketplace is not installed"
+        drift=true
+    elif ! spicetify config custom_apps 2>/dev/null | grep -qx "marketplace"; then
+        log_warn "drift: marketplace is not in custom_apps"
+        drift=true
+    else
+        log_info "ok: Spicetify Marketplace installed"
+    fi
+
+    if $drift; then return 1; fi
+    return 0
 }
 
 # =========================================================

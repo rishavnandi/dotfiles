@@ -26,7 +26,7 @@ Dock, and turns on Touch ID for `sudo`.
   -h, --help        Show this help
 ```
 
-Sections, in order: `brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid`.
+Sections, in order: `brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid spotify`.
 
 ```sh
 ./auto_config.sh --dry-run                 # preview everything
@@ -90,6 +90,24 @@ key, and `git_allowed_signers` is what makes `git verify-commit` report `Good`. 
 ```sh
 printf '%s %s\n' "$(git config user.email)" "$(cat ~/.ssh/id_ed25519.pub)" > git_allowed_signers
 ```
+
+### Spotify and Spicetify Marketplace
+
+Spicetify cannot patch Spotify until the app has run once and you are logged in, and neither can be
+scripted. `run_spotify` waits at the end of the run:
+
+```
+Spotify needs one logged-in run before Spicetify can patch it:
+  1. open Spotify and log in
+  2. spicetify backup apply
+  3. quit Spotify
+Install Spicetify Marketplace now? [y/N]
+```
+
+Answering `y` downloads the latest Marketplace release into
+`~/.config/spicetify/CustomApps/marketplace` and runs `spicetify apply`. There is no `spicetify`
+subcommand to install or update it, so re-running the section is also the update path. Marketplace
+installs themes into the active theme, so an empty placeholder theme is selected when none is set.
 
 ### Peekaboo (macOS automation)
 
