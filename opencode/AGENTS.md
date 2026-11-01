@@ -140,6 +140,14 @@ session tool, which cannot delete; the CLI also removes child sessions.
 Rule: Treat a subagent's report as a claim, not a result. Read its diff hunk by
 hunk. A subagent told to insert only duplicated an adjacent paragraph.
 
+Rule: Escape `+` in a `pgrep -f` pattern. It is a regex, so `pgrep -fl "O+Connect"`
+matches "OConnect" and prints nothing for a process that is running.
+
+Rule: `tailscale dns status` prints its "may use this configuration if 'Override
+Local DNS' is disabled" note unconditionally, so a `127.0.0.1` system resolver there
+says nothing about the admin toggle. Check the console, and if override is already on,
+suspect whatever else owns port 53.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
