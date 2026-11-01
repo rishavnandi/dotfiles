@@ -26,7 +26,7 @@ Dock, and turns on Touch ID for `sudo`.
   -h, --help        Show this help
 ```
 
-Sections, in order: `brew font apps omz nvim github dotfiles opencode shell dns macos dock touchid spotify`.
+Sections, in order: `brew font apps omz nvim github dotfiles opencode shell macos dock touchid spotify`.
 
 ```sh
 ./auto_config.sh --dry-run                 # preview everything
@@ -155,34 +155,33 @@ The light/dark theme is deliberately **not** set here; it is a first-boot choice
 
 ## DNS
 
-macOS has no encrypted-DNS field in System Settings. The DNS box in Wi-Fi → Details takes
-bare IP addresses and sends plaintext queries on port 53, which is why setting NextDNS's
-`45.90.28.138` / `45.90.30.138` there gets filtering but no encryption.
+DNS is Tailscale's job, with NextDNS behind it. On the tailnet's
+[DNS page](https://console.tailscale.com/admin/dns), the NextDNS profile is the global
+nameserver (over DNS-over-HTTPS) and **Override DNS servers** is on, so devices resolve
+through `100.100.100.100`: MagicDNS answers `*.ts.net`, everything else goes to NextDNS,
+filtered and encrypted.
 
-The `dns` section installs the [NextDNS CLI](https://github.com/nextdns/nextdns) instead.
-It listens on `127.0.0.1:53` and forwards over DNS-over-HTTPS, so every process on the
-machine — including ones that ignore the system resolver — gets encrypted queries. The
-`-auto-activate` flag points each network service at `127.0.0.1` and restores them if the
-daemon stops, so the plaintext IPs are not needed in the Wi-Fi pane.
-
-The profile id is read from `nextdns.id`, which is gitignored: the repo is public, and the
-id lets anyone spend the profile's query quota. On a new machine:
-
-```sh
-echo <id from my.nextdns.io → Endpoints> > ~/data/projects/dotfiles/nextdns.id
-./auto_config.sh --only brew,dns
-```
-
-Without that file the section skips itself, and `--verify` reports a skip rather than drift.
-
-This coexists with Tailscale. MagicDNS registers `100.100.100.100` as a supplemental
-resolver for every domain, so `*.ts.net` names resolve there and everything else falls
-through to the default resolver — now this proxy. Leave "Use Tailscale DNS settings" on.
+Do not also run the NextDNS CLI here. Its `-auto-activate` writes `127.0.0.1` into every
+network service, the one Tailscale owns included, so MagicDNS disappears and names like
+`ssh loki` stop resolving. `dig @100.100.100.100 loki.mist-matrix.ts.net` still answers,
+which makes it look like a resolution bug rather than two resolvers fighting. An earlier
+version of this repo installed it that way; machines that ran it need:
 
 ```sh
-curl -sL https://test.nextdns.io    # "protocol": "DOH" once active
-./auto_config.sh --verify --only dns
+sudo nextdns uninstall       # restores the service DNS it rewrote
+tailscale set --accept-dns=true
 ```
+
+Check the result:
+
+```sh
+tailscale dns status                     # Resolvers: the NextDNS DoH URL
+ping -c1 <host>                          # MagicDNS, short name
+curl -sL https://test.nextdns.io         # "protocol": "DOH"
+```
+
+The profile id stays in gitignored `nextdns.id`; the repo is public and the id lets anyone
+spend the profile's query quota.
 
 The Dock is configured separately in `DOCK_DEFAULTS` and `DOCK_APPS`: instant autohide,
 "suggested and recent apps" off, and a fixed pinned set. Anything not listed in `DOCK_APPS`
