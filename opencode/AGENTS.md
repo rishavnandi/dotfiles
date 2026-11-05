@@ -148,6 +148,22 @@ Local DNS' is disabled" note unconditionally, so a `127.0.0.1` system resolver t
 says nothing about the admin toggle. Check the console, and if override is already on,
 suspect whatever else owns port 53.
 
+Rule: For a disposable mountless Docker sandbox, use `sbx create shell` without
+a workspace path. `sbx run shell` mounts the current directory by default. Use
+`--skills off --static-mcp none` to avoid shared skills and registered MCP tools.
+
+Rule: In interactive terminal tests, wait for output absent from the echoed input.
+Use `printf 'MARK_%s' DONE`, not `printf MARK_DONE`, or a check can pass before the
+command runs.
+
+Rule: Lip Gloss v2 nested Render strings reset SGR backgrounds. Restore the
+container fill after resets on app-owned UI only, never on guest terminal output.
+Verify the resulting cells with a terminal emulator, not just string assertions.
+
+Rule: Rasterize terminal previews on a fixed cell grid. SVG textLength on styled
+text fragments stretches glyphs and loses apparent spacing; position each glyph
+by its terminal cell instead.
+
 ## 7. Maintaining this file
 
 Sections 0–5 and this one are hand-written. Append to section 6 only. Never rewrite
